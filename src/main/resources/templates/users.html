@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="sk">
+    <head>
+        <title>Recipes</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" th:href="@{'/css/style.css'}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script th:src="@{'/js/controller.js'}"></script>
+    </head>
+    <body>
+        <div th:replace="fragments/common :: header ">&nbsp;</div>
+        <nav th:replace="fragments/common :: menu('administration') ">&nbsp;</nav>
+        
+        <div class="content">
+            <div class="w3-main w3-content w3-padding" id="content" th:insert="fragments/user :: usersList">&nbsp;</div>
+        </div>
+        <script>
+            // Script to open and close sidebar
+            function w3_open() {
+                document.getElementById("mySidebar").style.display = "block";
+            }
+
+            function w3_close() {
+                document.getElementById("mySidebar").style.display = "none";
+            }
+        </script>
+    </body>
+</html>
+ 

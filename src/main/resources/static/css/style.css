@@ -1,0 +1,50 @@
+body,html{
+    height: 100%;
+    width:100%;
+}
+.top{
+    position:absolute;
+    top:0px;
+    left:0px;
+    height:54px;
+    right:0px;
+    overflow:hidden;
+    z-index: 1;
+    box-shadow: 0px 2px 5px grey;
+}
+.content{
+    position:absolute;
+    top:54px;
+    bottom:0px;
+    left:0px;
+    right:0px;
+    overflow:auto;
+}
+.menu{
+    display:none;
+    z-index:2;
+    width:40%;
+    min-width:300px;
+}
+.padding-right{
+    padding-right: 16px;
+}
+
+.removeBtn {
+    padding: 0px 6px 0px 6px;
+    margin: 4px 0px 4px 8px;
+}
+
+/*
+.padding-top-32{padding-top:32px!important;}
+.padding-top-16{padding-top:16px!important;}
+.padding-bottom-16{padding-bottom:16px!important;}
+.padding-bottom-32{padding-bottom:32px!important;}
+.logo{height: 38px! important;}
+.logoDiv{margin: 0px !important; padding: 0px !important;}
+.captcha-input{width: 150px;}
+.row-padding{padding: 4px 0px!important;}
+.row-padding-bottom{padding: 0px 0px 4px 0px!important;}
+.block-margin{margin: 8px 0px 8px 0px;}
+.w3-col{padding-top: 8px!important;}
+*/

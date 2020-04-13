@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="sk">
+    <head>
+        <title>Recipes</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" th:href="@{'/css/style.css'}">
+    </head>
+    <body>
+        <form method="post" th:if="${userSO!=null}" action="javascript:void(0);" id="userForm" th:object="${userSO}" th:fragment="userForm">
+            <h2 class="w3-center">User</h2>
+            <input type="hidden" th:field="*{id}"/>
+            <p>
+                <label class="w3-center">Username <span class="w3-text-red">*</span></label>
+                <input class="w3-input w3-border" type="text" th:field="*{username}" maxlength="255">
+                <label class="w3-text-red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Incorrect date</label>
+            </p>
+            <p>
+                <label class="w3-center">First name</label>
+                <input class="w3-input w3-border" type="text" th:field="*{firstName}" maxlength="255">
+                <label class="w3-text-red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Incorrect date</label>
+            </p>
+            <p>
+                <label class="w3-center">Last name</label>
+                <input class="w3-input w3-border" type="text" th:field="*{lastName}" maxlength="255">
+                <label class="w3-text-red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Incorrect date</label>
+            </p>
+            <p>
+                <label class="w3-center">Password <span th:if="*{id}==null" class="w3-text-red">*</span></label>
+                <input class="w3-input w3-border" type="password" th:field="*{password}" maxlength="255">
+                <label class="w3-text-red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Incorrect date</label>
+            </p>
+            <p>
+                <label class="w3-center">Password Confirm <span th:if="*{id}==null" class="w3-text-red">*</span></label>
+                <input class="w3-input w3-border" type="password" th:field="*{passwordConfirm}" maxlength="255">
+                <label class="w3-text-red" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}">Incorrect date</label>
+            </p>
+            <p>
+                <label class="w3-center">Roles</label>
+                <select class="w3-select w3-border" multiple th:field="*{roles}">
+                    <option th:each="roleName : ${T(sk.filo.recipes.domain.RoleName).values()}"
+                            th:value="${roleName}" 
+                            th:text="${roleName}"
+                            class="w3-button w3-block">
+                    </option>
+                </select>
+                <label class="w3-text-red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Incorrect date</label>
+            </p>
+            <p>
+                <input class="w3-check" type="checkbox" th:field="*{enabled}">
+                <label>Enable user</label>
+            </p>
+            <p>
+                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitUserForm('@{'/admin/user/save'}');|">Save</button>
+                <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitUserForm('@{'/admin/user/delete'}');|">Delete</button>
+                <button type="submit" class="w3-button w3-red" th:onclick="|submitUserForm('@{'/admin/user/cancel'}');|">Cancel</button>
+            </p>
+        </form>
+        <div th:fragment="usersList">
+            <div class="w3-row">
+                <div class="w3-col l11"><h2 class="w3-center">Users</h2></div>
+                <div class="w3-col l1"><a th:href="|javascript:$('#content').load('@{'/admin/user/add'}');|" class="w3-margin-top w3-right w3-button w3-circle w3-green">+</a></div>
+            </div>
+            <ul class="w3-ul w3-border" th:if="${users}">
+                <li class="w3-row w3-blue w3-strong">
+                    <label class="w3-col l2 m2 s12 w3-container"><b>Username</b></label>
+                    <label class="w3-col l5 m5 s12 w3-container"><b>Full name</b></label>
+                    <label class="w3-col l5 m5 s12 w3-container"><b>Roles</b></label>
+                </li>
+                <li class="w3-row" th:each="user,rowStat : ${users}" th:classappend="${!user.enabled} ? 'w3-text-gray'">
+                    <a class="w3-col l2 m2 s12 w3-container" th:href="|javascript:$('#content').load('@{'/admin/user/get/__${user.id}__'}');|" th:text="${user.username}"></a>
+                    <span class="w3-col l5 m5 s12 w3-container" th:text="|${user.firstName ?: ''} ${user.lastName ?: ''}|"></span>
+                    <span class="w3-col l5 m5 s12 w3-container">
+                        <span th:each="role : ${user.roles}" th:text="${role}" class="w3-tag w3-margin-right" th:classappend="${user.enabled} ? 'w3-blue' : 'w3-gray'"></span>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,90 @@
+package sk.filo.recipes.controller;
+
+import java.util.List;
+import javax.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import sk.filo.recipes.service.UserService;
+import sk.filo.recipes.so.UserSO;
+import sk.filo.recipes.validator.PasswordValidator;
+
+/**
+ *
+ * @author tomas
+ */
+@Controller
+public class UserController {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+    
+    private static final String MODEL_USERS = "users";
+    
+    private static final String MODEL_USER_SO = "userSO";
+    
+    private final Validator validator = new PasswordValidator();
+    
+    @Autowired
+    UserService userService;
+    
+    private void getAllUsers(final Model model) {
+        List<UserSO> users = userService.getAll();
+        model.addAttribute(MODEL_USERS, users);
+    }
+    
+    @RequestMapping(value="/admin/user/all")
+    public String getUsers(final Model model) {
+        LOGGER.debug("Get all users");
+        getAllUsers(model);
+        return "users";
+    }
+    
+    @RequestMapping(value="/admin/user/save")
+    public String saveUser(final Model model, @Valid UserSO user, final BindingResult bindingResult) {
+        LOGGER.debug("Save user action {}", user);
+        validator.validate(user, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "fragments/user::userForm";
+        }
+        userService.save(user);
+        getAllUsers(model);
+        return "fragments/user::usersList";
+    }
+    
+    @RequestMapping(value="/admin/user/add")
+    public String addUser(final Model model) {
+        LOGGER.debug("Create user action");
+        model.addAttribute(MODEL_USER_SO, new UserSO());
+        return "fragments/user::userForm";
+    }
+    
+    @RequestMapping(value="/admin/user/delete")
+    public String deleteUser(final Model model, UserSO user, final BindingResult bindingResult) {
+        LOGGER.debug("Delete user action {}", user);
+        userService.delete(user.getId());
+        getAllUsers(model);
+        return "fragments/user::usersList";
+    }
+    
+    @RequestMapping(value="/admin/user/cancel")
+    public String cancelUser(final Model model, UserSO user, final BindingResult bindingResult) {
+        LOGGER.debug("Cancel user action {}", user);
+        getAllUsers(model);
+        return "fragments/user::usersList";
+    }
+    
+    @RequestMapping(value="/admin/user/get/{id}")
+    public String getUserById(@PathVariable Long id, final Model model) {
+        LOGGER.debug("Get user by id {}", id);
+        UserSO user = userService.get(id);
+        model.addAttribute(MODEL_USER_SO, user);
+        return "fragments/user::userForm";
+    }
+    
+}
