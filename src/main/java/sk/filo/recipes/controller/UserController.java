@@ -20,6 +20,7 @@ import sk.filo.recipes.validator.PasswordValidator;
  * @author tomas
  */
 @Controller
+@RequestMapping(value = "/admin/user")
 public class UserController {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
@@ -38,14 +39,14 @@ public class UserController {
         model.addAttribute(MODEL_USERS, users);
     }
     
-    @RequestMapping(value="/admin/user/all")
+    @RequestMapping(value="/all")
     public String getUsers(final Model model) {
         LOGGER.debug("Get all users");
         getAllUsers(model);
         return "users";
     }
     
-    @RequestMapping(value="/admin/user/save")
+    @RequestMapping(value="/save")
     public String saveUser(final Model model, @Valid UserSO user, final BindingResult bindingResult) {
         LOGGER.debug("Save user action {}", user);
         validator.validate(user, bindingResult);
@@ -57,14 +58,14 @@ public class UserController {
         return "fragments/user::usersList";
     }
     
-    @RequestMapping(value="/admin/user/add")
+    @RequestMapping(value="/add")
     public String addUser(final Model model) {
         LOGGER.debug("Create user action");
         model.addAttribute(MODEL_USER_SO, new UserSO());
         return "fragments/user::userForm";
     }
     
-    @RequestMapping(value="/admin/user/delete")
+    @RequestMapping(value="/delete")
     public String deleteUser(final Model model, UserSO user, final BindingResult bindingResult) {
         LOGGER.debug("Delete user action {}", user);
         userService.delete(user.getId());
@@ -72,14 +73,14 @@ public class UserController {
         return "fragments/user::usersList";
     }
     
-    @RequestMapping(value="/admin/user/cancel")
+    @RequestMapping(value="/cancel")
     public String cancelUser(final Model model, UserSO user, final BindingResult bindingResult) {
         LOGGER.debug("Cancel user action {}", user);
         getAllUsers(model);
         return "fragments/user::usersList";
     }
     
-    @RequestMapping(value="/admin/user/get/{id}")
+    @RequestMapping(value="/get/{id}")
     public String getUserById(@PathVariable Long id, final Model model) {
         LOGGER.debug("Get user by id {}", id);
         UserSO user = userService.get(id);

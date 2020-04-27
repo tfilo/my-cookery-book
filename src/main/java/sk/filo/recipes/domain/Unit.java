@@ -32,7 +32,7 @@ public class Unit {
     private Long id;
     
     @Column(name = "name", nullable = false)
-    private Integer name;
+    private String name;
     
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "unit_category_id", nullable = false)

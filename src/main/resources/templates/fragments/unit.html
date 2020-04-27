@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="sk">
+    <head>
+        <title>Recipes</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" th:href="@{'/css/style.css'}">
+    </head>
+    <body>
+        <form method="post" th:if="${unitSO!=null}" action="javascript:void(0);" id="unitForm" th:object="${unitSO}" th:fragment="unitForm">
+            <h2 class="w3-center">Unit</h2>
+            <input type="hidden" th:field="*{id}"/>
+            <p>
+                <label class="w3-center">Name <span class="w3-text-red">*</span></label>
+                <input class="w3-input w3-border" type="text" th:field="*{name}" maxlength="255">
+                <label class="w3-text-red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect name</label>
+            </p>
+            <p>
+                <label class="w3-center">Category <span class="w3-text-red">*</span></label>
+                <input class="w3-input w3-border" type="text" th:field="*{unitCategoryId}" maxlength="255">
+                <label class="w3-text-red" th:if="${#fields.hasErrors('unitCategoryId')}" th:errors="*{unitCategoryId}">Incorrect unitCategoryId</label>
+            </p>
+            <p>
+                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('unitForm', '@{'/admin/unit/save'}');|">Save</button>
+                <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitForm('unitForm', '@{'/admin/unit/delete'}');|">Delete</button>
+                <button type="submit" class="w3-button w3-red" th:onclick="|submitForm('unitForm', '@{'/admin/unit/cancel'}');|">Cancel</button>
+            </p>
+        </form>
+        <div th:fragment="unitsList">
+            <div class="w3-row">
+                <div class="w3-col l11"><h2 class="w3-center">Units</h2></div>
+                <div class="w3-col l1"><a th:href="|javascript:$('#content').load('@{'/admin/unit/add'}');|" class="w3-margin-top w3-right w3-button w3-circle w3-green">+</a></div>
+            </div>
+            <ul class="w3-ul w3-border" th:if="${units}">
+                <li class="w3-row w3-blue w3-strong">
+                    <label class="w3-col l2 m2 s12 w3-container"><b>Unit Name</b></label>
+                </li>
+                <li class="w3-row" th:each="unit,rowStat : ${units}">
+                    <a class="w3-col l2 m2 s12 w3-container" th:href="|javascript:$('#content').load('@{'/admin/unit/get/__${unit.id}__'}');|" th:text="${unit.name}"></a>
+                </li>
+            </ul>
+        </div>
+    </body>
+</html>

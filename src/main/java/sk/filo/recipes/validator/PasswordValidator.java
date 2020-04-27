@@ -3,7 +3,6 @@ package sk.filo.recipes.validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -20,10 +19,12 @@ public class PasswordValidator implements Validator {
     private static final Logger LOGGER = LoggerFactory.getLogger(PasswordValidator.class);
     
 
+    @Override
     public boolean supports(Class clazz) {
         return UserSO.class.equals(clazz);
     }
     
+    @Override
     public void validate(Object obj, Errors e) {
         UserSO user = (UserSO) obj;
         LOGGER.debug("validujem objekt user {}", user);

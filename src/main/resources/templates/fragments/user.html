@@ -14,27 +14,27 @@
             <p>
                 <label class="w3-center">Username <span class="w3-text-red">*</span></label>
                 <input class="w3-input w3-border" type="text" th:field="*{username}" maxlength="255">
-                <label class="w3-text-red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Incorrect date</label>
+                <label class="w3-text-red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Incorrect username</label>
             </p>
             <p>
                 <label class="w3-center">First name</label>
                 <input class="w3-input w3-border" type="text" th:field="*{firstName}" maxlength="255">
-                <label class="w3-text-red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Incorrect date</label>
+                <label class="w3-text-red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Incorrect first name</label>
             </p>
             <p>
                 <label class="w3-center">Last name</label>
                 <input class="w3-input w3-border" type="text" th:field="*{lastName}" maxlength="255">
-                <label class="w3-text-red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Incorrect date</label>
+                <label class="w3-text-red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Incorrect last name</label>
             </p>
             <p>
                 <label class="w3-center">Password <span th:if="*{id}==null" class="w3-text-red">*</span></label>
                 <input class="w3-input w3-border" type="password" th:field="*{password}" maxlength="255">
-                <label class="w3-text-red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Incorrect date</label>
+                <label class="w3-text-red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Incorrect password</label>
             </p>
             <p>
                 <label class="w3-center">Password Confirm <span th:if="*{id}==null" class="w3-text-red">*</span></label>
                 <input class="w3-input w3-border" type="password" th:field="*{passwordConfirm}" maxlength="255">
-                <label class="w3-text-red" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}">Incorrect date</label>
+                <label class="w3-text-red" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}">Incorrect password</label>
             </p>
             <p>
                 <label class="w3-center">Roles</label>
@@ -45,16 +45,16 @@
                             class="w3-button w3-block">
                     </option>
                 </select>
-                <label class="w3-text-red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Incorrect date</label>
+                <label class="w3-text-red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Incorrect roles</label>
             </p>
             <p>
                 <input class="w3-check" type="checkbox" th:field="*{enabled}">
                 <label>Enable user</label>
             </p>
             <p>
-                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitUserForm('@{'/admin/user/save'}');|">Save</button>
-                <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitUserForm('@{'/admin/user/delete'}');|">Delete</button>
-                <button type="submit" class="w3-button w3-red" th:onclick="|submitUserForm('@{'/admin/user/cancel'}');|">Cancel</button>
+                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('formId', '@{'/admin/user/save'}');|">Save</button>
+                <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitForm('formId', '@{'/admin/user/delete'}');|">Delete</button>
+                <button type="submit" class="w3-button w3-red" th:onclick="|submitForm('formId', '@{'/admin/user/cancel'}');|">Cancel</button>
             </p>
         </form>
         <div th:fragment="usersList">

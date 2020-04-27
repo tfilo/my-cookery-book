@@ -13,9 +13,9 @@
                class="w3-bar-item w3-button">Close Menu</a>
             <hr sec:authorize="isAuthenticated()">
             <a th:href="@{'/admin/user/all'}" onclick="w3_close()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')">Users</a>
-            <a th:href="@{'/admin/categories'}" onclick="w3_close()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')">Categories</a>
-            <a th:href="@{'/admin/units'}" onclick="w3_close()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')">Units</a>
-            <a th:href="@{'/recipe/add'}" onclick="w3_close()" class="w3-bar-item w3-button" sec:authorize="hasRole('USER')">Pridať recept</a>
+            <a th:href="@{'/admin/category/all'}" onclick="w3_close()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')">Categories</a>
+            <a th:href="@{'/admin/unit/all'}" onclick="w3_close()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')">Units</a>
+            <a th:href="@{'/recipe/add'}" onclick="w3_close()" class="w3-bar-item w3-button" sec:authorize="hasRole('USER')">Add recipe</a>
             <hr>
             <div th:if="${content=='all'}">
                 <a href="#soups" onclick="w3_close()" class="w3-bar-item w3-button">Soups</a>
@@ -25,6 +25,16 @@
             <div th:if="${content!='all'}">
                 <a th:href="@{'/'}" onclick="w3_close()" class="w3-bar-item w3-button">Back to main page</a>
             </div>
+            <script>
+            // Script to open and close sidebar
+            function w3_open() {
+                document.getElementById("mySidebar").style.display = "block";
+            }
+
+            function w3_close() {
+                document.getElementById("mySidebar").style.display = "none";
+            }
+            </script>
         </nav>
         <div th:fragment="header" class="top w3-card w3-white">
             <div class="w3-button w3-padding-16 w3-left" onclick="w3_open()">☰</div>
