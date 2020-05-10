@@ -35,7 +35,7 @@ public class Section {
     @Column(name = "sort_number")
     private Integer sortNumber;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 255)
     private String name;
    
     @OneToMany(

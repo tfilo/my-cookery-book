@@ -34,7 +34,7 @@ public class Ingredient {
     @Column(name = "sort_number")
     private Integer sortNumber;
     
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, length = 255)
     private String name;
 
     @Column(name = "value", nullable = false)

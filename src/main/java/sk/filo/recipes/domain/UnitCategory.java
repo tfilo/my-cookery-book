@@ -1,9 +1,13 @@
 package sk.filo.recipes.domain;
 
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import lombok.Getter;
@@ -27,7 +31,17 @@ public class UnitCategory {
     @GeneratedValue(generator = "unit_category_generator")
     private Long id;
     
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, length = 255)
     private String name;
+    
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Unit> units;
+    
+    @PreRemove
+    public void checkUnitsBeforeRemoval() {
+        if (!this.units.isEmpty()) {
+            throw new RuntimeException("Can't remove a unit category that has units.");
+        }
+    }
 
 }

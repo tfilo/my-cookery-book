@@ -35,6 +35,10 @@ body,html{
     margin: 4px 0px 4px 8px;
 }
 
+.margin-bottom-16{
+    margin-bottom: 16px;
+}
+
 /*
 .padding-top-32{padding-top:32px!important;}
 .padding-top-16{padding-top:16px!important;}

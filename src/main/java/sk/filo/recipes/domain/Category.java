@@ -28,7 +28,7 @@ public class Category implements Serializable {
     @GeneratedValue(generator = "category_generator")
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, length = 255)
     private String name;
 
 }

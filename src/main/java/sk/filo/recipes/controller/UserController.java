@@ -47,13 +47,13 @@ public class UserController {
     }
     
     @RequestMapping(value="/save")
-    public String saveUser(final Model model, @Valid UserSO user, final BindingResult bindingResult) {
-        LOGGER.debug("Save user action {}", user);
-        validator.validate(user, bindingResult);
+    public String saveUser(final Model model, @Valid UserSO userSO, final BindingResult bindingResult) {
+        LOGGER.debug("Save user action {}", userSO);
+        validator.validate(userSO, bindingResult);
         if (bindingResult.hasErrors()) {
             return "fragments/user::userForm";
         }
-        userService.save(user);
+        userService.save(userSO);
         getAllUsers(model);
         return "fragments/user::usersList";
     }
@@ -66,16 +66,16 @@ public class UserController {
     }
     
     @RequestMapping(value="/delete")
-    public String deleteUser(final Model model, UserSO user, final BindingResult bindingResult) {
-        LOGGER.debug("Delete user action {}", user);
-        userService.delete(user.getId());
+    public String deleteUser(final Model model, UserSO userSO, final BindingResult bindingResult) {
+        LOGGER.debug("Delete user action {}", userSO);
+        userService.delete(userSO.getId());
         getAllUsers(model);
         return "fragments/user::usersList";
     }
     
     @RequestMapping(value="/cancel")
-    public String cancelUser(final Model model, UserSO user, final BindingResult bindingResult) {
-        LOGGER.debug("Cancel user action {}", user);
+    public String cancelUser(final Model model, UserSO userSO, final BindingResult bindingResult) {
+        LOGGER.debug("Cancel user action {}", userSO);
         getAllUsers(model);
         return "fragments/user::usersList";
     }

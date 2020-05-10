@@ -12,7 +12,6 @@ import sk.filo.recipes.domain.UnitCategory;
 import sk.filo.recipes.mapper.UnitMapper;
 import sk.filo.recipes.repository.UnitCategoryRepository;
 import sk.filo.recipes.repository.UnitRepository;
-import sk.filo.recipes.so.UnitCategorySO;
 import sk.filo.recipes.so.UnitSO;
 
 /**
@@ -50,13 +49,14 @@ public class UnitService {
     public void save(UnitSO unitSO) {
         LOGGER.debug("save unitSO {}", unitSO);
         Unit unit;
+        UnitCategory uc = unitCategoryRepository.getOne(unitSO.getUnitCategoryId());
         if (Objects.isNull(unitSO.getId())) {
             unit = unitMapper.mapUnitSOToUnit(unitSO);
+            uc.getUnits().add(unit);
         } else {
             unit = unitRepository.getOne(unitSO.getId());
             unit.setName(unitSO.getName());
         }
-        UnitCategory uc = unitCategoryRepository.getOne(unitSO.getUnitCategoryId());
         unit.setCategory(uc);
         
         LOGGER.debug("save unit {}", unit);
@@ -76,35 +76,4 @@ public class UnitService {
         Unit unit = unitRepository.getOne(id);
         return unitMapper.mapUnitToUnitSO(unit);
     }
-
-    
-    @Transactional
-    public void saveCategory(UnitCategorySO unitCategorySO) {
-        LOGGER.debug("save unitCategorySO {}", unitCategorySO);
-        UnitCategory uc;
-        if (Objects.isNull(unitCategorySO.getId())) {
-            uc = unitMapper.mapUnitCategorySOToUnitCategory(unitCategorySO);
-        } else {
-            uc = unitCategoryRepository.getOne(unitCategorySO.getId());
-            uc.setName(unitCategorySO.getName());
-        }
-
-        LOGGER.debug("save UnitCategory {}", uc);
-        unitCategoryRepository.save(uc);
-    }
-    
-    public void deleteCategory(Long id) {
-        unitCategoryRepository.deleteById(id);
-    }
-    
-    public List<UnitCategorySO> getAllCategories() {
-        List<UnitCategory> allUnitCategories = unitCategoryRepository.findAll();
-        return unitMapper.mapUnitCategoryListToUnitCategorySOList(allUnitCategories);
-    }
-    
-    public UnitCategorySO getUnitCategory(Long id) {
-        UnitCategory uc = unitCategoryRepository.getOne(id);
-        return unitMapper.mapUnitCategoryToUnitCategorySO(uc);
-    }
-
 }

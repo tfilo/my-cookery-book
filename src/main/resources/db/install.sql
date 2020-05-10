@@ -140,8 +140,8 @@ create table cb_user_role
         foreign key (user_id) references cb_user
 );
 
--- user/user     echo -n "user" | shasum -a 256
--- admin/user 
+-- user/user     echo -n "user" | shasum -a 256 -- neaktualny prikaz
+-- admin/admin 
 INSERT INTO cb_user (id, username, password, enabled) VALUES (1, 'admin', '$2a$10$y5c8a9Ri8Gre3653AjDjtuZJhtRG9mux2YVm/lHpXw19FIfTK3/Tu', true);
 INSERT INTO cb_user (id, username, password, enabled) VALUES (2, 'user', '$2a$10$E.nhuDgeQfFpI74XzI7j/ejt7TnANbe011iVO2tw09xEeTMM.LNb.', true);
 

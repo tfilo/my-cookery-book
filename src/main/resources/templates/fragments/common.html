@@ -14,7 +14,7 @@
             <hr sec:authorize="isAuthenticated()">
             <a th:href="@{'/admin/user/all'}" onclick="w3_close()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')">Users</a>
             <a th:href="@{'/admin/category/all'}" onclick="w3_close()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')">Categories</a>
-            <a th:href="@{'/admin/unit/all'}" onclick="w3_close()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')">Units</a>
+            <a th:href="@{'/admin/unitcategory/all'}" onclick="w3_close()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')">Units</a>
             <a th:href="@{'/recipe/add'}" onclick="w3_close()" class="w3-bar-item w3-button" sec:authorize="hasRole('USER')">Add recipe</a>
             <hr>
             <div th:if="${content=='all'}">

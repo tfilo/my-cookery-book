@@ -1,5 +1,6 @@
 package sk.filo.recipes.domain;
 
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,9 +8,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,7 +25,8 @@ import lombok.ToString;
 @Setter
 @ToString
 @Entity
-@Table(name = "cb_unit")
+@Table(name = "cb_unit", 
+       uniqueConstraints=@UniqueConstraint(columnNames={"name", "abbreviation"}))
 @SequenceGenerator(name = "unit_generator", allocationSize = 1, sequenceName = "cb_unit_seq")
 public class Unit {
     
@@ -31,10 +35,13 @@ public class Unit {
     @GeneratedValue(generator = "unit_generator")
     private Long id;
     
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, length = 255)
     private String name;
     
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "unit_category_id", nullable = false)
+    @Column(name = "abbreviation", nullable = false, length = 255)
+    private String abbreviation;
+    
+    @ManyToOne
+    @JoinColumn(name = "unit_category_id")
     private UnitCategory category;
 }

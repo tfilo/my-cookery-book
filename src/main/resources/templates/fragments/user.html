@@ -52,9 +52,9 @@
                 <label>Enable user</label>
             </p>
             <p>
-                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('formId', '@{'/admin/user/save'}');|">Save</button>
-                <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitForm('formId', '@{'/admin/user/delete'}');|">Delete</button>
-                <button type="submit" class="w3-button w3-red" th:onclick="|submitForm('formId', '@{'/admin/user/cancel'}');|">Cancel</button>
+                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('userForm', '@{'/admin/user/save'}');|">Save</button>
+                <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitForm('userForm', '@{'/admin/user/delete'}');|">Delete</button>
+                <button type="submit" class="w3-button w3-red" th:onclick="|submitForm('userForm', '@{'/admin/user/cancel'}');|">Cancel</button>
             </p>
         </form>
         <div th:fragment="usersList">

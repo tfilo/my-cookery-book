@@ -1,7 +1,6 @@
 package sk.filo.recipes.so;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,18 +11,11 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class UnitSO {
+public class UnitCategoryBasicSO {
 
-    private Long id;
-
-    @NotBlank
-    @Size(max=255)
-    private String name;
+    Long id;
     
     @NotBlank
     @Size(max=255)
-    private String abbreviation;
-
-    @NotNull
-    private Long unitCategoryId;
+    String name;
 }

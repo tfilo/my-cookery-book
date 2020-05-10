@@ -37,11 +37,11 @@ public class Recipe {
     @GeneratedValue(generator = "category_generator")
     private Long id;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = false, length = 255)
     private String title;
     
-    @Column(name = "subtitle")
-    private String subtitle;
+    @Column(name = "description", length = 255)
+    private String description;
 
     @OneToMany(
         cascade = CascadeType.ALL,
@@ -62,7 +62,7 @@ public class Recipe {
             inverseJoinColumns = @JoinColumn(name = "associated_recipe_id", nullable = false))
     private List<Recipe> associatedRecipes;
     
-    @Column(name = "source")
+    @Column(name = "source", length = 1024)
     private String source;
     
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

@@ -35,16 +35,16 @@ public class User {
     @GeneratedValue(generator = "user_generator")
     private Long id;
     
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", nullable = false, length = 255)
     private String username;
     
-    @Column(name = "first_name", nullable = true)
+    @Column(name = "first_name", nullable = true, length = 255)
     private String firstName;
     
-    @Column(name = "last_name", nullable = true)
+    @Column(name = "last_name", nullable = true, length = 255)
     private String lastName;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", nullable = false, length = 255)
     private String password;
     
     @Column(name = "enabled", nullable = false)

@@ -8,9 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import sk.filo.recipes.service.UnitCategoryService;
 import sk.filo.recipes.service.UnitService;
+import sk.filo.recipes.so.UnitCategoryBasicSO;
+import sk.filo.recipes.so.UnitCategorySO;
 import sk.filo.recipes.so.UnitSO;
 
 /**
@@ -23,25 +27,26 @@ public class UnitController {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(UnitController.class);
     
-    private static final String MODEL_UNITS = "units";
-    
     private static final String MODEL_UNIT_SO = "unitSO";
+    
+    private static final String MODEL_CATEGORIES = "categories";
     
     @Autowired
     UnitService unitService;
     
-    private void getAllUnits(final Model model) {
-        List<UnitSO> units = unitService.getAll();
-        model.addAttribute(MODEL_UNITS, units);
+    @Autowired
+    UnitCategoryService unitCategoryService;
+    
+    @ModelAttribute("availableCategories")
+    public List<UnitCategoryBasicSO> populateCategories() {
+        return unitCategoryService.getAllBasic();
     }
     
-    @RequestMapping(value="/all")
-    public String getUnits(final Model model) {
-        LOGGER.debug("Get all units");
-        getAllUnits(model);
-        return "unitEditor";
+    private void getAllCategories(final Model model) {
+        List<UnitCategorySO> categories = unitCategoryService.getAll();
+        model.addAttribute(MODEL_CATEGORIES, categories);
     }
-    
+        
     @RequestMapping(value="/save")
     public String saveUnit(final Model model, @Valid UnitSO unit, final BindingResult bindingResult) {
         LOGGER.debug("Save unit action {}", unit);
@@ -49,14 +54,16 @@ public class UnitController {
             return "fragments/unit::unitForm";
         }
         unitService.save(unit);
-        getUnits(model);
-        return "fragments/unit::unitsList";
+        getAllCategories(model);
+        return "fragments/unitCategory::unitCategoriesList";
     }
     
-    @RequestMapping(value="/add")
-    public String addUnit(final Model model) {
+    @RequestMapping(value="/add/{category_id}")
+    public String addUnit(@PathVariable Long category_id, final Model model) {
         LOGGER.debug("Create unit action");
-        model.addAttribute(MODEL_UNIT_SO, new UnitSO());
+        UnitSO unitSO = new UnitSO();
+        unitSO.setUnitCategoryId(category_id);
+        model.addAttribute(MODEL_UNIT_SO, unitSO);
         return "fragments/unit::unitForm";
     }
     
@@ -64,15 +71,8 @@ public class UnitController {
     public String deleteUnit(final Model model, UnitSO unit, final BindingResult bindingResult) {
         LOGGER.debug("Delete unit action {}", unit);
         unitService.delete(unit.getId());
-        getAllUnits(model);
-        return "fragments/unit::unitsList";
-    }
-    
-    @RequestMapping(value="/cancel")
-    public String cancelUnit(final Model model, UnitSO unit, final BindingResult bindingResult) {
-        LOGGER.debug("Cancel unit action {}", unit);
-        getAllUnits(model);
-        return "fragments/unit::unitsList";
+        getAllCategories(model);
+        return "fragments/unitCategory::unitCategoriesList";
     }
     
     @RequestMapping(value="/get/{id}")
