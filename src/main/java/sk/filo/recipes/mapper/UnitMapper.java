@@ -6,9 +6,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.NullValueCheckStrategy;
 import sk.filo.recipes.domain.Unit;
-import sk.filo.recipes.domain.UnitCategory;
-import sk.filo.recipes.so.UnitCategoryBasicSO;
-import sk.filo.recipes.so.UnitCategorySO;
 import sk.filo.recipes.so.UnitSO;
 
 /**

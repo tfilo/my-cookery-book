@@ -64,14 +64,14 @@
             </div>
             <ul class="w3-ul w3-border" th:if="${users}">
                 <li class="w3-row w3-blue w3-strong">
-                    <label class="w3-col l2 m2 s12 w3-container"><b>Username</b></label>
-                    <label class="w3-col l5 m5 s12 w3-container"><b>Full name</b></label>
-                    <label class="w3-col l5 m5 s12 w3-container"><b>Roles</b></label>
+                    <label class="w3-col l2 m2 s12"><b>Username</b></label>
+                    <label class="w3-col l5 m5 s12"><b>Full name</b></label>
+                    <label class="w3-col l5 m5 s12"><b>Roles</b></label>
                 </li>
                 <li class="w3-row" th:each="user,rowStat : ${users}" th:classappend="${!user.enabled} ? 'w3-text-gray'">
-                    <a class="w3-col l2 m2 s12 w3-container" th:href="|javascript:$('#content').load('@{'/admin/user/get/__${user.id}__'}');|" th:text="${user.username}"></a>
-                    <span class="w3-col l5 m5 s12 w3-container" th:text="|${user.firstName ?: ''} ${user.lastName ?: ''}|"></span>
-                    <span class="w3-col l5 m5 s12 w3-container">
+                    <a class="w3-col l2 m2 s12" th:href="|javascript:$('#content').load('@{'/admin/user/get/__${user.id}__'}');|" th:text="${user.username}"></a>
+                    <span class="w3-col l5 m5 s12" th:text="|${user.firstName ?: ''} ${user.lastName ?: ''}|"></span>
+                    <span class="w3-col l5 m5 s12">
                         <span th:each="role : ${user.roles}" th:text="${role}" class="w3-tag w3-margin-right" th:classappend="${user.enabled} ? 'w3-blue' : 'w3-gray'"></span>
                     </span>
                 </li>

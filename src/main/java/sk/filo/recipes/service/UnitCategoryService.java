@@ -37,7 +37,6 @@ public class UnitCategoryService {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(UnitCategoryService.class);
 
-    @Transactional
     public void save(UnitCategoryBasicSO unitCategoryBasicSO) {
         LOGGER.debug("save unitCategoryBasicSO {}", unitCategoryBasicSO);
         UnitCategory unitCategory;
@@ -56,7 +55,6 @@ public class UnitCategoryService {
         unitCategoryRepository.deleteById(id);
     }
     
-    @Transactional
     public List<UnitCategorySO> getAll() {
         List<UnitCategory> allCategories = unitCategoryRepository.findAll();
         return unitCategoryMapper.mapUnitCategoryListToUnitCategorySOList(allCategories);

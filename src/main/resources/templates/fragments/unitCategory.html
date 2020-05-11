@@ -29,13 +29,13 @@
             </div>
             <ul class="w3-ul w3-border margin-bottom-16" th:if="${categories}" th:each="category,rowStat : ${categories}">
                     <li class="w3-row w3-blue w3-strong">
-                        <span class="w3-col l12 m12 s12 w3-container"><b><a th:href="|javascript:$('#content').load('@{'/admin/unitcategory/get/__${category.id}__'}');|" th:text="${category.name}"></a></b><a th:href="|javascript:$('#content').load('@{'/admin/unit/add/__${category.id}__'}');|" class="w3-right w3-small w3-button w3-circle w3-green">+</a></span>
-                        <label class="w3-col l8 m8 s9 w3-container"><b>Unit Name</b></label>
-                        <label class="w3-col l4 m4 s3 w3-container"><b>Abbreviation</b></label>
+                        <span class="w3-col l12 m12 s12"><b><a th:href="|javascript:$('#content').load('@{'/admin/unitcategory/get/__${category.id}__'}');|" th:text="${category.name}"></a></b><a th:href="|javascript:$('#content').load('@{'/admin/unit/add/__${category.id}__'}');|" class="w3-right w3-small w3-button w3-circle w3-green">+</a></span>
+                        <label class="w3-col l8 m8 s9"><b>Unit Name</b></label>
+                        <label class="w3-col l4 m4 s3"><b>Abbreviation</b></label>
                     </li>
                     <li class="w3-row" th:each="unit,rowStat : ${category.units}">
-                        <a class="w3-col l8 m8 s9 w3-container" th:href="|javascript:$('#content').load('@{'/admin/unit/get/__${unit.id}__'}');|" th:text="${unit.name}"></a>
-                        <span class="w3-col l4 m4 s3 w3-container" th:text="${unit.abbreviation}"></span>
+                        <a class="w3-col l8 m8 s9" th:href="|javascript:$('#content').load('@{'/admin/unit/get/__${unit.id}__'}');|" th:text="${unit.name}"></a>
+                        <span class="w3-col l4 m4 s3" th:text="${unit.abbreviation}"></span>
                     </li>
             </ul>
         </div>

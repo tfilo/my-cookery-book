@@ -4,12 +4,14 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -20,7 +22,8 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "units")
+@EqualsAndHashCode(exclude = "units")
 @Entity
 @Table(name = "cb_unit_category")
 @SequenceGenerator(name = "unit_category_generator", allocationSize = 1, sequenceName = "cb_unit_category_seq")
@@ -34,7 +37,7 @@ public class UnitCategory {
     @Column(name = "name", nullable = false, length = 255)
     private String name;
     
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<Unit> units;
     
     @PreRemove

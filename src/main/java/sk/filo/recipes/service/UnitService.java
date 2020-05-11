@@ -44,8 +44,7 @@ public class UnitService {
     }
     
     private static final Logger LOGGER = LoggerFactory.getLogger(UnitService.class);
-
-    @Transactional
+ 
     public void save(UnitSO unitSO) {
         LOGGER.debug("save unitSO {}", unitSO);
         Unit unit;
@@ -54,6 +53,7 @@ public class UnitService {
         } else {
             unit = unitRepository.getOne(unitSO.getId());
             unit.setName(unitSO.getName());
+            unit.setAbbreviation(unitSO.getAbbreviation());
         }
         unit.setCategory(unitCategoryRepository.getOne(unitSO.getUnitCategoryId()));
         
