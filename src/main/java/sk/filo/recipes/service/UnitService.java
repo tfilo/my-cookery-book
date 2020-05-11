@@ -49,15 +49,13 @@ public class UnitService {
     public void save(UnitSO unitSO) {
         LOGGER.debug("save unitSO {}", unitSO);
         Unit unit;
-        UnitCategory uc = unitCategoryRepository.getOne(unitSO.getUnitCategoryId());
         if (Objects.isNull(unitSO.getId())) {
             unit = unitMapper.mapUnitSOToUnit(unitSO);
-            uc.getUnits().add(unit);
         } else {
             unit = unitRepository.getOne(unitSO.getId());
             unit.setName(unitSO.getName());
         }
-        unit.setCategory(uc);
+        unit.setCategory(unitCategoryRepository.getOne(unitSO.getUnitCategoryId()));
         
         LOGGER.debug("save unit {}", unit);
         unitRepository.save(unit);
