@@ -1,0 +1,31 @@
+## default connection pool
+spring:
+    ## PostgreSQL
+    datasource:
+        hikari:
+            connectionTimeout: 20000
+            maximumPoolSize: 5
+        url: jdbc:postgresql://localhost:5432/recipes
+        username: user
+        password: User123
+    #jpa
+    #drop n create table again, good for testing, comment this in production
+    jpa:
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                enable_lazy_load_no_trans: true
+                event:
+                    merge:
+                        entity_copy_observer: allow
+    #thymeleaf
+    thymeleaf:
+        cache: false
+#log
+logging:
+    level:
+        sk:
+            filo:
+                recipes: debug
+
