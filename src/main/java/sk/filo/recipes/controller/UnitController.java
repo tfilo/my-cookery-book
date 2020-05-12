@@ -37,7 +37,7 @@ public class UnitController {
     @Autowired
     UnitCategoryService unitCategoryService;
     
-    @ModelAttribute("availableCategories")
+    @ModelAttribute("availableUnitCategories")
     public List<UnitCategoryBasicSO> populateCategories() {
         return unitCategoryService.getAllBasic();
     }

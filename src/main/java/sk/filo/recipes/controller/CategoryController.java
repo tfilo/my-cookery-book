@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import sk.filo.recipes.service.CategoryService;
@@ -29,7 +30,7 @@ public class CategoryController {
     
     @Autowired
     CategoryService categoryService;
-    
+        
     private void getAllCategories(final Model model) {
         List<CategorySO> users = categoryService.getAll();
         model.addAttribute(MODEL_CATEGORIES, users);

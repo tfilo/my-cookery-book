@@ -18,9 +18,9 @@
             <a th:href="@{'/recipe/add'}" onclick="w3_close()" class="w3-bar-item w3-button" sec:authorize="hasRole('USER')">Add recipe</a>
             <hr>
             <div th:if="${content=='all'}">
-                <a href="#soups" onclick="w3_close()" class="w3-bar-item w3-button">Soups</a>
-                <a href="#mainDishes" onclick="w3_close()" class="w3-bar-item w3-button">Main dishes</a>
-                <a href="#baking" onclick="w3_close()" class="w3-bar-item w3-button">Baking</a>
+                <th:block th:each="category : ${allCategories}">
+                    <a th:href="${'#category_' + category.id}" onclick="w3_close()" class="w3-bar-item w3-button" th:text="${category.name}">Category name</a>
+                </th:block>
             </div>
             <div th:if="${content!='all'}">
                 <a th:href="@{'/'}" onclick="w3_close()" class="w3-bar-item w3-button">Back to main page</a>
