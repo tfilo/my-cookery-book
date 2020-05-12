@@ -12,86 +12,41 @@
         <div th:replace="fragments/common :: header ">&nbsp;</div>
         
         <div class="content">
-            <div class="w3-main w3-content w3-padding">
-                
-                <h2 class="w3-center" id="soups">Soups</h2>
-                <div class="w3-row-padding w3-padding-16 w3-center">
-                    <div class="w3-quarter">
-                        <img src="/w3images/sandwich.jpg" alt="Sandwich" style="width:100%">
-                        <h3>The Perfect Sandwich, A Real NYC Classic</h3>
-                        <p>Just some random text, lorem ipsum text praesent tincidunt ipsum lipsum.</p>
+            <div class="w3-main w3-content">
+                <th:block th:each="category, rowStat : ${allCategories}">
+                    <h2 class="w3-center" th:id="${'category_' + category.id}" th:text="${category.name}">Category name</h2>
+                    <div class="w3-row-padding" th:classappend="${rowStat.last} ? 'w3-margin-bottom'">
+                        <div class="w3-col l3 m6">
+                            <div class="w3-card w3-container">
+                                <div class="w3-center"><img th:src="@{image/default_meal.jpg}" class="meal-preview-image w3-circle"></div>
+                                <h3>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</h3>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                            </div>
+                        </div>
+                        <div class="w3-col l3 m6">
+                            <div class="w3-card w3-container">
+                                <div class="w3-center"><img th:src="@{image/default_meal.jpg}" class="meal-preview-image w3-circle"></div>
+                                <h3>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</h3>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                            </div>
+                        </div>
+                        <div class="w3-col l3 m6">
+                            <div class="w3-card w3-container">
+                                <div class="w3-center"><img th:src="@{image/default_meal.jpg}" class="meal-preview-image w3-circle"></div>
+                                <h3>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</h3>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                            </div>
+                        </div>
+                        <div class="w3-col l3 m6">
+                            <div class="w3-card w3-container">
+                                <div class="w3-center"><img th:src="@{image/default_meal.jpg}" class="meal-preview-image w3-circle"></div>
+                                <h3>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</h3>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="w3-quarter">
-                        <img src="/w3images/steak.jpg" alt="Steak" style="width:100%">
-                        <h3>Let Me Tell You About This Steak</h3>
-                        <p>Once again, some random text to lorem lorem lorem lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-                    </div>
-                    <div class="w3-quarter">
-                        <img src="/w3images/cherries.jpg" alt="Cherries" style="width:100%">
-                        <h3>Cherries, interrupted</h3>
-                        <p>Lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-                        <p>What else?</p>
-                    </div>
-                    <div class="w3-quarter">
-                        <img src="/w3images/wine.jpg" alt="Pasta and Wine" style="width:100%">
-                        <h3>Once Again, Robust Wine and Vegetable Pasta</h3>
-                        <p>Lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-                    </div>
-                </div>
-                
-                <hr id="about">
-                
-                <h2 class="w3-center" id="mainDishes">Main dishes</h2>
-                <div class="w3-row-padding w3-padding-16 w3-center">
-                    <div class="w3-quarter">
-                        <img src="/w3images/sandwich.jpg" alt="Sandwich" style="width:100%">
-                        <h3>The Perfect Sandwich, A Real NYC Classic</h3>
-                        <p>Just some random text, lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-                    </div>
-                    <div class="w3-quarter">
-                        <img src="/w3images/steak.jpg" alt="Steak" style="width:100%">
-                        <h3>Let Me Tell You About This Steak</h3>
-                        <p>Once again, some random text to lorem lorem lorem lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-                    </div>
-                    <div class="w3-quarter">
-                        <img src="/w3images/cherries.jpg" alt="Cherries" style="width:100%">
-                        <h3>Cherries, interrupted</h3>
-                        <p>Lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-                        <p>What else?</p>
-                    </div>
-                    <div class="w3-quarter">
-                        <img src="/w3images/wine.jpg" alt="Pasta and Wine" style="width:100%">
-                        <h3>Once Again, Robust Wine and Vegetable Pasta</h3>
-                        <p>Lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-                    </div>
-                </div>
-                
-                <hr id="about">
-                
-                <h2 class="w3-center" id="baking">Baking</h2>
-                <div class="w3-row-padding w3-padding-16 w3-center">
-                    <div class="w3-quarter">
-                        <img src="/w3images/sandwich.jpg" alt="Sandwich" style="width:100%">
-                        <h3>The Perfect Sandwich, A Real NYC Classic</h3>
-                        <p>Just some random text, lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-                    </div>
-                    <div class="w3-quarter">
-                        <img src="/w3images/steak.jpg" alt="Steak" style="width:100%">
-                        <h3>Let Me Tell You About This Steak</h3>
-                        <p>Once again, some random text to lorem lorem lorem lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-                    </div>
-                    <div class="w3-quarter">
-                        <img src="/w3images/cherries.jpg" alt="Cherries" style="width:100%">
-                        <h3>Cherries, interrupted</h3>
-                        <p>Lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-                        <p>What else?</p>
-                    </div>
-                    <div class="w3-quarter">
-                        <img src="/w3images/wine.jpg" alt="Pasta and Wine" style="width:100%">
-                        <h3>Once Again, Robust Wine and Vegetable Pasta</h3>
-                        <p>Lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-                    </div>
-                </div>
+                    <hr id="about" th:if="!${rowStat.last}">
+                </th:block>
             </div>
         </div>
     </body>

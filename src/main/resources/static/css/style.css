@@ -2,6 +2,11 @@ body,html{
     height: 100%;
     width:100%;
 }
+
+.w3-content{
+    max-width: 1280px;
+}
+
 .top{
     position:absolute;
     top:0px;
@@ -12,6 +17,7 @@ body,html{
     z-index: 1;
     box-shadow: 0px 2px 5px grey;
 }
+
 .content{
     position:absolute;
     top:54px;
@@ -20,35 +26,41 @@ body,html{
     right:0px;
     overflow:auto;
 }
+
 .menu{
     display:none;
     z-index:2;
     width:40%;
     min-width:300px;
 }
+
 .padding-right{
     padding-right: 16px;
-}
-
-.removeBtn {
-    padding: 0px 6px 0px 6px;
-    margin: 4px 0px 4px 8px;
 }
 
 .margin-bottom-16{
     margin-bottom: 16px;
 }
 
-/*
-.padding-top-32{padding-top:32px!important;}
-.padding-top-16{padding-top:16px!important;}
-.padding-bottom-16{padding-bottom:16px!important;}
-.padding-bottom-32{padding-bottom:32px!important;}
-.logo{height: 38px! important;}
-.logoDiv{margin: 0px !important; padding: 0px !important;}
-.captcha-input{width: 150px;}
-.row-padding{padding: 4px 0px!important;}
-.row-padding-bottom{padding: 0px 0px 4px 0px!important;}
-.block-margin{margin: 8px 0px 8px 0px;}
-.w3-col{padding-top: 8px!important;}
-*/
+.meal-preview-image{
+    max-width: 170px;
+    max-height: 170px;
+    padding-top: 10px;
+    object-fit: cover;
+    width: 170px;
+    height: 170px;
+}
+
+select[multiple] option:checked {
+  background: gray linear-gradient(0deg, gray 0%, gray 100%);
+}
+
+.circle-btn{
+    width: 40px;
+    height: 40px;
+}
+
+.page-title{
+    padding-left: 95px;
+    font-weight: bolder;
+}

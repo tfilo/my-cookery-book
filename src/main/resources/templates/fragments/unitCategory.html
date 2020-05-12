@@ -25,11 +25,11 @@
         <div th:fragment="unitCategoriesList">
             <div class="w3-row">
                 <div class="w3-col l11"><h2 class="w3-center">Categories / Units</h2></div>
-                <div class="w3-col l1"><a th:href="|javascript:$('#content').load('@{'/admin/unitcategory/add'}');|" class="w3-margin-top w3-right w3-button w3-circle w3-green">+</a></div>
+                <div class="w3-col l1"><a th:href="|javascript:$('#content').load('@{'/admin/unitcategory/add'}');|" class="w3-margin-top w3-right w3-button w3-circle w3-green circle-btn">+</a></div>
             </div>
             <ul class="w3-ul w3-border margin-bottom-16" th:if="${categories}" th:each="category,rowStat : ${categories}">
-                    <li class="w3-row w3-blue w3-strong">
-                        <span class="w3-col l12 m12 s12"><b><a th:href="|javascript:$('#content').load('@{'/admin/unitcategory/get/__${category.id}__'}');|" th:text="${category.name}"></a></b><a th:href="|javascript:$('#content').load('@{'/admin/unit/add/__${category.id}__'}');|" class="w3-right w3-small w3-button w3-circle w3-green">+</a></span>
+                    <li class="w3-row w3-light-grey w3-strong">
+                        <span class="w3-col l12 m12 s12"><b><a th:href="|javascript:$('#content').load('@{'/admin/unitcategory/get/__${category.id}__'}');|" th:text="${category.name}"></a></b><a th:href="|javascript:$('#content').load('@{'/admin/unit/add/__${category.id}__'}');|" class="w3-right w3-button w3-circle w3-green circle-btn">+</a></span>
                         <label class="w3-col l8 m8 s9"><b>Unit Name</b></label>
                         <label class="w3-col l4 m4 s3"><b>Abbreviation</b></label>
                     </li>
@@ -40,4 +40,4 @@
             </ul>
         </div>
     </body>
-</html><a th:href="|javascript:$('#content').load('@{'/admin/unitcategory/add'}');|" class="w3-margin-top w3-right w3-button w3-circle w3-green">+</a>
+</html><a th:href="|javascript:$('#content').load('@{'/admin/unitcategory/add'}');|" class="w3-margin-top w3-right w3-button w3-circle w3-green circle-btn">+</a>
