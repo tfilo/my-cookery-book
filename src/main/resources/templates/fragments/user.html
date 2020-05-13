@@ -52,15 +52,15 @@
                 <label>Enable user</label>
             </p>
             <p>
-                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('userForm', '@{'/admin/user/save'}');|">Save</button>
-                <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitForm('userForm', '@{'/admin/user/delete'}');|">Delete</button>
-                <button type="submit" class="w3-button w3-red" th:onclick="|submitForm('userForm', '@{'/admin/user/cancel'}');|">Cancel</button>
+                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('userForm', '@{'/admin/user/save'}');|"><i class="fas fa-save"></i>&nbsp;<span>Save</span></button>
+                <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitForm('userForm', '@{'/admin/user/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span>Delete</span></button>
+                <button type="submit" class="w3-button w3-red" th:onclick="|submitForm('userForm', '@{'/admin/user/cancel'}');|"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></button>
             </p>
         </form>
         <div th:fragment="usersList">
-            <div class="w3-row">
-                <div class="w3-col l11"><h2 class="w3-center">Users</h2></div>
-                <div class="w3-col l1"><a th:href="|javascript:$('#content').load('@{'/admin/user/add'}');|" class="w3-margin-top w3-right w3-button w3-circle w3-green circle-btn">+</a></div>
+            <div>
+                <div class="w3-right"><a th:href="|javascript:$('#content').load('@{'/admin/user/add'}');|" class="w3-button w3-xlarge w3-text-green"><i class="fas fa-plus-circle"></i></a></div>
+                <div><h2 class="w3-center">Users</h2></div>
             </div>
             <ul class="w3-ul w3-border" th:if="${users}">
                 <li class="w3-row w3-light-grey w3-strong">

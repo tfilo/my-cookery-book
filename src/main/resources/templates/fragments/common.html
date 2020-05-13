@@ -8,44 +8,49 @@
         <link rel="stylesheet" th:href="@{'/css/style.css'}">
     </head>
     <body>
-        <nav th:fragment="menu(content)" onmouseleave="w3_close()" class="w3-sidebar w3-bar-block w3-card w3-top w3-large w3-animate-left menu" id="mySidebar">
-            <a href="javascript:void(0)" onclick="w3_close()"
-               class="w3-bar-item w3-button">Close Menu</a>
+        <nav th:fragment="menu(content)" onmouseleave="closeSidebar()" class="w3-sidebar w3-bar-block w3-border-right w3-animate-left menu" id="mySidebar">
+            <div class="w3-button w3-padding-16 w3-left" onclick="closeSidebar()"><i class="fas fa-angle-double-left"></i></div>
+            <a th:href="@{'/admin/user/all'}" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-user icon"></i> Users</a>
+            <a th:href="@{'/admin/category/all'}" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-list icon"></i> Categories</a>
+            <a th:href="@{'/admin/unitcategory/all'}" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-prescription-bottle icon"></i> Units</a>
+            <a th:href="@{'/recipe/add'}" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('USER')"><i class="fas fa-pizza-slice icon"></i> Add recipe</a>
             <hr sec:authorize="isAuthenticated()">
-            <a th:href="@{'/admin/user/all'}" onclick="w3_close()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')">Users</a>
-            <a th:href="@{'/admin/category/all'}" onclick="w3_close()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')">Categories</a>
-            <a th:href="@{'/admin/unitcategory/all'}" onclick="w3_close()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')">Units</a>
-            <a th:href="@{'/recipe/add'}" onclick="w3_close()" class="w3-bar-item w3-button" sec:authorize="hasRole('USER')">Add recipe</a>
-            <hr>
-            <div th:if="${content=='all'}">
+            <div th:if="${content=='all'}" id="categoryLinks">
                 <th:block th:each="category : ${allCategories}">
-                    <a th:href="${'#category_' + category.id}" onclick="w3_close()" class="w3-bar-item w3-button" th:text="${category.name}">Category name</a>
+                    <a th:href="${'#category_' + category.id}" onclick="closeSidebar()" class="w3-bar-item w3-button" th:text="${category.name}">Category name</a>
                 </th:block>
             </div>
             <div th:if="${content!='all'}">
-                <a th:href="@{'/'}" onclick="w3_close()" class="w3-bar-item w3-button">Back to main page</a>
+                <a th:href="@{'/'}" onclick="closeSidebar()" class="w3-bar-item w3-button"><i class="fas fa-reply icon"></i> Back to main page</a>
             </div>
             <script>
-            // Script to open and close sidebar
-            function w3_open() {
-                document.getElementById("mySidebar").style.display = "block";
-            }
+                // Script to open and close sidebar
+                function openSidebar() {
+                    document.getElementById("mySidebar").style.display = "block";
+                }
 
-            function w3_close() {
-                document.getElementById("mySidebar").style.display = "none";
-            }
+                function closeSidebar() {
+                    document.getElementById("mySidebar").style.display = "none";
+                }
+                $("#categoryLinks a").click(function(event) {
+                    event.preventDefault();
+                    var id =  $(this).attr('href');
+                    $('html, body').animate({         
+                        scrollTop: $(id).offset().top-$("#header").height()
+                    }, 1000);
+                });
             </script>
         </nav>
-        <div th:fragment="header" class="top w3-card w3-white">
-            <div class="w3-button w3-padding-16 w3-left" onclick="w3_open()">☰</div>
+        <header id="header" th:fragment="header" class="w3-top w3-card transparent-white">
+            <div class="w3-button w3-padding-16 w3-left" onclick="openSidebar()"><i class="fas fa-bars"></i></div>
             <div class="w3-right w3-padding-16 padding-right" sec:authorize="!isAuthenticated()">
-                <a th:href="@{'/login'}">Log in</a>
+                <a th:href="@{'/login'}"><i class="fas fa-sign-in-alt"></i></a>
             </div>
             <div class="w3-right w3-padding-16 padding-right" sec:authorize="isAuthenticated()">
                 <b sec:authentication="name"></b><span> </span>
-                <a th:href="@{'/logout'}">Log out</a>
+                <a th:href="@{'/logout'}"><i class="fas fa-sign-out-alt"></i></a>
             </div>
-            <div class="w3-center w3-wide w3-xxlarge page-title">My recipes</div>
-        </div>
+            <div class="w3-center w3-wide w3-large page-title">My recipes</div>
+        </header>
     </body>
 </html>

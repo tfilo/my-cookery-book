@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link rel="stylesheet" th:href="@{'/css/style.css'}">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://kit.fontawesome.com/cfd63b17be.js" crossorigin="anonymous"></script>
         <script th:src="@{'/js/controller.js'}"></script>
     </head>
     <body>
@@ -14,6 +15,7 @@
         <nav th:replace="fragments/common :: menu('administration') ">&nbsp;</nav>
         
         <div class="content">
+            <div class="spacer">&nbsp;</div>
             <div class="w3-main w3-content w3-padding" id="content" th:insert="fragments/category :: categoriesList">&nbsp;</div>
         </div>
     </body>

@@ -31,9 +31,9 @@
                 <label class="w3-text-red" th:if="${#fields.hasErrors('unitCategoryId')}" th:errors="*{unitCategoryId}">Incorrect unitCategoryId</label>
             </p>
             <p>
-                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('unitForm', '@{'/admin/unit/save'}');|">Save</button>
-                <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitForm('unitForm', '@{'/admin/unit/delete'}');|">Delete</button>
-                <button type="submit" class="w3-button w3-red" th:onclick="|submitForm('unitForm', '@{'/admin/unitcategory/cancel'}');|">Cancel</button>
+                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('unitForm', '@{'/admin/unit/save'}');|"><i class="fas fa-save"></i>&nbsp;<span>Save</span></button>
+                <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitForm('unitForm', '@{'/admin/unit/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span>Delete</span></button>
+                <button type="submit" class="w3-button w3-red" th:onclick="|submitForm('unitForm', '@{'/admin/unitcategory/cancel'}');|"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></button>
             </p>
         </form>
     </body>
