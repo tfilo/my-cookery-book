@@ -32,6 +32,7 @@
                 function closeSidebar() {
                     document.getElementById("mySidebar").style.display = "none";
                 }
+                
                 $("#categoryLinks a").click(function(event) {
                     event.preventDefault();
                     var id =  $(this).attr('href');
@@ -50,7 +51,7 @@
                 <b sec:authentication="name"></b><span> </span>
                 <a th:href="@{'/logout'}"><i class="fas fa-sign-out-alt"></i></a>
             </div>
-            <div class="w3-center w3-wide w3-large page-title">My recipes</div>
+            <div class="w3-center w3-wide w3-large page-title">My Cookery Book</div>
         </header>
     </body>
 </html>

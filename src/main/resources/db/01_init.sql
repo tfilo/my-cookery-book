@@ -28,13 +28,20 @@ CREATE SEQUENCE public.cb_ingredient_seq
     NO MAXVALUE
     CACHE 1;
 
+CREATE TABLE public.cb_picture (
+    id bigint NOT NULL,
+    data oid,
+    name character varying(255),
+    section_id bigint NOT NULL,
+    recipe_id bigint NOT NULL
+);
+
 CREATE TABLE public.cb_recipe (
     id bigint NOT NULL,
     created timestamp without time zone NOT NULL,
     description character varying(255),
     modified timestamp without time zone,
-    source character varying(1024),
-    title character varying(255) NOT NULL,
+    title character varying(100) NOT NULL,
     creator_id bigint NOT NULL,
     modifier_id bigint
 );
@@ -70,6 +77,19 @@ CREATE TABLE public.cb_section (
 );
 
 CREATE SEQUENCE public.cb_section_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+CREATE TABLE public.cb_source (
+    id bigint NOT NULL,
+    url character varying(255) NOT NULL,
+    recipe_id bigint NOT NULL
+);
+
+CREATE SEQUENCE public.cb_source_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -129,6 +149,9 @@ ALTER TABLE ONLY public.cb_category
 ALTER TABLE ONLY public.cb_ingredient
     ADD CONSTRAINT cb_ingredient_pkey PRIMARY KEY (id);
 
+ALTER TABLE ONLY public.cb_picture
+    ADD CONSTRAINT cb_picture_pkey PRIMARY KEY (id);
+
 ALTER TABLE ONLY public.cb_recipe
     ADD CONSTRAINT cb_recipe_pkey PRIMARY KEY (id);
 
@@ -137,6 +160,9 @@ ALTER TABLE ONLY public.cb_role
 
 ALTER TABLE ONLY public.cb_section
     ADD CONSTRAINT cb_section_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY public.cb_source
+    ADD CONSTRAINT cb_source_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY public.cb_unit_category
     ADD CONSTRAINT cb_unit_category_pkey PRIMARY KEY (id);
@@ -156,6 +182,9 @@ ALTER TABLE ONLY public.cb_role
 ALTER TABLE ONLY public.cb_unit
     ADD CONSTRAINT ukmamh9vjvof98qbnx037y1ew9h UNIQUE (name, abbreviation);
 
+ALTER TABLE ONLY public.cb_picture
+    ADD CONSTRAINT fk6fy3p82gtfk59au09dyyub9na FOREIGN KEY (section_id) REFERENCES public.cb_section(id);
+
 ALTER TABLE ONLY public.cb_user_role
     ADD CONSTRAINT fk7gk8v6sw7k1h7e2cepo2jmhhp FOREIGN KEY (role_id) REFERENCES public.cb_role(id);
 
@@ -164,6 +193,9 @@ ALTER TABLE ONLY public.cb_recipe_recipe
 
 ALTER TABLE ONLY public.cb_ingredient
     ADD CONSTRAINT fkblob62qr747viwc3yf6mernwi FOREIGN KEY (section_id) REFERENCES public.cb_section(id);
+
+ALTER TABLE ONLY public.cb_picture
+    ADD CONSTRAINT fkbm0f40htk2rloqs2m369bqp9s FOREIGN KEY (recipe_id) REFERENCES public.cb_recipe(id);
 
 ALTER TABLE ONLY public.cb_recipe_category
     ADD CONSTRAINT fkbybwg1o0l8tn8bh79nwyg0j1x FOREIGN KEY (category_id) REFERENCES public.cb_category(id);
@@ -182,6 +214,9 @@ ALTER TABLE ONLY public.cb_user_role
 
 ALTER TABLE ONLY public.cb_recipe
     ADD CONSTRAINT fkmrx4yyywcppxw41olxv74wo8v FOREIGN KEY (creator_id) REFERENCES public.cb_user(id);
+
+ALTER TABLE ONLY public.cb_source
+    ADD CONSTRAINT fko0nqrrbf88pcnpcygxc3a3v08 FOREIGN KEY (recipe_id) REFERENCES public.cb_recipe(id);
 
 ALTER TABLE ONLY public.cb_recipe_recipe
     ADD CONSTRAINT fkoqvv3g34ipbqs56tpv0dvmbd5 FOREIGN KEY (associated_recipe_id) REFERENCES public.cb_recipe(id);

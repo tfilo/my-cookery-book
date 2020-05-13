@@ -40,7 +40,7 @@ public class CategoryController {
     public String getCategories(final Model model) {
         LOGGER.debug("Get all categories");
         getAllCategories(model);
-        return "categoryEditor";
+        return "categories";
     }
     
     @RequestMapping(value="/save")

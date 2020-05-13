@@ -40,7 +40,7 @@ public class UnitCategoryController {
     public String getCategories(final Model model) {
         LOGGER.debug("Get all unitCategories with units");
         getAllCategories(model);
-        return "unitCategoryEditor";
+        return "unitCategories";
     }
     
     @RequestMapping(value="/save")

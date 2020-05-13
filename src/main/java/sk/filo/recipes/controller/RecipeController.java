@@ -19,7 +19,7 @@ public class RecipeController {
     public String addRecipe(final Model model) {
         LOGGER.debug("Add recipe");
         model.addAttribute("recipe", "new recipe");
-        return "recipeEditor";
+        return "recipes";
     }
 
 }

@@ -7,8 +7,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.NullValueCheckStrategy;
-import org.mapstruct.NullValueMappingStrategy;
-import org.mapstruct.NullValuePropertyMappingStrategy;
 import sk.filo.recipes.domain.User;
 import sk.filo.recipes.so.UserSO;
 

@@ -2,7 +2,6 @@ package sk.filo.recipes.domain;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,8 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import lombok.Getter;
@@ -37,42 +36,56 @@ public class Recipe {
     @GeneratedValue(generator = "category_generator")
     private Long id;
 
-    @Column(name = "title", nullable = false, length = 255)
+    @Column(name = "title", nullable = false, length = 100)
     private String title;
     
     @Column(name = "description", length = 255)
     private String description;
 
     @OneToMany(
+        fetch = FetchType.LAZY,
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
     @JoinColumn(name = "recipe_id", nullable = false)
     private List<Section> sections;
     
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
-    @JoinTable(name = "cb_recipe_category",
-            joinColumns = @JoinColumn(name = "recipe_id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "category_id", nullable = false))
-    private List<Category> category;
-    
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinTable(name = "cb_recipe_recipe",
             joinColumns = @JoinColumn(name = "recipe_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "associated_recipe_id", nullable = false))
     private List<Recipe> associatedRecipes;
     
-    @Column(name = "source", length = 1024)
-    private String source;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @JoinTable(name = "cb_recipe_category",
+            joinColumns = @JoinColumn(name = "recipe_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "category_id", nullable = false))
+    private List<Category> categories;
     
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "recipe_id", nullable = false)
+    private List<Source> sources;
+    
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    @JoinColumn(name = "recipe_id", nullable = false)
+    private List<Picture> pictures;
+    
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
     
     @Column(name = "created", nullable = false)
     private LocalDateTime created;
     
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "modifier_id", nullable = true)
     private User modifier;
     
