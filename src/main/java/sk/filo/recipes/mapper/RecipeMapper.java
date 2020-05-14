@@ -14,7 +14,8 @@ import sk.filo.recipes.so.RecipeSO;
  * @author tomas
  */
 @Mapper(
-    nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
+    nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
+    uses = { SimpleCategoryMapper.class, SimpleRecipeMapper.class}
 )
 public interface RecipeMapper {
 
@@ -22,7 +23,9 @@ public interface RecipeMapper {
             @Mapping(target = "creator", ignore = true),
             @Mapping(target = "created", ignore = true),
             @Mapping(target = "modifier", ignore = true),
-            @Mapping(target = "modified", ignore = true)
+            @Mapping(target = "modified", ignore = true),
+            @Mapping(target = "categories", ignore = true),
+            @Mapping(target = "associatedRecipes", ignore = true)
     })
     Recipe mapRecipeSOToRecipe(RecipeSO recipeSO);
 
@@ -30,7 +33,9 @@ public interface RecipeMapper {
             @Mapping(target = "creator", ignore = true),
             @Mapping(target = "created", ignore = true),
             @Mapping(target = "modifier", ignore = true),
-            @Mapping(target = "modified", ignore = true)
+            @Mapping(target = "modified", ignore = true),
+            @Mapping(target = "categories", ignore = true),
+            @Mapping(target = "associatedRecipes", ignore = true)
     })
     void mapRecipeSOToRecipe(RecipeSO recipeSO, @MappingTarget Recipe recipe);
     

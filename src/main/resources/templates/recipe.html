@@ -1,0 +1,155 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="sk">
+    <head>
+        <title>Recipes</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" th:href="@{'/css/style.css'}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://kit.fontawesome.com/cfd63b17be.js" crossorigin="anonymous"></script>
+        <script th:src="@{'/js/controller.js'}"></script>
+    </head>
+    <body>
+        <div th:replace="fragments/common :: header ">&nbsp;</div>
+        <nav th:replace="fragments/common :: menu('administration') ">&nbsp;</nav>
+        
+        <div class="content">
+            <div class="spacer">&nbsp;</div>
+            <div class="w3-main w3-content w3-padding" id="content">
+                <form method="post" th:if="${recipeSO!=null}" action="javascript:void(0);" id="recipeForm" th:object="${recipeSO}" th:fragment="recipeForm">
+                    <h2 class="w3-center" th:if="*{id==null}">Add recipe</h2>
+                    <h2 class="w3-center" th:if="*{id!=null}">Edit recipe</h2>
+                    <input type="hidden" th:field="*{id}"/>
+                    <input type="hidden" th:field="*{creator}"/>
+                    <input type="hidden" th:field="*{created}"/>
+                    <input type="hidden" th:field="*{modifier}"/>
+                    <input type="hidden" th:field="*{modified}"/>
+                    <div class="padding-8">
+                        <label>Title<span class="w3-text-red"> *</span></label>
+                        <input class="w3-input w3-border" type="text" th:field="*{title}" maxlength="100">
+                        <label class="w3-text-red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Incorrect title</label>
+                    </div>
+                    <div class="padding-8">
+                        <label>Description</label>
+                        <textarea class="w3-input w3-border" th:field="*{description}" style="resize:none" maxlength="255"></textarea>
+                        <label class="w3-text-red" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Incorrect description</label>
+                    </div>
+
+                    <div class="padding-8">
+                        <div>
+                            <label>Sections<span class="w3-text-red"> *</span></label>
+                            <a th:href="|javascript:submitForm('recipeForm', '@{'/recipe/sectionAdd'}');|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
+                        </div>
+                        <div class="w3-border">
+                            <div th:each="source,rowStat : *{sections}" class="w3-padding w3-display-container" th:classappend="${rowStat.even} ? 'w3-light-grey'">
+                                <input type="hidden" th:field="*{sections[__${rowStat.index}__].id}"/>
+                                <div class="padding-8">
+                                    <label>Name<span class="w3-text-red"> *</span></label>
+                                    <input class="w3-input w3-border" type="text" th:field="*{sections[__${rowStat.index}__].name}" maxlength="100">
+                                    <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].name')}" th:errors="*{sections[__${rowStat.index}__].name}">Incorrect name</label>
+                                </div>
+                                
+                                <div class="padding-8">
+                                    <div>
+                                        <label>Ingredients</label>
+                                        <a th:href="|javascript:submitForm('recipeForm', '@{'/recipe/ingredientAdd/__${rowStat.index}__'}');|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
+                                    </div>
+                                    <div class="w3-border" th:if="*{#lists.size(sections[__${rowStat.index}__].ingredients)} > 0">
+                                        <div th:each="ingredient,rowStat2 : *{sections[__${rowStat.index}__].ingredients}" class="w3-display-container" th:classappend="${rowStat2.even} ? 'w3-light-grey'">
+                                            <div class="padding-8 w3-row-padding">
+                                                <input type="hidden" th:field="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].id}"/>
+                                                <div class="w3-col l5 m5 s5 padding-8">
+                                                    <label class="source-label">Name<span class="w3-text-red"> *</span></label>
+                                                    <input class="w3-input w3-border" type="text" th:errorclass="w3-pale-red" th:field="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].name}" maxlength="255" required>
+                                                    <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].name')}" th:errors="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].name}">Incorrect name</label>
+                                                </div>
+                                                <div class="w3-col l3 m3 s3 padding-8">
+                                                    <label class="source-label">Value<span class="w3-text-red"> *</span></label>
+                                                    <input class="w3-input w3-border" type="number" th:errorclass="w3-pale-red" th:field="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].value}" required>
+                                                    <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].value')}" th:errors="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].value}">Incorrect value</label>
+                                                </div>
+                                                <div class="w3-col l4 m4 s4 padding-8">
+                                                    <label class="w3-center">Unit<span class="w3-text-red"> *</span></label>
+                                                    <select class="w3-select w3-border" th:errorclass="w3-pale-red" th:field="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].unitId}" >
+                                                        <option th:value="null"
+                                                                class="w3-block">Select value</option>
+                                                        <optgroup th:each="unitCategory : ${allUnitCategoriesWithUnits}"
+                                                                  th:label="${unitCategory.name}">
+                                                            <option th:each="unit : ${unitCategory.units}"
+                                                                    th:value="${unit.id}" 
+                                                                    th:text="${unit.name}"
+                                                                    class="w3-block">
+                                                            </option>
+                                                        </optgroup>
+                                                    </select>
+                                                    <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].unitId')}" th:errors="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].unitId}">Incorrect unit</label>
+                                                </div>
+                                            </div>
+                                            <a th:href="|javascript:submitForm('recipeForm', '@{'/recipe/ingredientRemove/__${rowStat.index}__/__${rowStat2.index}__'}');|" style="display: inline;" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
+                                        </div>
+                                    </div> 
+                                </div>
+                                
+                                <div class="padding-8">
+                                    <label>Method<span class="w3-text-red"> *</span></label>
+                                    <textarea class="w3-input w3-border" th:field="*{sections[__${rowStat.index}__].method}" style="resize:none" maxlength="2000" required></textarea>
+                                    <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].method')}" th:errors="*{sections[__${rowStat.index}__].method}">Incorrect method</label>
+                                </div>
+                                
+                                <a th:if="${!rowStat.first}"  th:href="|javascript:submitForm('recipeForm', '@{'/recipe/sectionRemove/__${rowStat.index}__'}');|" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
+                                    
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="padding-8">
+                        ASSOCIATED RECIPES
+                    </div>
+                    
+                    <div class="padding-8">
+                        <label>Categories<span class="w3-text-red"> *</span></label>
+                        <select class="w3-select w3-border" th:errorclass="w3-pale-red" multiple th:field="*{categories}" th:size="${#lists.size(allCategories)}">
+                            <option th:each="category : ${allCategories}"
+                                    th:value="${category.id}" 
+                                    th:text="${category.name}"
+                                    class="w3-block">
+                            </option>
+                        </select>
+                        <label class="w3-text-red" th:if="${#fields.hasErrors('categories')}" th:errors="*{categories}">Incorrect categories</label>
+                    </div>
+
+                    <div class="padding-8">
+                        <div>
+                            <label>Sources</label>
+                            <a th:href="|javascript:submitForm('recipeForm', '@{'/recipe/sourceAdd'}');|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
+                        </div>
+                        <div class="w3-border" th:if="*{#lists.size(sources)} > 0">
+                            <div th:each="source,rowStat : *{sources}" class="w3-padding w3-display-container" th:classappend="${rowStat.even} ? 'w3-light-grey'">
+                                <div class="padding-8">
+                                    <label class="source-label">URL<span class="w3-text-red"> *</span></label>
+                                    <input class="w3-input w3-border" type="text" th:errorclass="w3-pale-red" th:field="*{sources[__${rowStat.index}__].url}" maxlength="1000" required>
+                                    <label class="w3-text-red" th:if="${#fields.hasErrors('sources[__${rowStat.index}__].url')}" th:errors="*{sources[__${rowStat.index}__].url}">Incorrect url</label>
+                                </div>
+                                <a th:href="|javascript:submitForm('recipeForm', '@{'/recipe/sourceRemove/__${rowStat.index}__'}');|" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
+                            </div>
+                        </div> 
+                    </div>
+
+                    <div class="padding-8">
+                        <label th:if="*{creator!=''}">Created by <span th:text="*{creator}">username</span></label>
+                        <label th:if="*{created!=null}">Created at <span th:text="*{created}">date</span></label>
+                        <label th:if="*{modifier!=''}">Modified by <span th:text="*{modifier}">username</span></label>
+                        <label th:if="*{modified!=null}">Modified at <span th:text="*{modified}">date</span></label>
+                    </div>
+                    <div class="padding-8">
+                        <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('recipeForm', '@{'/recipe/save'}');|"><i class="fas fa-save"></i>&nbsp;<span>Save</span></button>
+                        <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitForm('recipeForm', '@{'/recipe/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span>Delete</span></button>
+                        <button type="submit" class="w3-button w3-red" th:href="@{'/'}"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
+ 

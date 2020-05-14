@@ -48,8 +48,4 @@ public class UserSO {
         }
         return roles;
     }
-    
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
-    }
 }

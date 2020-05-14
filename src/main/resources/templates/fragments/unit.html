@@ -11,17 +11,17 @@
         <form method="post" th:if="${unitSO!=null}" action="javascript:void(0);" id="unitForm" th:object="${unitSO}" th:fragment="unitForm">
             <h2 class="w3-center">Unit</h2>
             <input type="hidden" th:field="*{id}"/>
-            <p>
+            <div class="padding-8">
                 <label class="w3-center">Name <span class="w3-text-red">*</span></label>
                 <input class="w3-input w3-border" type="text" th:field="*{name}" maxlength="255">
                 <label class="w3-text-red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect name</label>
-            </p>
-            <p>
+            </div>
+            <div class="padding-8">
                 <label class="w3-center">Abbreviation <span class="w3-text-red">*</span></label>
                 <input class="w3-input w3-border" type="text" th:field="*{abbreviation}" maxlength="255">
                 <label class="w3-text-red" th:if="${#fields.hasErrors('abbreviation')}" th:errors="*{abbreviation}">Incorrect abbreviation</label>
-            </p>
-            <p>
+            </div>
+            <div class="padding-8">
                 <label class="w3-center">Category <span class="w3-text-red">*</span></label>
                 <select class="w3-select w3-border" th:field="*{unitCategoryId}">
                     <option th:each="category : ${availableUnitCategories}" 
@@ -29,12 +29,12 @@
                             th:text="${category.name}">Category name</option>
                 </select>
                 <label class="w3-text-red" th:if="${#fields.hasErrors('unitCategoryId')}" th:errors="*{unitCategoryId}">Incorrect unitCategoryId</label>
-            </p>
-            <p>
+            </div>
+            <div class="padding-8">
                 <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('unitForm', '@{'/admin/unit/save'}');|"><i class="fas fa-save"></i>&nbsp;<span>Save</span></button>
                 <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitForm('unitForm', '@{'/admin/unit/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span>Delete</span></button>
                 <button type="submit" class="w3-button w3-red" th:onclick="|submitForm('unitForm', '@{'/admin/unitcategory/cancel'}');|"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></button>
-            </p>
+            </div>
         </form>
     </body>
 </html>

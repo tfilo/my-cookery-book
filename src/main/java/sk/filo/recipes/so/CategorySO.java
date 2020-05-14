@@ -4,6 +4,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -11,12 +12,13 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@ToString
 public class CategorySO {
 
-    Long id;
+    private Long id;
     
     @NotBlank
     @Size(max=255)
-    String name;
+    private String name;
     
 }

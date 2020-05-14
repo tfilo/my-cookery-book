@@ -1,6 +1,8 @@
 package sk.filo.recipes.domain;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -55,5 +57,19 @@ public class Section {
     )
     @JoinColumn(name = "section_id", nullable = false)
     private List<Picture> pictures;
+    
+    public List<Ingredient> getIngredients() {
+        if (Objects.isNull(ingredients)) {
+            ingredients = new ArrayList<>();
+        }
+        return ingredients;
+    }
+    
+    public List<Picture> getPictures() {
+        if (Objects.isNull(pictures)) {
+            pictures = new ArrayList<>();
+        }
+        return pictures;
+    }
     
 }

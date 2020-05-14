@@ -11,16 +11,16 @@
         <form method="post" th:if="${categorySO!=null}" action="javascript:void(0);" id="categoryForm" th:object="${categorySO}" th:fragment="categoryForm">
             <h2 class="w3-center">Category</h2>
             <input type="hidden" th:field="*{id}"/>
-            <p>
+            <div class="padding-8">
                 <label class="w3-center">Name <span class="w3-text-red">*</span></label>
                 <input class="w3-input w3-border" type="text" th:field="*{name}" maxlength="255">
                 <label class="w3-text-red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect  name</label>
-            </p>
-            <p>
+            </div>
+            <div class="padding-8">
                 <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('categoryForm', '@{'/admin/category/save'}');|"><i class="fas fa-save"></i>&nbsp;<span>Save</span></button>
                 <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitForm('categoryForm', '@{'/admin/category/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span>Delete</span></button>
                 <button type="submit" class="w3-button w3-red" th:onclick="|submitForm('categoryForm', '@{'/admin/category/cancel'}');|"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></button>
-            </p>
+            </div>
         </form>
         <div th:fragment="categoriesList">
             <div>

@@ -1,6 +1,8 @@
 package sk.filo.recipes.domain;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,6 +41,13 @@ public class UnitCategory {
     
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<Unit> units;
+    
+    public List<Unit> getUnits() {
+        if (Objects.isNull(units)) {
+            units = new ArrayList<>();
+        }
+        return units;
+    }
     
     @PreRemove
     public void checkUnitsBeforeRemoval() {

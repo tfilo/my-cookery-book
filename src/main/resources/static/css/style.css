@@ -54,7 +54,7 @@ body,html{
 }
 
 select[multiple] option:checked {
-  background: gray linear-gradient(0deg, gray 0%, gray 100%);
+    background: gray linear-gradient(0deg, gray 0%, gray 100%);
 }
 
 .circle-btn{
@@ -73,4 +73,16 @@ select[multiple] option:checked {
 .login-dialog{
     left: -153px;
     width: 200px;
+}
+
+.margin-top-16{
+    margin-top: 16px;
+}
+
+.float-left{
+    float: left;
+}
+
+.padding-8{
+    padding-top:8px!important;padding-bottom:8px!important
 }

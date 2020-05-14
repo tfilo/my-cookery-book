@@ -1,7 +1,11 @@
 package sk.filo.recipes.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -91,4 +95,39 @@ public class Recipe {
     
     @Column(name = "modified", nullable = true)
     private LocalDateTime modified;
+    
+    public List<Section> getSection() {
+        if (Objects.isNull(sections)) {
+            sections = new ArrayList<>();
+        }
+        return sections;
+    }
+    
+    public List<Recipe> getAssociatedRecipes() {
+        if (Objects.isNull(associatedRecipes)) {
+            associatedRecipes = new ArrayList<>();
+        }
+        return associatedRecipes;
+    }
+    
+    public List<Category> getCategories() {
+        if (Objects.isNull(categories)) {
+            categories = new ArrayList<>();
+        }
+        return categories;
+    }
+    
+    public List<Source> getSources() {
+        if (Objects.isNull(sources)) {
+            sources = new ArrayList<>();
+        }
+        return sources;
+    }
+    
+    public List<Picture> getPictures() {
+        if (Objects.isNull(pictures)) {
+            pictures = new ArrayList<>();
+        }
+        return pictures;
+    }
 }

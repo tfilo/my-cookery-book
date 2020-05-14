@@ -4,6 +4,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -11,12 +12,13 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@ToString
 public class SourceSO {
     
-    Long id;
+    private Long id;
     
     @NotBlank
     @Size(max=1000)
-    String url;
+    private String url;
     
 }
