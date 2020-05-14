@@ -5,6 +5,7 @@ INSERT INTO cb_user (id, username, password, enabled) VALUES (2, 'user', '$2a$10
 INSERT INTO cb_role (id, name) VALUES (1, 'ROLE_ADMIN');
 INSERT INTO cb_role (id, name) VALUES (2, 'ROLE_USER');
 INSERT INTO cb_user_role (user_id, role_id) VALUES (1, 1);
+INSERT INTO cb_user_role (user_id, role_id) VALUES (1, 2);
 INSERT INTO cb_user_role (user_id, role_id) VALUES (2, 2);
 
 -- pg_dumpall -O -x -a --inserts --no-comments -l recipes -U user   > dump.sql
@@ -29,8 +30,8 @@ INSERT INTO public.cb_unit VALUES (10, 'č.l.', 'Čajová lyžička', 3);
 INSERT INTO public.cb_unit VALUES (11, 'šl.', 'Šálka', 3);
 SELECT pg_catalog.setval('public.cb_category_seq', 5, true);
 SELECT pg_catalog.setval('public.cb_ingredient_seq', 1, false);
-SELECT pg_catalog.setval('public.cb_role_seq', 1, false);
+SELECT pg_catalog.setval('public.cb_role_seq', 3, false);
 SELECT pg_catalog.setval('public.cb_section_seq', 1, false);
 SELECT pg_catalog.setval('public.cb_unit_category_seq', 3, true);
 SELECT pg_catalog.setval('public.cb_unit_seq', 11, true);
-SELECT pg_catalog.setval('public.cb_user_seq', 1, false);
+SELECT pg_catalog.setval('public.cb_user_seq', 3, false);

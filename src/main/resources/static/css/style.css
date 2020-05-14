@@ -86,3 +86,7 @@ select[multiple] option:checked {
 .padding-8{
     padding-top:8px!important;padding-bottom:8px!important
 }
+
+.quill-editor-div{
+    min-height: 100px;
+}

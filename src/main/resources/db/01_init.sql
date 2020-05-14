@@ -30,7 +30,7 @@ CREATE SEQUENCE public.cb_ingredient_seq
 
 CREATE TABLE public.cb_picture (
     id bigint NOT NULL,
-    data oid,
+    data oid NOT NULL,
     name character varying(255),
     section_id bigint NOT NULL,
     recipe_id bigint NOT NULL
@@ -85,7 +85,7 @@ CREATE SEQUENCE public.cb_section_seq
 
 CREATE TABLE public.cb_source (
     id bigint NOT NULL,
-    url character varying(255) NOT NULL,
+    url character varying(1000) NOT NULL,
     recipe_id bigint NOT NULL
 );
 
