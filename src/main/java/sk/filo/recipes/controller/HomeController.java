@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import sk.filo.recipes.service.CategoryService;
-import sk.filo.recipes.so.CategorySO;
+import sk.filo.recipes.so.CategoryWithRecipeBasicSO;
 
 /**
  *
@@ -23,9 +23,10 @@ public class HomeController {
     @Autowired
     CategoryService categoryService;
     
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @ModelAttribute("allCategories")
-    public List<CategorySO> allCategories() {
-        return categoryService.getAll();
+    public List<CategoryWithRecipeBasicSO> allCategories() {
+        return categoryService.getFist4RecipesForEveryCategory();
     }
     
     @RequestMapping({"/", "/"})

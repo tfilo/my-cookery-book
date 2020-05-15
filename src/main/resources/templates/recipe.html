@@ -1,39 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" th:lang="sk">
-    <head>
-        <title>Recipes</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-        <link rel="stylesheet" th:href="@{'/css/style.css'}">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script src="https://kit.fontawesome.com/cfd63b17be.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-        <script th:src="@{'/js/controller.js'}"></script>
-        <script>
-            this.editors = {};
-
-            Quill.register('modules/counter', function (quill, options) {
-                var container = document.querySelector(options.container);
-                quill.on('text-change', function () {
-                    var text = quill.getText();
-                    if (options.unit === 'word') {
-                        container.innerText = text.split(/\s+/).length + ' words';
-                    } else {
-                        container.innerText = (text.length - 1) + ' characters';
-                    }
-                });
-            });
-            
-            Quill.register('modules/textarea', function (quill, options) {
-                var container = document.querySelector(options.container);
-                quill.on('text-change', function () {
-                    var json = JSON.stringify(quill.getContents());
-                    container.setAttribute('value', json);
-                });
-            });
-        </script>
+    <head th:replace="fragments/common :: htmlHeader">
     </head>
     <body>
         <div th:replace="fragments/common :: header ">&nbsp;</div>
@@ -64,7 +31,7 @@
                     <div class="padding-8">
                         <div>
                             <label>Sections<span class="w3-text-red"> *</span></label>
-                            <a th:href="|javascript:submitForm('recipeForm', '@{'/recipe/sectionAdd'}');|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
+                            <a th:href="|javascript:submitForm('recipeForm', 'content', '@{'/recipe/sectionAdd'}');|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
                         </div>
                         <div class="w3-border">
                             <div th:each="source,rowStat : *{sections}" class="w3-padding w3-display-container" th:classappend="${rowStat.even} ? 'w3-light-grey'">
@@ -78,7 +45,7 @@
                                 <div class="padding-8">
                                     <div>
                                         <label>Ingredients</label>
-                                        <a th:href="|javascript:submitForm('recipeForm', '@{'/recipe/ingredientAdd/__${rowStat.index}__'}');|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
+                                        <a th:href="|javascript:submitForm('recipeForm', 'content', '@{'/recipe/ingredientAdd/__${rowStat.index}__'}');|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
                                     </div>
                                     <div class="w3-border" th:if="*{#lists.size(sections[__${rowStat.index}__].ingredients)} > 0">
                                         <div th:each="ingredient,rowStat2 : *{sections[__${rowStat.index}__].ingredients}" class="w3-display-container" th:classappend="${rowStat2.even} ? 'w3-light-grey'">
@@ -111,71 +78,41 @@
                                                     <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].unitId')}" th:errors="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].unitId}">Incorrect unit</label>
                                                 </div>
                                             </div>
-                                            <a th:href="|javascript:submitForm('recipeForm', '@{'/recipe/ingredientRemove/__${rowStat.index}__/__${rowStat2.index}__'}');|" style="display: inline;" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
+                                            <a th:href="|javascript:submitForm('recipeForm', 'content', '@{'/recipe/ingredientRemove/__${rowStat.index}__/__${rowStat2.index}__'}');|" style="display: inline;" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
                                         </div>
                                     </div> 
                                 </div>
 
                                 <div class="padding-8">
                                     <label>Method<span class="w3-text-red"> *</span></label>
-                                    <input th:field="*{sections[__${rowStat.index}__].method}" type="hidden" required></input>
-                                    <div th:id="|quillSection${rowStat.index}Method|" class="quill-editor-div"></div>
-                                    <div th:id="|quillSection${rowStat.index}MethodCounter|"></div>
+                                    <input th:field="*{sections[__${rowStat.index}__].method}" th:id="|sections__${rowStat.index}__method|" type="hidden" required></input>
+                                    <div th:id="|method${rowStat.index}|" class="quill-editor-div"></div>
+                                    <div th:id="|method${rowStat.index}length|"></div>
                                     <script th:inline="javascript">
                                         var id = [[${rowStat.index}]];
-
-                                        this.editors[id] = new Quill('#quillSection' + id + 'Method', {
-                                            //readOnly: true,
-                                            modules: {
-                                                toolbar: [
-                                                    ['bold', 'italic', 'underline'],
-                                                    [{'list': 'ordered'}, {'list': 'bullet'}],
-                                                    [{'indent': '-1'}, {'indent': '+1'}],
-                                                    [{'align': []}],
-                                                    ['clean']
-                                                ],
-                                                //toolbar: false,
-                                                counter: {
-                                                    container: '#quillSection' + id + 'MethodCounter',
-                                                    unit: 'character'
-                                                },
-                                                textarea: {
-                                                    container: '#sections' + id + '\\.method'
-                                                },
-                                                clipboard: {
-                                                    matchers: [
-                                                        [Node.ELEMENT_NODE, (node, delta) => {
-                                                                let ops = [];
-                                                                delta.ops.forEach(op => {
-                                                                    if (op.insert && typeof op.insert === 'string') {
-                                                                        ops.push({
-                                                                            insert: op.insert
-                                                                        });
-                                                                    }
-                                                                });
-                                                                delta.ops = ops;
-                                                                return delta;
-                                                            }]
-                                                    ]
-                                                }
-                                            },
-                                            theme: 'snow'
-                                        });
-                                        var content = [[*{sections[__${rowStat.index}__].method}]];
-                                        this.editors[id].setContents(JSON.parse(content));
+                                        var editor = new Quill('#method' + id, getQuillEditConfiguration("#method" + id + "length", "#sections" + id + "method"));
+                                        editor.setContents(JSON.parse($("#sections" + id + "method").val()));
                                     </script>
 
                                     <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].method')}" th:errors="*{sections[__${rowStat.index}__].method}">Incorrect method</label>
                                 </div>
 
-                                <a th:if="${!rowStat.first}"  th:href="|javascript:submitForm('recipeForm', '@{'/recipe/sectionRemove/__${rowStat.index}__'}');|" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
+                                <a th:if="${!rowStat.first}"  th:href="|javascript:submitForm('recipeForm', 'content', '@{'/recipe/sectionRemove/__${rowStat.index}__'}');|" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
 
                             </div>
                         </div>
                     </div>
 
                     <div class="padding-8">
-                        ASSOCIATED RECIPES
+                        <label>Associated Recipes TODO - FIX THIS FOR FILTERING SELECT AND SEPARED LIST OF SELECTED<span class="w3-text-red"> *</span></label>
+                        <select class="w3-select w3-border" th:errorclass="w3-pale-red" multiple th:field="*{associatedRecipes}" th:size="${#lists.size(allRecipes)}">
+                            <option th:each="recipe : ${allRecipes}"
+                                    th:value="${recipe.id}" 
+                                    th:text="${recipe.title}"
+                                    class="w3-block">
+                            </option>
+                        </select>
+                        <label class="w3-text-red" th:if="${#fields.hasErrors('associatedRecipes')}" th:errors="*{associatedRecipes}">Incorrect associated recipes</label>
                     </div>
 
                     <div class="padding-8">
@@ -193,7 +130,7 @@
                     <div class="padding-8">
                         <div>
                             <label>Sources</label>
-                            <a th:href="|javascript:submitForm('recipeForm', '@{'/recipe/sourceAdd'}');|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
+                            <a th:href="|javascript:submitForm('recipeForm', 'content', '@{'/recipe/sourceAdd'}');|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
                         </div>
                         <div class="w3-border" th:if="*{#lists.size(sources)} > 0">
                             <div th:each="source,rowStat : *{sources}" class="w3-padding w3-display-container" th:classappend="${rowStat.even} ? 'w3-light-grey'">
@@ -202,20 +139,20 @@
                                     <input class="w3-input w3-border" type="text" th:errorclass="w3-pale-red" th:field="*{sources[__${rowStat.index}__].url}" maxlength="1000" required>
                                     <label class="w3-text-red" th:if="${#fields.hasErrors('sources[__${rowStat.index}__].url')}" th:errors="*{sources[__${rowStat.index}__].url}">Incorrect url</label>
                                 </div>
-                                <a th:href="|javascript:submitForm('recipeForm', '@{'/recipe/sourceRemove/__${rowStat.index}__'}');|" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
+                                <a th:href="|javascript:submitForm('recipeForm', 'content', '@{'/recipe/sourceRemove/__${rowStat.index}__'}');|" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
                             </div>
                         </div> 
                     </div>
 
                     <div class="padding-8">
-                        <label th:if="*{creator}">Created by <span th:text="*{creator}">username</span></label>
-                        <label th:if="*{created!=null}">Created at <span th:text="*{created}">date</span></label>
-                        <label th:if="*{modifier}">Modified by <span th:text="*{modifier}">username</span></label>
-                        <label th:if="*{modified!=null}">Modified at <span th:text="*{modified}">date</span></label>
+                        <div th:if="*{creator}">Created by <span th:text="*{creator}">username</span>.</div>
+                        <div th:if="*{created!=null}">Created at <span th:text="${#temporals.format(recipeSO.created, 'dd.MM.yyyy HH:mm')}" >date</span>.</div>
+                        <div th:if="*{modifier}">Modified by <span th:text="*{modifier}">username</span>.</div>
+                        <div th:if="*{modified!=null}">Modified at <span th:text="${#temporals.format(recipeSO.modified, 'dd.MM.yyyy HH:mm')}">date</span>.</div>
                     </div>
                     <div class="padding-8">
-                        <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('recipeForm', '@{'/recipe/save'}');|"><i class="fas fa-save"></i>&nbsp;<span>Save</span></button>
-                        <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitForm('recipeForm', '@{'/recipe/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span>Delete</span></button>
+                        <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/save'}');|"><i class="fas fa-save"></i>&nbsp;<span>Save</span></button>
+                        <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span>Delete</span></button>
                         <button type="submit" class="w3-button w3-red" th:href="@{'/'}"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></button>
                     </div>
                 </form>

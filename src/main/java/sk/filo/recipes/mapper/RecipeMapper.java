@@ -7,6 +7,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.NullValueCheckStrategy;
 import sk.filo.recipes.domain.Recipe;
+import sk.filo.recipes.so.RecipeBasicSO;
 import sk.filo.recipes.so.RecipeSO;
 
 /**
@@ -15,7 +16,7 @@ import sk.filo.recipes.so.RecipeSO;
  */
 @Mapper(
     nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
-    uses = { SimpleCategoryMapper.class, SimpleRecipeMapper.class}
+    uses = { SimpleCategoryMapper.class, SimpleRecipeMapper.class, IngredientMapper.class}
 )
 public interface RecipeMapper {
 
@@ -25,17 +26,21 @@ public interface RecipeMapper {
             @Mapping(target = "modifier", ignore = true),
             @Mapping(target = "modified", ignore = true),
             @Mapping(target = "categories", ignore = true),
-            @Mapping(target = "associatedRecipes", ignore = true)
+            @Mapping(target = "associatedRecipes", ignore = true),
+            @Mapping(target = "sections", ignore = true),
+            @Mapping(target = "pictures", ignore = true)
     })
     Recipe mapRecipeSOToRecipe(RecipeSO recipeSO);
-
+    
     @Mappings({
             @Mapping(target = "creator", ignore = true),
             @Mapping(target = "created", ignore = true),
             @Mapping(target = "modifier", ignore = true),
             @Mapping(target = "modified", ignore = true),
             @Mapping(target = "categories", ignore = true),
-            @Mapping(target = "associatedRecipes", ignore = true)
+            @Mapping(target = "associatedRecipes", ignore = true),
+            @Mapping(target = "sections", ignore = true),
+            @Mapping(target = "pictures", ignore = true)
     })
     void mapRecipeSOToRecipe(RecipeSO recipeSO, @MappingTarget Recipe recipe);
     
@@ -46,4 +51,8 @@ public interface RecipeMapper {
     RecipeSO mapRecipeToRecipeSO(Recipe recipe);
     
     List<RecipeSO> mapRecipeListToRecipeSOList(List<Recipe> recipe);
+    
+    RecipeBasicSO mapRecipeToRecipeBasicSO(Recipe recipe);
+    
+    List<RecipeBasicSO> mapRecipeListToRecipeBasicSOList(List<Recipe> recipe);
 }

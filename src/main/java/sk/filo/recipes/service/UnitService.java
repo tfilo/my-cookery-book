@@ -1,14 +1,14 @@
 package sk.filo.recipes.service;
 
 import java.util.List;
-import java.util.Objects;
 import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import sk.filo.recipes.domain.Unit;
-import sk.filo.recipes.domain.UnitCategory;
 import sk.filo.recipes.mapper.UnitMapper;
 import sk.filo.recipes.repository.UnitCategoryRepository;
 import sk.filo.recipes.repository.UnitRepository;
@@ -47,16 +47,8 @@ public class UnitService {
  
     public void save(UnitSO unitSO) {
         LOGGER.debug("save unitSO {}", unitSO);
-        Unit unit;
-        if (Objects.isNull(unitSO.getId())) {
-            unit = unitMapper.mapUnitSOToUnit(unitSO);
-        } else {
-            unit = unitRepository.getOne(unitSO.getId());
-            unit.setName(unitSO.getName());
-            unit.setAbbreviation(unitSO.getAbbreviation());
-        }
-        unit.setCategory(unitCategoryRepository.getOne(unitSO.getUnitCategoryId()));
-        
+        Unit unit = unitMapper.mapUnitSOToUnit(unitSO);
+        unit.setCategory(unitCategoryRepository.findById(unitSO.getUnitCategoryId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found!")));
         LOGGER.debug("save unit {}", unit);
         unitRepository.save(unit);
     }

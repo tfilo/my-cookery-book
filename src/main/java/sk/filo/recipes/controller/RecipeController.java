@@ -17,6 +17,7 @@ import sk.filo.recipes.service.RecipeService;
 import sk.filo.recipes.service.UnitCategoryService;
 import sk.filo.recipes.so.CategorySO;
 import sk.filo.recipes.so.IngredientSO;
+import sk.filo.recipes.so.RecipeBasicSO;
 import sk.filo.recipes.so.RecipeSO;
 import sk.filo.recipes.so.SectionSO;
 import sk.filo.recipes.so.SourceSO;
@@ -53,12 +54,26 @@ public class RecipeController {
         return unitCategoryService.getAll();
     }
     
+    @ModelAttribute("allRecipes")
+    public List<RecipeBasicSO> allRecipes() {
+        return recipeService.getAllBasic();
+    }
+    
     @RequestMapping(value="/add")
     public String addRecipe(final Model model, final HttpServletRequest req) {
         LOGGER.debug("Add recipe");
         RecipeSO recipeSO = new RecipeSO();
         recipeSO.getSections().add(new SectionSO());
         recipeSO.setCreator(req.getUserPrincipal().getName());
+        model.addAttribute(MODEL_RECIPE_SO, recipeSO);
+        return "recipe";
+    }
+    
+    @RequestMapping(value="/edit/{recipeId}")
+    public String editRecipe(final Model model, @PathVariable Long recipeId, final HttpServletRequest req) {
+        LOGGER.debug("Edit recipe by id {}", recipeId);
+        RecipeSO recipeSO = recipeService.get(recipeId);
+        LOGGER.debug("Loaded recipe {}", recipeSO);
         model.addAttribute(MODEL_RECIPE_SO, recipeSO);
         return "recipe";
     }

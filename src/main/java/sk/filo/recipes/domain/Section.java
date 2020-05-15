@@ -1,5 +1,6 @@
 package sk.filo.recipes.domain;
 
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,6 +17,8 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 /**
  *
@@ -26,6 +29,10 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "cb_section")
+@TypeDef(
+    name = "jsonb",
+    typeClass = JsonBinaryType.class
+)
 @SequenceGenerator(name = "section_generator", allocationSize = 1, sequenceName = "cb_section_seq")
 public class Section {
     
@@ -41,13 +48,15 @@ public class Section {
     private String name;
    
     @OneToMany(
+        fetch = FetchType.LAZY,   
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
     @JoinColumn(name = "section_id", nullable = false)
     private List<Ingredient> ingredients;
     
-    @Column(name = "method", nullable = false, length = 2000)
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb", name = "method", nullable = false)
     private String method;
     
     @OneToMany(
@@ -55,7 +64,7 @@ public class Section {
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    @JoinColumn(name = "section_id", nullable = false)
+    @JoinColumn(name = "section_id")
     private List<Picture> pictures;
     
     public List<Ingredient> getIngredients() {

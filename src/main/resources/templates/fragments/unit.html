@@ -1,11 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" th:lang="sk">
-    <head>
-        <title>Recipes</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-        <link rel="stylesheet" th:href="@{'/css/style.css'}">
+    <head th:replace="fragments/common :: htmlHeader">
     </head>
     <body>
         <form method="post" th:if="${unitSO!=null}" action="javascript:void(0);" id="unitForm" th:object="${unitSO}" th:fragment="unitForm">
@@ -31,9 +26,9 @@
                 <label class="w3-text-red" th:if="${#fields.hasErrors('unitCategoryId')}" th:errors="*{unitCategoryId}">Incorrect unitCategoryId</label>
             </div>
             <div class="padding-8">
-                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('unitForm', '@{'/admin/unit/save'}');|"><i class="fas fa-save"></i>&nbsp;<span>Save</span></button>
-                <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitForm('unitForm', '@{'/admin/unit/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span>Delete</span></button>
-                <button type="submit" class="w3-button w3-red" th:onclick="|submitForm('unitForm', '@{'/admin/unitcategory/cancel'}');|"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></button>
+                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('unitForm', 'content', '@{'/admin/unit/save'}');|"><i class="fas fa-save"></i>&nbsp;<span>Save</span></button>
+                <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitForm('unitForm', 'content', '@{'/admin/unit/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span>Delete</span></button>
+                <button type="submit" class="w3-button w3-red" th:onclick="|submitForm('unitForm', 'content', '@{'/admin/unitcategory/cancel'}');|"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></button>
             </div>
         </form>
     </body>

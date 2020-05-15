@@ -1,23 +1,20 @@
 package sk.filo.recipes.service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.util.StringUtils;
 import sk.filo.recipes.domain.Category;
-import sk.filo.recipes.domain.Role;
-import sk.filo.recipes.domain.RoleName;
-import sk.filo.recipes.domain.User;
+import sk.filo.recipes.domain.Recipe;
 import sk.filo.recipes.mapper.CategoryMapper;
+import sk.filo.recipes.mapper.RecipeMapper;
 import sk.filo.recipes.repository.CategoryRepository;
+import sk.filo.recipes.repository.RecipeRepository;
 import sk.filo.recipes.so.CategorySO;
-import sk.filo.recipes.so.UserSO;
+import sk.filo.recipes.so.CategoryWithRecipeBasicSO;
 
 /**
  *
@@ -29,7 +26,11 @@ public class CategoryService {
 
     private CategoryMapper categoryMapper;
     
+    private RecipeMapper recipeMapper;
+    
     private CategoryRepository categoryRepository;
+    
+    private RecipeRepository recipeRepository;
     
     @Autowired
     public void setCategoryMapper(CategoryMapper categoryMapper) {
@@ -37,8 +38,18 @@ public class CategoryService {
     }
     
     @Autowired
+    public void setRecipeMapper(RecipeMapper recipeMapper) {
+        this.recipeMapper = recipeMapper;
+    }
+    
+    @Autowired
     public void setCategoryRepository(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
+    }
+    
+    @Autowired
+    public void setRecipeRepository(RecipeRepository recipeRepository) {
+        this.recipeRepository = recipeRepository;
     }
     
     private static final Logger LOGGER = LoggerFactory.getLogger(CategoryService.class);
@@ -46,16 +57,7 @@ public class CategoryService {
     @Transactional
     public void save(CategorySO categorySO) {
         LOGGER.debug("save categorySO {}", categorySO);
-        Category category;
-        if (Objects.isNull(categorySO.getId())) {
-            category = categoryMapper.mapCategorySOToCategory(categorySO);
-        } else {
-            category = categoryRepository.getOne(categorySO.getId());
-            category.setName(categorySO.getName());
-        }
-        
-        LOGGER.debug("save category {}", category);
-        categoryRepository.save(category);
+        categoryRepository.save(categoryMapper.mapCategorySOToCategory(categorySO));
     }
     
     public void delete(Long id) {
@@ -65,6 +67,20 @@ public class CategoryService {
     public List<CategorySO> getAll() {
         List<Category> allUsers = categoryRepository.findAll();
         return categoryMapper.mapCategoryListToCategorySOList(allUsers);
+    }
+    
+    public List<CategoryWithRecipeBasicSO> getFist4RecipesForEveryCategory() {
+        List<Category> categories = categoryRepository.findAll();
+        List<CategoryWithRecipeBasicSO> list = categoryMapper.mapCategoryListToCategoryWithRecipeBasicSOList(categories);
+        
+        list.forEach((so) -> {
+            List<Recipe> recipes = recipeRepository.findFirst4ByCategoriesId(so.getId());
+            recipes.forEach((r) -> {
+                so.getRecipes().add(recipeMapper.mapRecipeToRecipeBasicSO(r));
+            });
+        });
+        
+        return list;
     }
     
     public CategorySO get(Long id) {

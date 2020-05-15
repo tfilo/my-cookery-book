@@ -5,6 +5,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.NullValueCheckStrategy;
 import sk.filo.recipes.domain.Category;
 import sk.filo.recipes.so.CategorySO;
+import sk.filo.recipes.so.CategoryWithRecipeBasicSO;
 
 /**
  *
@@ -20,4 +21,8 @@ public interface CategoryMapper {
     CategorySO mapCategoryToCategorySO(Category category);
 
     List<CategorySO> mapCategoryListToCategorySOList(List<Category> category);
+    
+    CategoryWithRecipeBasicSO mapCategoryToCategoryWithRecipeBasicSO(Category category);
+
+    List<CategoryWithRecipeBasicSO> mapCategoryListToCategoryWithRecipeBasicSOList(List<Category> category);
 }

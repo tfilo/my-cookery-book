@@ -7,7 +7,6 @@ import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +24,7 @@ public class RecipeSO {
     private Long id;
     
     @NotBlank
-    @Size(max=100)
+    @Size(max=80)
     private String title;
     
     @Size(max=255)
@@ -34,9 +33,8 @@ public class RecipeSO {
     @Valid
     @NotEmpty
     private List<SectionSO> sections;
-    
-    
-    private List<Long> associatedRecipeIds;
+
+    private List<Long> associatedRecipes;
     
     @NotEmpty
     private List<Long> categories;
@@ -60,10 +58,10 @@ public class RecipeSO {
     }
 
     public List<Long> getAssociatedRecipes() {
-        if (Objects.isNull(associatedRecipeIds)) {
-            associatedRecipeIds = new ArrayList<>();
+        if (Objects.isNull(associatedRecipes)) {
+            associatedRecipes = new ArrayList<>();
         }
-        return associatedRecipeIds;
+        return associatedRecipes;
     }
     
     public List<Long> getCategories() {

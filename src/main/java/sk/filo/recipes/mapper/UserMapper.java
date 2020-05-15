@@ -24,6 +24,12 @@ public interface UserMapper {
         @Mapping(target = "roles", ignore = true)
     })
     User mapUserSOToUser(UserSO userSO);
+    
+    @Mappings({
+        @Mapping(target = "password", ignore = true),
+        @Mapping(target = "roles", ignore = true)
+    })
+    void mapUserSOToUser(UserSO userSO, @MappingTarget User user);
 
     @Mappings({
             @Mapping(target = "password", ignore = true),

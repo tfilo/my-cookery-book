@@ -66,20 +66,16 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(userSO.getPassword()));
         } else {
             user = userRepository.getOne(userSO.getId());
+            userMapper.mapUserSOToUser(userSO, user);
             if (!StringUtils.isEmptyOrWhitespace(userSO.getPassword())) {
                 user.setPassword(passwordEncoder.encode(userSO.getPassword()));
             }
-            user.setUsername(userSO.getUsername());
-            user.setEnabled(userSO.getEnabled());
-            user.setFirstName(userSO.getFirstName());
-            user.setLastName(userSO.getLastName());
         }
         Set<Role> roles = new HashSet<>();
         userSO.getRoles().forEach((roleName) -> {
             roles.add(roleRepository.findByName(RoleName.valueOf(roleName)));
         });
         user.setRoles(roles);
-        
         LOGGER.debug("save user {}", user);
         userRepository.save(user);
     }

@@ -2,10 +2,8 @@ package sk.filo.recipes.domain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,7 +38,7 @@ public class Recipe {
     @GeneratedValue(generator = "category_generator")
     private Long id;
 
-    @Column(name = "title", nullable = false, length = 100)
+    @Column(name = "title", nullable = false, length = 80)
     private String title;
     
     @Column(name = "description", length = 255)
@@ -54,13 +52,13 @@ public class Recipe {
     @JoinColumn(name = "recipe_id", nullable = false)
     private List<Section> sections;
     
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH})
     @JoinTable(name = "cb_recipe_recipe",
             joinColumns = @JoinColumn(name = "recipe_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "associated_recipe_id", nullable = false))
     private List<Recipe> associatedRecipes;
     
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH})
     @JoinTable(name = "cb_recipe_category",
             joinColumns = @JoinColumn(name = "recipe_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "category_id", nullable = false))
@@ -79,24 +77,24 @@ public class Recipe {
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    @JoinColumn(name = "recipe_id", nullable = false)
+    @JoinColumn(name = "recipe_id")
     private List<Picture> pictures;
     
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
     
     @Column(name = "created", nullable = false)
     private LocalDateTime created;
     
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "modifier_id", nullable = true)
     private User modifier;
     
     @Column(name = "modified", nullable = true)
     private LocalDateTime modified;
     
-    public List<Section> getSection() {
+    public List<Section> getSections() {
         if (Objects.isNull(sections)) {
             sections = new ArrayList<>();
         }
