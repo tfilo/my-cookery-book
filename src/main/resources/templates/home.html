@@ -16,7 +16,9 @@
                             <div class="w3-card w3-container w3-display-container">
                                 <a th:href="@{'/recipe/edit/__${recipe.id}__'}" style="display: inline;" class="w3-button w3-text-green w3-display-topright" sec:authorize="hasRole('USER')"><i class="fas fa-edit"></i></a>
                                 <div class="w3-center"><img th:src="@{image/default_meal.jpg}" class="meal-preview-image w3-circle"></div>
-                                <h3 th:text="${recipe.title}">Recipe title</h3>
+                                <h3>
+                                    <a th:href="@{'/recipe/view/__${recipe.id}__'}" style="display: inline;" th:text="${recipe.title}">Recipe title</a>
+                                </h3>
                                 <p th:text="${recipe.description}">Recipe description</p>
                             </div>
                         </div>

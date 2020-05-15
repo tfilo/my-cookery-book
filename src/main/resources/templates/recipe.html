@@ -9,7 +9,7 @@
         <div class="content">
             <div class="spacer">&nbsp;</div>
             <div class="w3-main w3-content w3-padding" id="content">
-                <form method="post" th:if="${recipeSO!=null}" action="javascript:void(0);" id="recipeForm" th:object="${recipeSO}" th:fragment="recipeForm">
+                <form method="post" th:if="${recipeSO!=null}" th:action="@{'/recipe/save'}" id="recipeForm" th:object="${recipeSO}" th:fragment="recipeForm">
                     <h2 class="w3-center" th:if="*{id==null}">Add recipe</h2>
                     <h2 class="w3-center" th:if="*{id!=null}">Edit recipe</h2>
                     <input type="hidden" th:field="*{id}"/>
@@ -34,10 +34,10 @@
                             <a th:href="|javascript:submitForm('recipeForm', 'content', '@{'/recipe/sectionAdd'}');|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
                         </div>
                         <div class="w3-border">
-                            <div th:each="source,rowStat : *{sections}" class="w3-padding w3-display-container" th:classappend="${rowStat.even} ? 'w3-light-grey'">
+                            <div th:each="section,rowStat : *{sections}" class="w3-padding w3-display-container" th:classappend="${rowStat.even} ? 'w3-light-grey'">
                                 <input type="hidden" th:field="*{sections[__${rowStat.index}__].id}"/>
                                 <div class="padding-8">
-                                    <label>Name<span class="w3-text-red"> *</span></label>
+                                    <label>Name</label>
                                     <input class="w3-input w3-border" type="text" th:field="*{sections[__${rowStat.index}__].name}" maxlength="100">
                                     <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].name')}" th:errors="*{sections[__${rowStat.index}__].name}">Incorrect name</label>
                                 </div>
@@ -51,14 +51,14 @@
                                         <div th:each="ingredient,rowStat2 : *{sections[__${rowStat.index}__].ingredients}" class="w3-display-container" th:classappend="${rowStat2.even} ? 'w3-light-grey'">
                                             <div class="padding-8 w3-row-padding">
                                                 <input type="hidden" th:field="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].id}"/>
-                                                <div class="w3-col l5 m5 s5 padding-8">
+                                                <div class="w3-col l6 m5 s5 padding-8">
                                                     <label class="source-label">Name<span class="w3-text-red"> *</span></label>
                                                     <input class="w3-input w3-border" type="text" th:errorclass="w3-pale-red" th:field="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].name}" maxlength="255" required>
                                                     <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].name')}" th:errors="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].name}">Incorrect name</label>
                                                 </div>
-                                                <div class="w3-col l3 m3 s3 padding-8">
+                                                <div class="w3-col l2 m3 s3 padding-8">
                                                     <label class="source-label">Value<span class="w3-text-red"> *</span></label>
-                                                    <input class="w3-input w3-border" type="number" th:errorclass="w3-pale-red" th:field="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].value}" required>
+                                                    <input class="w3-input w3-border" type="number" step="0.05" th:errorclass="w3-pale-red" th:field="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].value}" required>
                                                     <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].value')}" th:errors="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].value}">Incorrect value</label>
                                                 </div>
                                                 <div class="w3-col l4 m4 s4 padding-8">
@@ -124,7 +124,7 @@
                                     class="w3-block">
                             </option>
                         </select>
-                        <label class="w3-text-red" th:if="${#fields.hasErrors('categories')}" th:errors="*{categories}">Incorrect categories</label>
+                        <label class="w3-text-red" th:if="*{#fields.hasErrors('categories')}" th:errors="*{categories}">Incorrect categories</label>
                     </div>
 
                     <div class="padding-8">
@@ -145,15 +145,13 @@
                     </div>
 
                     <div class="padding-8">
-                        <div th:if="*{creator}">Created by <span th:text="*{creator}">username</span>.</div>
-                        <div th:if="*{created!=null}">Created at <span th:text="${#temporals.format(recipeSO.created, 'dd.MM.yyyy HH:mm')}" >date</span>.</div>
-                        <div th:if="*{modifier}">Modified by <span th:text="*{modifier}">username</span>.</div>
-                        <div th:if="*{modified!=null}">Modified at <span th:text="${#temporals.format(recipeSO.modified, 'dd.MM.yyyy HH:mm')}">date</span>.</div>
+                        <div th:if="*{creator}">Created by <i th:text="*{creator}">username</i> at <i th:text="*{#temporals.format(created, 'dd.MM.yyyy HH:mm')}" >date</i>.</div>
+                        <div th:if="*{modifier}">Modified by <i th:text="*{modifier}">username</i> at <i th:text="*{#temporals.format(modified, 'dd.MM.yyyy HH:mm')}">date</i>.</div>
                     </div>
                     <div class="padding-8">
-                        <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/save'}');|"><i class="fas fa-save"></i>&nbsp;<span>Save</span></button>
-                        <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span>Delete</span></button>
-                        <button type="submit" class="w3-button w3-red" th:href="@{'/'}"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></button>
+                        <button type="submit" class="w3-button w3-light-green"><i class="fas fa-save"></i>&nbsp;<span>Save</span></button>
+                        <button type="button" class="w3-button w3-red" th:if="*{id}" th:onclick="|submitFormSynchronous('recipeForm', '@{'/recipe/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span>Delete</span></button>
+                        <a class="w3-button w3-red" th:href="@{'/'}"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></a>
                     </div>
                 </form>
             </div>

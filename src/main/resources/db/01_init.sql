@@ -26,7 +26,7 @@ CREATE TABLE public.cb_ingredient (
     id bigint NOT NULL,
     name character varying(255) NOT NULL,
     sort_number integer,
-    value integer NOT NULL,
+    value real NOT NULL,
     unit_id bigint NOT NULL,
     section_id bigint NOT NULL
 );
@@ -66,7 +66,7 @@ CREATE TABLE public.cb_recipe (
     created timestamp without time zone NOT NULL,
     description character varying(255),
     modified timestamp without time zone,
-    title character varying(100) NOT NULL,
+    title character varying(80) NOT NULL,
     creator_id bigint NOT NULL,
     modifier_id bigint
 );

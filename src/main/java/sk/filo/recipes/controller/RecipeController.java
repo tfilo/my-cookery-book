@@ -22,6 +22,7 @@ import sk.filo.recipes.so.RecipeSO;
 import sk.filo.recipes.so.SectionSO;
 import sk.filo.recipes.so.SourceSO;
 import sk.filo.recipes.so.UnitCategorySO;
+import sk.filo.recipes.so.view.RecipeViewSO;
 
 /**
  *
@@ -34,6 +35,8 @@ public class RecipeController {
     private static final Logger LOGGER = LoggerFactory.getLogger(RecipeController.class);
     
     private static final String MODEL_RECIPE_SO = "recipeSO";
+    
+    private static final String MODEL_RECIPE_VIEW_SO = "recipeViewSO";
     
     @Autowired
     RecipeService recipeService;
@@ -85,6 +88,15 @@ public class RecipeController {
             recipeSO.getSources().add(new SourceSO());
         }
         return "recipe::recipeForm";
+    }
+    
+    @RequestMapping(value="/view/{recipeId}")
+    public String viewRecipe(final Model model, @PathVariable Long recipeId, final HttpServletRequest req) {
+        LOGGER.debug("View recipe by id {}", recipeId);
+        RecipeViewSO recipeSO = recipeService.getView(recipeId);
+        LOGGER.debug("Loaded recipe view {}", recipeSO);
+        model.addAttribute(MODEL_RECIPE_VIEW_SO, recipeSO);
+        return "recipeview";
     }
 
     @RequestMapping(value = "/sourceRemove/{rowId}")
@@ -139,16 +151,17 @@ public class RecipeController {
     public String deleteRecipe(final RecipeSO recipe) {
         LOGGER.debug("Delete recipe action {}", recipe);
         recipeService.delete(recipe.getId());
-        return "recipe::recipeForm";
+        return "redirect:/";
     }
     
     @RequestMapping(value="/save")
     public String saveRecipe(final @Valid RecipeSO recipe, final BindingResult bindingResult) {
         LOGGER.debug("Save recipe action {}", recipe);
         if (bindingResult.hasErrors()) {
-            return "recipe::recipeForm";
+            LOGGER.debug(bindingResult.toString());
+            return "recipe";
         }
         recipeService.save(recipe);
-        return "recipe::recipeForm";
+        return "redirect:/";
     }
 }

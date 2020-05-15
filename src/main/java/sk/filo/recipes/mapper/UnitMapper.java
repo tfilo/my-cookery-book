@@ -7,6 +7,7 @@ import org.mapstruct.Mappings;
 import org.mapstruct.NullValueCheckStrategy;
 import sk.filo.recipes.domain.Unit;
 import sk.filo.recipes.so.UnitSO;
+import sk.filo.recipes.so.view.UnitViewSO;
 
 /**
  *
@@ -22,7 +23,7 @@ public interface UnitMapper {
     @Mappings({
         @Mapping(source = "category.id", target = "unitCategoryId"),
     })
-    UnitSO mapUnitToUnitSO(Unit unit);   
-
+    UnitSO mapUnitToUnitSO(Unit unit);
+    
     List<UnitSO> mapUnitListToUnitSOList(List<Unit> units);
 }

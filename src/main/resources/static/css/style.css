@@ -7,6 +7,10 @@ body,html{
     max-width: 1280px;
 }
 
+.w3-content.view{
+    max-width: 960px;
+}
+
 .content{
     position:absolute;
     top:0px;
@@ -89,4 +93,32 @@ select[multiple] option:checked {
 
 .quill-editor-div{
     min-height: 100px;
+}
+
+.quill-editor-div.ql-container{
+    font-size: 15px;
+}
+
+.quill-viewer-div{
+    border: none!important;
+}
+
+.quill-viewer-div .ql-editor{
+    padding: 0px;
+}
+
+.quill-viewer-div.ql-container{
+    font-size: 15px;
+}
+ 
+.bold{
+    font-weight: bold;
+}
+
+hr {
+    margin: 12px 0px 4px 0px;
+}
+
+.absolute{
+    position: absolute;
 }

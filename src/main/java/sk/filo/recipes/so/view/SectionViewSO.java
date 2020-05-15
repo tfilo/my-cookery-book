@@ -1,12 +1,8 @@
-package sk.filo.recipes.so;
+package sk.filo.recipes.so.view;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,33 +14,24 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class SectionSO {
+public class SectionViewSO {
     
-    private Long id;
-    
-    @Min(value=0)
-    private Integer sortNumber;
-    
-    @Size(max=100)
     private String name;
     
-    @Valid
-    private List<IngredientSO> ingredients;
+    private List<IngredientViewSO> ingredients;
     
-    @NotBlank
-    @Size(max=2000)
     private String method;
         
-    private List<PictureSO> pictures;
+    private List<PictureViewSO> pictures;
     
-    public List<IngredientSO> getIngredients() {
+    public List<IngredientViewSO> getIngredients() {
         if (Objects.isNull(ingredients)) {
             ingredients = new ArrayList<>();
         }
         return ingredients;
     }
 
-    public List<PictureSO> getPictures() {
+    public List<PictureViewSO> getPictures() {
         if (Objects.isNull(pictures)) {
             pictures = new ArrayList<>();
         }

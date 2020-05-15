@@ -9,6 +9,7 @@ import org.mapstruct.NullValueCheckStrategy;
 import sk.filo.recipes.domain.Recipe;
 import sk.filo.recipes.so.RecipeBasicSO;
 import sk.filo.recipes.so.RecipeSO;
+import sk.filo.recipes.so.view.RecipeViewSO;
 
 /**
  *
@@ -16,7 +17,7 @@ import sk.filo.recipes.so.RecipeSO;
  */
 @Mapper(
     nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
-    uses = { SimpleCategoryMapper.class, SimpleRecipeMapper.class, IngredientMapper.class}
+    uses = { SimpleCategoryMapper.class, SimpleSourceMapper.class, SimpleRecipeMapper.class, IngredientMapper.class}
 )
 public interface RecipeMapper {
 
@@ -49,6 +50,12 @@ public interface RecipeMapper {
             @Mapping(target = "modifier", source = "modifier.username"),
     })
     RecipeSO mapRecipeToRecipeSO(Recipe recipe);
+    
+    @Mappings({
+            @Mapping(target = "creator", source = "creator.username"),
+            @Mapping(target = "modifier", source = "modifier.username"),
+    })
+    RecipeViewSO mapRecipeToRecipeViewSO(Recipe recipe);
     
     List<RecipeSO> mapRecipeListToRecipeSOList(List<Recipe> recipe);
     

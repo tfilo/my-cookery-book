@@ -38,9 +38,9 @@ public class Ingredient {
     private String name;
 
     @Column(name = "value", nullable = false)
-    private Integer value;
+    private Float value;
     
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "unit_id", nullable = false)
     private Unit unit;
 }

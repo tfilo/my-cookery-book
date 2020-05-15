@@ -28,6 +28,7 @@ import sk.filo.recipes.so.IngredientSO;
 import sk.filo.recipes.so.RecipeBasicSO;
 import sk.filo.recipes.so.RecipeSO;
 import sk.filo.recipes.so.SectionSO;
+import sk.filo.recipes.so.view.RecipeViewSO;
 
 /**
  *
@@ -118,13 +119,20 @@ public class RecipeService {
     }
     
     public void delete(Long id) {
-        recipeRepository.deleteById(id);
+        Recipe one = recipeRepository.getOne(id);
+        recipeRepository.delete(one);
     }
     
     public RecipeSO get(Long id) {
         Recipe recipe = recipeRepository.getOne(id);
         LOGGER.debug("get recipe {}", recipe);
         return recipeMapper.mapRecipeToRecipeSO(recipe);
+    }
+    
+    public RecipeViewSO getView(Long id) {
+        Recipe recipe = recipeRepository.getOne(id);
+        LOGGER.debug("get view recipe {}", recipe);
+        return recipeMapper.mapRecipeToRecipeViewSO(recipe);
     }
 
     public List<RecipeBasicSO> getAllBasic() {

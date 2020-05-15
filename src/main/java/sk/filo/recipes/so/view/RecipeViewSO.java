@@ -1,13 +1,9 @@
-package sk.filo.recipes.so;
+package sk.filo.recipes.so.view;
         
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,30 +15,21 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class RecipeSO {
+public class RecipeViewSO {
     
     private Long id;
     
-    @NotBlank
-    @Size(max=80)
     private String title;
     
-    @Size(max=255)
     private String description;
     
-    @Valid
-    @NotEmpty
-    private List<SectionSO> sections;
+    private List<SectionViewSO> sections;
 
-    private List<Long> associatedRecipes;
+    private List<RecipeBasicViewSO> associatedRecipes;
     
-    private List<PictureSO> pictures;
-    
-    @NotEmpty
-    private List<Long> categories;
-    
-    @Valid
-    private List<SourceSO> sources;
+    private List<PictureViewSO> pictures;
+
+    private List<String> sources;
     
     private String creator;
     
@@ -52,35 +39,28 @@ public class RecipeSO {
     
     private LocalDateTime modified;
     
-    public List<SectionSO> getSections() {
+    public List<SectionViewSO> getSections() {
         if (Objects.isNull(sections)) {
             sections = new ArrayList<>();
         }
         return sections;
     }
 
-    public List<Long> getAssociatedRecipes() {
+    public List<RecipeBasicViewSO> getAssociatedRecipes() {
         if (Objects.isNull(associatedRecipes)) {
             associatedRecipes = new ArrayList<>();
         }
         return associatedRecipes;
     }
     
-    public List<PictureSO> getPictures() {
+    public List<PictureViewSO> getPictures() {
         if (Objects.isNull(pictures)) {
             pictures = new ArrayList<>();
         }
         return pictures;
     }
     
-    public List<Long> getCategories() {
-        if (Objects.isNull(categories)) {
-            categories = new ArrayList<>();
-        }
-        return categories;
-    }
-    
-    public List<SourceSO> getSources() {
+    public List<String> getSources() {
         if (Objects.isNull(sources)) {
             sources = new ArrayList<>();
         }
