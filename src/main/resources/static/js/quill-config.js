@@ -18,7 +18,7 @@ Quill.register('modules/textarea', function (quill, options) {
     });
 });
 
-//Quill.register('modules/clipboard', PasteSmart, true);
+Quill.register('modules/clipboard', QuillPasteSmart, true);
 
 function getQuillEditConfiguration(counterId, inputTargetId) {
     return {
@@ -36,30 +36,7 @@ function getQuillEditConfiguration(counterId, inputTargetId) {
             },
             textarea: {
                 container: inputTargetId
-            },
-            clipboard: {
-                matchers: [
-                    [Node.ELEMENT_NODE, (node, delta) => {
-                            let ops = [];
-                            delta.ops.forEach(op => {
-                                if (op.insert && typeof op.insert === 'string') {
-                                    ops.push({
-                                        insert: op.insert
-                                    });
-                                }
-                            });
-                            delta.ops = ops;
-                            return delta;
-                        }]
-                ]
             }
-            //clipboard: {
-            //    allowed: {
-            //        tags: ['b', 'i', 'u', 'ul', 'ol', 'li'],
-            //        attributes: []
-            //    },
-            //    keepSelection: true
-            //}
         },
         theme: 'snow'
     };

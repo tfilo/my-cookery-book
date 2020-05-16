@@ -74,7 +74,7 @@ public class CategoryService {
         List<CategoryWithRecipeBasicSO> list = categoryMapper.mapCategoryListToCategoryWithRecipeBasicSOList(categories);
         
         list.forEach((so) -> {
-            List<Recipe> recipes = recipeRepository.findFirst4ByCategoriesId(so.getId());
+            List<Recipe> recipes = recipeRepository.findTop4ByCategoriesIdOrderByCreatedDesc(so.getId());
             recipes.forEach((r) -> {
                 so.getRecipes().add(recipeMapper.mapRecipeToRecipeBasicSO(r));
             });

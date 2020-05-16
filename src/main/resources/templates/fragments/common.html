@@ -19,18 +19,15 @@
     <body>
         <nav th:fragment="menu(content)" onmouseleave="closeSidebar()" class="w3-sidebar w3-bar-block w3-border-right w3-animate-left menu" id="mySidebar">
             <div class="w3-button w3-padding-16 w3-left" onclick="closeSidebar()"><i class="fas fa-angle-double-left"></i></div>
-            <a th:href="@{'/admin/user/all'}" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-user icon"></i> Users</a>
-            <a th:href="@{'/admin/category/all'}" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-list icon"></i> Categories</a>
-            <a th:href="@{'/admin/unitcategory/all'}" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-prescription-bottle icon"></i> Units</a>
-            <a th:href="@{'/recipe/add'}" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('USER')"><i class="fas fa-pizza-slice icon"></i> Add recipe</a>
+            <a th:href="|javascript:$('#content').load('@{'/admin/user/all'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-user icon"></i> Users</a>
+            <a th:href="|javascript:$('#content').load('@{'/admin/category/all'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-list icon"></i> Categories</a>
+            <a th:href="|javascript:$('#content').load('@{'/admin/unitcategory/all'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-prescription-bottle icon"></i> Units</a>
+            <a th:href="|javascript:$('#content').load('@{'/recipe/add'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('USER')"><i class="fas fa-pizza-slice icon"></i> Add recipe</a>
             <hr sec:authorize="isAuthenticated()">
-            <div th:if="${content=='all'}" id="categoryLinks">
-                <th:block th:each="category : ${allCategories}">
+            <div id="categoryLinks">
+                <th:block th:each="category : ${allCategoriesWithRecipes}">
                     <a th:href="${'#category_' + category.id}" onclick="closeSidebar()" class="w3-bar-item w3-button" th:text="${category.name}">Category name</a>
                 </th:block>
-            </div>
-            <div th:if="${content!='all'}">
-                <a th:href="@{'/'}" onclick="closeSidebar()" class="w3-bar-item w3-button"><i class="fas fa-reply icon"></i> Back to main page</a>
             </div>
         </nav>
         <header id="header" th:fragment="header" class="w3-top w3-card transparent-white">

@@ -13,8 +13,8 @@
             </div>
             <div class="padding-8">
                 <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('categoryForm', 'content', '@{'/admin/category/save'}');|"><i class="fas fa-save"></i>&nbsp;<span>Save</span></button>
-                <button th:if="*{id}" type="submit" class="w3-button w3-red" th:onclick="|submitForm('categoryForm', 'content', '@{'/admin/category/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span>Delete</span></button>
-                <button type="submit" class="w3-button w3-red" th:onclick="|submitForm('categoryForm', 'content', '@{'/admin/category/cancel'}');|"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></button>
+                <button type="button" class="w3-button w3-red" th:if="*{id}" th:onclick="|submitForm('categoryForm', 'content', '@{'/admin/category/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span>Delete</span></button>
+                <button type="button" class="w3-button w3-red" th:onclick="|javascript:$('#content').load('@{'/admin/category/all'}');|"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></button>
             </div>
         </form>
         <div th:fragment="categoriesList">

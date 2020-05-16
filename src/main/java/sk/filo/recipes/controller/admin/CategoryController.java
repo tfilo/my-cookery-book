@@ -1,6 +1,5 @@
-package sk.filo.recipes.controller;
+package sk.filo.recipes.controller.admin;
 
-import java.util.List;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,27 +29,15 @@ public class CategoryController {
     @Autowired
     CategoryService categoryService;
         
-    private void getAllCategories(final Model model) {
-        List<CategorySO> users = categoryService.getAll();
-        model.addAttribute(MODEL_CATEGORIES, users);
+    private void setAllCategories(final Model model) {
+        model.addAttribute(MODEL_CATEGORIES, categoryService.getAll());
     }
     
     @RequestMapping(value="/all")
     public String getCategories(final Model model) {
         LOGGER.debug("Get all categories");
-        getAllCategories(model);
-        return "categories";
-    }
-    
-    @RequestMapping(value="/save")
-    public String saveCategory(final Model model, @Valid CategorySO category, final BindingResult bindingResult) {
-        LOGGER.debug("Save category action {}", category);
-        if (bindingResult.hasErrors()) {
-            return "fragments/category::categoryForm";
-        }
-        categoryService.save(category);
-        getAllCategories(model);
-        return "fragments/category::categoriesList";
+        setAllCategories(model);
+        return "fragments/category :: categoriesList";
     }
     
     @RequestMapping(value="/add")
@@ -60,26 +47,30 @@ public class CategoryController {
         return "fragments/category::categoryForm";
     }
     
-    @RequestMapping(value="/delete")
-    public String deleteCategory(final Model model, CategorySO category, final BindingResult bindingResult) {
-        LOGGER.debug("Delete category action {}", category);
-        categoryService.delete(category.getId());
-        getAllCategories(model);
-        return "fragments/category::categoriesList";
-    }
-    
-    @RequestMapping(value="/cancel")
-    public String cancelCategory(final Model model, CategorySO category, final BindingResult bindingResult) {
-        LOGGER.debug("Cancel category action {}", category);
-        getAllCategories(model);
-        return "fragments/category::categoriesList";
-    }
-    
     @RequestMapping(value="/get/{id}")
     public String getCategoryById(@PathVariable Long id, final Model model) {
         LOGGER.debug("Get category by id {}", id);
         CategorySO category = categoryService.get(id);
         model.addAttribute(MODEL_CATEGORY_SO, category);
         return "fragments/category::categoryForm";
+    }
+    
+    @RequestMapping(value="/save")
+    public String saveCategory(final Model model, @Valid CategorySO category, final BindingResult bindingResult) {
+        LOGGER.debug("Save category action {}", category);
+        if (bindingResult.hasErrors()) {
+            return "fragments/category::categoryForm";
+        }
+        categoryService.save(category);
+        setAllCategories(model);
+        return "fragments/category::categoriesList";
+    }
+    
+    @RequestMapping(value="/delete")
+    public String deleteCategory(final Model model, CategorySO category, final BindingResult bindingResult) {
+        LOGGER.debug("Delete category action {}", category);
+        categoryService.delete(category.getId());
+        setAllCategories(model);
+        return "fragments/category::categoriesList";
     }
 }

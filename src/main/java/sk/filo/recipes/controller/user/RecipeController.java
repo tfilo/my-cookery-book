@@ -1,4 +1,4 @@
-package sk.filo.recipes.controller;
+package sk.filo.recipes.controller.user;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +22,6 @@ import sk.filo.recipes.so.RecipeSO;
 import sk.filo.recipes.so.SectionSO;
 import sk.filo.recipes.so.SourceSO;
 import sk.filo.recipes.so.UnitCategorySO;
-import sk.filo.recipes.so.view.RecipeViewSO;
 
 /**
  *
@@ -36,7 +35,11 @@ public class RecipeController {
     
     private static final String MODEL_RECIPE_SO = "recipeSO";
     
-    private static final String MODEL_RECIPE_VIEW_SO = "recipeViewSO";
+    private static final String MODEL_CATEGORIES = "allCategories";
+    
+    private static final String MODEL_UNIT_CATEGORIES_WITH_UNITS = "allUnitCategoriesWithUnits";
+
+    private static final String MODEL_RECIPES = "allRecipes";
     
     @Autowired
     RecipeService recipeService;
@@ -47,18 +50,25 @@ public class RecipeController {
     @Autowired
     UnitCategoryService unitCategoryService;
     
-    @ModelAttribute("allCategories")
+    private void setAllCategoriesWithRecipes(Model model) {
+        model.addAttribute("allCategoriesWithRecipes", categoryService.getFist4RecipesForEveryCategory());
+    }
+    
+    @ModelAttribute(MODEL_CATEGORIES)
     public List<CategorySO> allCategories() {
+        LOGGER.debug("allCategories");
         return categoryService.getAll();
     }
     
-    @ModelAttribute("allUnitCategoriesWithUnits")
-    public List<UnitCategorySO> allUnitCategories() {
+    @ModelAttribute(MODEL_UNIT_CATEGORIES_WITH_UNITS)
+    public List<UnitCategorySO> allUnitCategoriesWithUnits() {
+        LOGGER.debug("allUnitCategories");
         return unitCategoryService.getAll();
     }
     
-    @ModelAttribute("allRecipes")
+    @ModelAttribute(MODEL_RECIPES)
     public List<RecipeBasicSO> allRecipes() {
+        LOGGER.debug("allRecipes");
         return recipeService.getAllBasic();
     }
     
@@ -69,7 +79,7 @@ public class RecipeController {
         recipeSO.getSections().add(new SectionSO());
         recipeSO.setCreator(req.getUserPrincipal().getName());
         model.addAttribute(MODEL_RECIPE_SO, recipeSO);
-        return "recipe";
+        return "fragments/recipe::recipeForm";
     }
     
     @RequestMapping(value="/edit/{recipeId}")
@@ -78,7 +88,7 @@ public class RecipeController {
         RecipeSO recipeSO = recipeService.get(recipeId);
         LOGGER.debug("Loaded recipe {}", recipeSO);
         model.addAttribute(MODEL_RECIPE_SO, recipeSO);
-        return "recipe";
+        return "fragments/recipe::recipeForm";
     }
     
     @RequestMapping(value = "/sourceAdd")
@@ -87,16 +97,7 @@ public class RecipeController {
         if (recipeSO!=null) {
             recipeSO.getSources().add(new SourceSO());
         }
-        return "recipe::recipeForm";
-    }
-    
-    @RequestMapping(value="/view/{recipeId}")
-    public String viewRecipe(final Model model, @PathVariable Long recipeId, final HttpServletRequest req) {
-        LOGGER.debug("View recipe by id {}", recipeId);
-        RecipeViewSO recipeSO = recipeService.getView(recipeId);
-        LOGGER.debug("Loaded recipe view {}", recipeSO);
-        model.addAttribute(MODEL_RECIPE_VIEW_SO, recipeSO);
-        return "recipeview";
+        return "fragments/recipe::recipeForm";
     }
 
     @RequestMapping(value = "/sourceRemove/{rowId}")
@@ -105,7 +106,7 @@ public class RecipeController {
         if (recipeSO != null) {
             recipeSO.getSources().remove(rowId.intValue());
         }
-        return "recipe::recipeForm";
+        return "fragments/recipe::recipeForm";
     }
     
     @RequestMapping(value = "/sectionAdd")
@@ -114,7 +115,7 @@ public class RecipeController {
         if (recipeSO!=null) {
             recipeSO.getSections().add(new SectionSO());
         }
-        return "recipe::recipeForm";
+        return "fragments/recipe::recipeForm";
     }
 
     @RequestMapping(value = "/sectionRemove/{rowId}")
@@ -125,7 +126,7 @@ public class RecipeController {
                 recipeSO.getSections().remove(rowId.intValue());
             }
         }
-        return "recipe::recipeForm";
+        return "fragments/recipe::recipeForm";
     }
 
     @RequestMapping(value = "/ingredientAdd/{sectionRowId}")
@@ -135,7 +136,7 @@ public class RecipeController {
             recipeSO.getSections().get(sectionRowId).getIngredients().add(new IngredientSO());
         }
         LOGGER.debug("new ingredient {}", recipeSO);
-        return "recipe::recipeForm";
+        return "fragments/recipe::recipeForm";
     }
 
     @RequestMapping(value = "/ingredientRemove/{sectionRowId}/{rowId}")
@@ -144,24 +145,26 @@ public class RecipeController {
         if (recipeSO != null) {
             recipeSO.getSections().get(sectionRowId).getIngredients().remove(rowId.intValue());
         }
-        return "recipe::recipeForm";
+        return "fragments/recipe::recipeForm";
     }
     
     @RequestMapping(value="/delete")
-    public String deleteRecipe(final RecipeSO recipe) {
+    public String deleteRecipe(final Model model, final RecipeSO recipe) {
         LOGGER.debug("Delete recipe action {}", recipe);
         recipeService.delete(recipe.getId());
-        return "redirect:/";
+        setAllCategoriesWithRecipes(model);
+        return "fragments/view::categoriesPreview";
     }
     
     @RequestMapping(value="/save")
-    public String saveRecipe(final @Valid RecipeSO recipe, final BindingResult bindingResult) {
+    public String saveRecipe(final Model model, final @Valid RecipeSO recipe, final BindingResult bindingResult) {
         LOGGER.debug("Save recipe action {}", recipe);
         if (bindingResult.hasErrors()) {
             LOGGER.debug(bindingResult.toString());
             return "recipe";
         }
         recipeService.save(recipe);
-        return "redirect:/";
+        setAllCategoriesWithRecipes(model);
+        return "fragments/view::categoriesPreview";
     }
 }

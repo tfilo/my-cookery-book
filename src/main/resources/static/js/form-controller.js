@@ -13,3 +13,14 @@ function submitForm(formId, target, url) {
 function submitFormSynchronous(formId, url) {
     $("#" + formId).attr("action", url).submit();
 }
+
+function asyncLoadFragment(target, url) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        success: function (response) { // on success..
+            $('#' + target).html(response); // update the DIV
+        }
+    });
+    return false; // cancel original event to prevent form submitting
+}

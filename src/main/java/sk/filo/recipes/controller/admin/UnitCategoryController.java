@@ -1,6 +1,5 @@
-package sk.filo.recipes.controller;
+package sk.filo.recipes.controller.admin;
 
-import java.util.List;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,27 +30,14 @@ public class UnitCategoryController {
     @Autowired
     UnitCategoryService unitCategoryService;
     
-    private void getAllCategories(final Model model) {
-        List<UnitCategorySO> categories = unitCategoryService.getAll();
-        model.addAttribute(MODEL_CATEGORIES, categories);
+    private void setAllCategories(final Model model) {
+        model.addAttribute(MODEL_CATEGORIES, unitCategoryService.getAll());
     }
     
     @RequestMapping(value="/all")
     public String getCategories(final Model model) {
-        LOGGER.debug("Get all unitCategories with units");
-        getAllCategories(model);
-        return "unitCategories";
-    }
-    
-    @RequestMapping(value="/save")
-    public String saveUnitCategory(final Model model, @Valid UnitCategoryBasicSO unitCategoryBasicSO, final BindingResult bindingResult) {
-        LOGGER.debug("Save unitCategory action {}", unitCategoryBasicSO);
-        if (bindingResult.hasErrors()) {
-            return "fragments/unitCategory::unitCategoryForm";
-        }
-        unitCategoryService.save(unitCategoryBasicSO);
-        getAllCategories(model);
-        return "fragments/unitCategory::unitCategoriesList";
+        setAllCategories(model);
+        return "fragments/unitCategory :: unitCategoriesList";
     }
     
     @RequestMapping(value="/add")
@@ -61,26 +47,30 @@ public class UnitCategoryController {
         return "fragments/unitCategory::unitCategoryForm";
     }
     
-    @RequestMapping(value="/delete")
-    public String deleteUnitCategory(final Model model, UnitCategorySO unitCategory, final BindingResult bindingResult) {
-        LOGGER.debug("Delete unitCategory action {}", unitCategory);
-        unitCategoryService.delete(unitCategory.getId());
-        getAllCategories(model);
-        return "fragments/unitCategory::unitCategoriesList";
-    }
-    
-    @RequestMapping(value="/cancel")
-    public String cancelUnitCategory(final Model model) {
-        LOGGER.debug("Cancel unitCategory action");
-        getAllCategories(model);
-        return "fragments/unitCategory::unitCategoriesList";
-    }
-    
     @RequestMapping(value="/get/{id}")
     public String getUnitCategoryById(@PathVariable Long id, final Model model) {
         LOGGER.debug("Get unitCategory by id {}", id);
         UnitCategoryBasicSO unitCategory = unitCategoryService.get(id);
         model.addAttribute(MODEL_UNIT_CATEGORY_SO, unitCategory);
         return "fragments/unitCategory::unitCategoryForm";
+    }
+    
+    @RequestMapping(value="/save")
+    public String saveUnitCategory(final Model model, @Valid UnitCategoryBasicSO unitCategoryBasicSO, final BindingResult bindingResult) {
+        LOGGER.debug("Save unitCategory action {}", unitCategoryBasicSO);
+        if (bindingResult.hasErrors()) {
+            return "fragments/unitCategory::unitCategoryForm";
+        }
+        unitCategoryService.save(unitCategoryBasicSO);
+        setAllCategories(model);
+        return "fragments/unitCategory::unitCategoriesList";
+    }
+    
+    @RequestMapping(value="/delete")
+    public String deleteUnitCategory(final Model model, UnitCategorySO unitCategory, final BindingResult bindingResult) {
+        LOGGER.debug("Delete unitCategory action {}", unitCategory);
+        unitCategoryService.delete(unitCategory.getId());
+        setAllCategories(model);
+        return "fragments/unitCategory::unitCategoriesList";
     }
 }

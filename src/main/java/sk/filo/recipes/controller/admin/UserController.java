@@ -1,6 +1,5 @@
-package sk.filo.recipes.controller;
+package sk.filo.recipes.controller.admin;
 
-import java.util.List;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,28 +33,15 @@ public class UserController {
     @Autowired
     UserService userService;
     
-    private void getAllUsers(final Model model) {
-        List<UserSO> users = userService.getAll();
-        model.addAttribute(MODEL_USERS, users);
+    private void setAllUsers(final Model model) {
+        model.addAttribute(MODEL_USERS, userService.getAll());
     }
     
     @RequestMapping(value="/all")
     public String getUsers(final Model model) {
         LOGGER.debug("Get all users");
-        getAllUsers(model);
-        return "users";
-    }
-    
-    @RequestMapping(value="/save")
-    public String saveUser(final Model model, @Valid UserSO userSO, final BindingResult bindingResult) {
-        LOGGER.debug("Save user action {}", userSO);
-        validator.validate(userSO, bindingResult);
-        if (bindingResult.hasErrors()) {
-            return "fragments/user::userForm";
-        }
-        userService.save(userSO);
-        getAllUsers(model);
-        return "fragments/user::usersList";
+        setAllUsers(model);
+        return "fragments/user :: usersList";
     }
     
     @RequestMapping(value="/add")
@@ -63,21 +49,6 @@ public class UserController {
         LOGGER.debug("Create user action");
         model.addAttribute(MODEL_USER_SO, new UserSO());
         return "fragments/user::userForm";
-    }
-    
-    @RequestMapping(value="/delete")
-    public String deleteUser(final Model model, UserSO userSO, final BindingResult bindingResult) {
-        LOGGER.debug("Delete user action {}", userSO);
-        userService.delete(userSO.getId());
-        getAllUsers(model);
-        return "fragments/user::usersList";
-    }
-    
-    @RequestMapping(value="/cancel")
-    public String cancelUser(final Model model, UserSO userSO, final BindingResult bindingResult) {
-        LOGGER.debug("Cancel user action {}", userSO);
-        getAllUsers(model);
-        return "fragments/user::usersList";
     }
     
     @RequestMapping(value="/get/{id}")
@@ -88,4 +59,24 @@ public class UserController {
         return "fragments/user::userForm";
     }
     
+    @RequestMapping(value="/save")
+    public String saveUser(final Model model, @Valid UserSO userSO, final BindingResult bindingResult) {
+        LOGGER.debug("Save user action {}", userSO);
+        validator.validate(userSO, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "fragments/user::userForm";
+        }
+        userService.save(userSO);
+        setAllUsers(model);
+        LOGGER.debug("Uzivatelia po ulozeni: {}",model.getAttribute(MODEL_USERS));
+        return "fragments/user::usersList";
+    }
+    
+    @RequestMapping(value="/delete")
+    public String deleteUser(final Model model, UserSO userSO, final BindingResult bindingResult) {
+        LOGGER.debug("Delete user action {}", userSO);
+        userService.delete(userSO.getId());
+        setAllUsers(model);
+        return "fragments/user::usersList";
+    }
 }
