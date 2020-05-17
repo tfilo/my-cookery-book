@@ -5,7 +5,7 @@ function openSidebar() {
 function closeSidebar() {
     document.getElementById("mySidebar").style.display = "none";
 }
-
+/*
 $(document).ready(function () {
     $("#categoryLinks a").click(function (event) {
         event.preventDefault();
@@ -15,3 +15,5 @@ $(document).ready(function () {
         }, 1000);
     });
 });
+ */
+ 
