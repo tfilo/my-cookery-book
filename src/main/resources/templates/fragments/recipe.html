@@ -21,11 +21,11 @@
                 <textarea class="w3-input w3-border" th:field="*{description}" style="resize:none" maxlength="255"></textarea>
                 <label class="w3-text-red" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Incorrect description</label>
             </div>
-
-            <div class="padding-8">
+            <div id="sections">
+            <div class="padding-8" th:fragment="sections" th:object="${recipeSO}">
                 <div>
                     <label>Sections<span class="w3-text-red"> *</span></label>
-                    <a th:href="|javascript:submitForm('recipeForm', 'content', '@{'/recipe/sectionAdd'}');|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
+                    <a th:href="|javascript:submitForm('recipeForm', 'sections', '@{'/recipe/sectionAdd'}');|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
                 </div>
                 <div class="w3-border">
                     <div th:each="section,rowStat : *{sections}" class="w3-padding w3-display-container" th:classappend="${rowStat.even} ? 'w3-light-grey'">
@@ -35,11 +35,10 @@
                             <input class="w3-input w3-border" type="text" th:field="*{sections[__${rowStat.index}__].name}" maxlength="100">
                             <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].name')}" th:errors="*{sections[__${rowStat.index}__].name}">Incorrect name</label>
                         </div>
-
                         <div class="padding-8">
                             <div>
                                 <label>Ingredients</label>
-                                <a th:href="|javascript:submitForm('recipeForm', 'content', '@{'/recipe/ingredientAdd/__${rowStat.index}__'}');|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
+                                <a th:href="|javascript:submitForm('recipeForm', 'sections', '@{'/recipe/ingredientAdd/__${rowStat.index}__'}');|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
                             </div>
                             <div class="w3-border" th:if="*{#lists.size(sections[__${rowStat.index}__].ingredients)} > 0">
                                 <div th:each="ingredient,rowStat2 : *{sections[__${rowStat.index}__].ingredients}" class="w3-display-container" th:classappend="${rowStat2.even} ? 'w3-light-grey'">
@@ -72,11 +71,10 @@
                                             <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].unitId')}" th:errors="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].unitId}">Incorrect unit</label>
                                         </div>
                                     </div>
-                                    <a th:href="|javascript:submitForm('recipeForm', 'content', '@{'/recipe/ingredientRemove/__${rowStat.index}__/__${rowStat2.index}__'}');|" style="display: inline;" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
+                                    <a th:href="|javascript:submitForm('recipeForm', 'sections', '@{'/recipe/ingredientRemove/__${rowStat.index}__/__${rowStat2.index}__'}');|" style="display: inline;" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
                                 </div>
                             </div> 
                         </div>
-
                         <div class="padding-8">
                             <label>Method<span class="w3-text-red"> *</span></label>
                             <input th:field="*{sections[__${rowStat.index}__].method}" th:id="|sections__${rowStat.index}__method|" type="hidden" required></input>
@@ -91,24 +89,43 @@
                             <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].method')}" th:errors="*{sections[__${rowStat.index}__].method}">Incorrect method</label>
                         </div>
 
-                        <a th:if="${!rowStat.first}"  th:href="|javascript:submitForm('recipeForm', 'content', '@{'/recipe/sectionRemove/__${rowStat.index}__'}');|" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
+                        <a th:if="${!rowStat.first}"  th:href="|javascript:submitForm('recipeForm', 'sections', '@{'/recipe/sectionRemove/__${rowStat.index}__'}');|" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
 
                     </div>
                 </div>
             </div>
-
-            <div class="padding-8">
-                <label>Associated Recipes TODO - FIX THIS FOR FILTERING SELECT AND SEPARED LIST OF SELECTED<span class="w3-text-red"> *</span></label>
-                <select class="w3-select w3-border" th:errorclass="w3-pale-red" multiple th:field="*{associatedRecipes}" th:size="${#lists.size(allRecipes)}">
-                    <option th:each="recipe : ${allRecipes}"
-                            th:value="${recipe.id}" 
-                            th:text="${recipe.title}"
-                            class="w3-block">
-                    </option>
-                </select>
-                <label class="w3-text-red" th:if="${#fields.hasErrors('associatedRecipes')}" th:errors="*{associatedRecipes}">Incorrect associated recipes</label>
             </div>
-
+            <div id="associatedRecipes">
+                <div class="padding-8" th:fragment="associatedRecipes" th:object="${recipeSO}">
+                    <label>Associated Recipes - TODO filtering select</label>
+                    <div class="w3-display-container">
+                        <div class="w3-row">
+                            <div class="w3-col w3-right" style="width: 55px;">
+                                &nbsp;
+                            </div>
+                            <div class="w3-rest">
+                                <select class="w3-select w3-border w3-rest" id="recipeToAdd">
+                                    <option th:each="recipe : ${allRecipes}"
+                                            th:value="${recipe.id}" 
+                                            th:text="${recipe.title}"
+                                            class="w3-block">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="w3-display-right">
+                            <a th:href="|javascript:submitForm('recipeForm', 'associatedRecipes', '@{'/recipe/associatedRecipe/add/'}' + $('#recipeToAdd').val());|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
+                        </div>
+                    </div>
+                    <ul>
+                        <li th:each="associatedRecipe,rowStat : *{associatedRecipes}" class="w3-display-container">
+                            <input type="hidden" th:field="*{associatedRecipes[__${rowStat.index}__].title}"></input>
+                            <input type="hidden" th:field="*{associatedRecipes[__${rowStat.index}__].id}"></input>
+                            <span th:text="*{associatedRecipes[__${rowStat.index}__].title}"></span><a th:href="|javascript:submitForm('recipeForm', 'associatedRecipes', '@{'/recipe/associatedRecipe/remove/__${rowStat.index}__'}');|" class="w3-button w3-text-red w3-display-right"><i class="fas fa-minus-circle"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div class="padding-8">
                 <label>Categories<span class="w3-text-red"> *</span></label>
                 <select class="w3-select w3-border" th:errorclass="w3-pale-red" multiple th:field="*{categories}" th:size="${#lists.size(allCategories)}">

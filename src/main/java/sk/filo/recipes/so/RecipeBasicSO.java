@@ -14,7 +14,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class RecipeBasicSO {
-    
+        
     private Long id;
     
     @NotBlank

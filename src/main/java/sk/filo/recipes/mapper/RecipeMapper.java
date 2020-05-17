@@ -9,6 +9,7 @@ import org.mapstruct.NullValueCheckStrategy;
 import sk.filo.recipes.domain.Recipe;
 import sk.filo.recipes.so.RecipeBasicSO;
 import sk.filo.recipes.so.RecipeSO;
+import sk.filo.recipes.so.RecipeSimpleSO;
 import sk.filo.recipes.so.view.RecipeViewSO;
 
 /**
@@ -60,6 +61,8 @@ public interface RecipeMapper {
     List<RecipeSO> mapRecipeListToRecipeSOList(List<Recipe> recipe);
     
     RecipeBasicSO mapRecipeToRecipeBasicSO(Recipe recipe);
+    
+    RecipeSimpleSO mapRecipeToRecipeSimpleSO(Recipe recipe);
     
     List<RecipeBasicSO> mapRecipeListToRecipeBasicSOList(List<Recipe> recipe);
 }

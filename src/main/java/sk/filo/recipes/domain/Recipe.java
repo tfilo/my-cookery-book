@@ -27,7 +27,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "associatedRecipes")
 @Entity
 @Table(name = "cb_recipe")
 @SequenceGenerator(name = "recipe_generator", allocationSize = 1, sequenceName = "cb_recipe_seq")

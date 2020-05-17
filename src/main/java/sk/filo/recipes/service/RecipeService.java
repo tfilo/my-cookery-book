@@ -3,10 +3,13 @@ package sk.filo.recipes.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +30,7 @@ import sk.filo.recipes.repository.UserRepository;
 import sk.filo.recipes.so.IngredientSO;
 import sk.filo.recipes.so.RecipeBasicSO;
 import sk.filo.recipes.so.RecipeSO;
+import sk.filo.recipes.so.RecipeSimpleSO;
 import sk.filo.recipes.so.SectionSO;
 import sk.filo.recipes.so.view.RecipeViewSO;
 
@@ -134,16 +138,36 @@ public class RecipeService {
         LOGGER.debug("get view recipe {}", recipe);
         return recipeMapper.mapRecipeToRecipeViewSO(recipe);
     }
+    
+    public RecipeSimpleSO getBasic(Long id) {
+        Recipe recipe = recipeRepository.getOne(id);
+        LOGGER.debug("get recipe {}", recipe);
+        return recipeMapper.mapRecipeToRecipeSimpleSO(recipe);
+    }
 
     public List<RecipeBasicSO> getAllBasic() {
         List<Recipe> recipes = recipeRepository.findAll();
         return recipeMapper.mapRecipeListToRecipeBasicSOList(recipes);
     }
     
-    private void mapAssociatedRecipes(final List<Long> associatedRecipeIds, final List<Recipe> associatedRecipes) {
+    public Page<RecipeBasicSO> getAllBasicByCategoryId(Pageable page, Long categoryId) {
+        Page<Recipe> recipes = recipeRepository.findAllByCategoriesId(page, categoryId);
+        return mapToRecipeBasicSO(recipes);
+    }
+    
+    private Page<RecipeBasicSO> mapToRecipeBasicSO(Page<Recipe> recipes) {
+        return recipes.map(
+                (recipe) -> {
+                    RecipeBasicSO so = recipeMapper.mapRecipeToRecipeBasicSO(recipe);
+                    return so;
+                }
+        );
+    }
+    
+    private void mapAssociatedRecipes(final List<RecipeSimpleSO> associatedRecipeSOs, final List<Recipe> associatedRecipes) {
         associatedRecipes.clear();
-        associatedRecipeIds.forEach((Long id) -> {
-            associatedRecipes.add(recipeRepository.findById(id)
+        associatedRecipeSOs.forEach((RecipeSimpleSO so) -> {
+            associatedRecipes.add(recipeRepository.findById(so.getId())
                                   .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Associated recipe not found!")));
         });
     }

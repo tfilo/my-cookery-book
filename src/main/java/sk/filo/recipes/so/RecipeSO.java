@@ -2,8 +2,10 @@ package sk.filo.recipes.so;
         
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -20,7 +22,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class RecipeSO {
-    
+        
     private Long id;
     
     @NotBlank
@@ -34,7 +36,7 @@ public class RecipeSO {
     @NotEmpty
     private List<SectionSO> sections;
 
-    private List<Long> associatedRecipes;
+    private List<RecipeSimpleSO> associatedRecipes;
     
     private List<PictureSO> pictures;
     
@@ -59,7 +61,7 @@ public class RecipeSO {
         return sections;
     }
 
-    public List<Long> getAssociatedRecipes() {
+    public List<RecipeSimpleSO> getAssociatedRecipes() {
         if (Objects.isNull(associatedRecipes)) {
             associatedRecipes = new ArrayList<>();
         }

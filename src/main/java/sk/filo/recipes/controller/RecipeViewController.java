@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,8 @@ public class RecipeViewController {
     private static final String MODEL_RECIPE_VIEW_SO = "recipeViewSO";
     
     private static final String MODEL_CATEGORIES_WITH_RECIPES_SO = "allCategoriesWithRecipes";
+    
+    private static final String MODEL_RECIPES = "recipes";
     
     @Autowired
     RecipeService recipeService;
@@ -51,4 +54,15 @@ public class RecipeViewController {
         setAllCategoriesWithRecipes(model);
         return "fragments/view::categoriesPreview";
     }
+
+    @RequestMapping(value="/recipesByCategory/{categoryId}")
+    public String viewRecipesInCategory(final Model model, @PathVariable Long categoryId) {
+        LOGGER.debug("Getting recipes by category");
+        Integer page = 0;
+        Integer size = 16;
+        PageRequest pr =  PageRequest.of(page, size);
+        model.addAttribute(MODEL_RECIPES, recipeService.getAllBasicByCategoryId(pr, categoryId));
+        return "fragments/view::recipesList";
+    }
+    
 }

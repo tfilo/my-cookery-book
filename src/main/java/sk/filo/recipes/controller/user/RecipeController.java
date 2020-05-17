@@ -109,24 +109,42 @@ public class RecipeController {
         return "fragments/recipe::recipeForm";
     }
     
+    @RequestMapping(value = "/associatedRecipe/add/{recipeId}")
+    public String addAssociatedRecipe(final RecipeSO recipeSO, @PathVariable Long recipeId) {
+        LOGGER.debug("addAssociatedRecipe {}, {}", recipeSO, recipeId);
+        if (recipeId!=null && recipeSO!=null) {
+            recipeSO.getAssociatedRecipes().add(recipeService.getBasic(recipeId));
+        }
+        return "fragments/recipe::associatedRecipes";
+    }
+
+    @RequestMapping(value = "/associatedRecipe/remove/{rowId}")
+    public String removeAssociatedRecipe(final RecipeSO recipeSO, @PathVariable Integer rowId) {
+        LOGGER.debug("removeAssociatedRecipe {}, {}", recipeSO, rowId);
+        if (recipeSO != null) {
+            recipeSO.getAssociatedRecipes().remove(rowId.intValue());
+        }
+        return "fragments/recipe::associatedRecipes";
+    }
+    
     @RequestMapping(value = "/sectionAdd")
     public String addSection(final RecipeSO recipeSO) {
         LOGGER.debug("addRow section {}", recipeSO);
         if (recipeSO!=null) {
             recipeSO.getSections().add(new SectionSO());
         }
-        return "fragments/recipe::recipeForm";
+        return "fragments/recipe::sections";
     }
 
     @RequestMapping(value = "/sectionRemove/{rowId}")
-    public String removeSection(final RecipeSO recipeSO, @PathVariable Integer rowId , HttpServletRequest req) {
+    public String removeSection(final RecipeSO recipeSO, @PathVariable Integer rowId) {
         LOGGER.debug("removeRow section {}, {}", recipeSO, rowId);
         if (recipeSO != null) {
             if (recipeSO.getSections().size() > 1) {
                 recipeSO.getSections().remove(rowId.intValue());
             }
         }
-        return "fragments/recipe::recipeForm";
+        return "fragments/recipe::sections";
     }
 
     @RequestMapping(value = "/ingredientAdd/{sectionRowId}")
@@ -136,7 +154,7 @@ public class RecipeController {
             recipeSO.getSections().get(sectionRowId).getIngredients().add(new IngredientSO());
         }
         LOGGER.debug("new ingredient {}", recipeSO);
-        return "fragments/recipe::recipeForm";
+        return "fragments/recipe::sections";
     }
 
     @RequestMapping(value = "/ingredientRemove/{sectionRowId}/{rowId}")
@@ -145,7 +163,7 @@ public class RecipeController {
         if (recipeSO != null) {
             recipeSO.getSections().get(sectionRowId).getIngredients().remove(rowId.intValue());
         }
-        return "fragments/recipe::recipeForm";
+        return "fragments/recipe::sections";
     }
     
     @RequestMapping(value="/delete")
