@@ -1,6 +1,6 @@
 package sk.filo.recipes.so;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.validation.constraints.NotBlank;
@@ -44,7 +44,7 @@ public class UserSO {
     
     public Set<String> getRoles() {
         if (Objects.isNull(roles)) {
-            roles = new HashSet<>();
+            roles = new LinkedHashSet<>();
         }
         return roles;
     }

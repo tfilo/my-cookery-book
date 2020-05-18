@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import lombok.Getter;
@@ -53,6 +54,7 @@ public class Section {
         orphanRemoval = true
     )
     @JoinColumn(name = "section_id", nullable = false)
+    @OrderBy("sortNumber ASC")
     private List<Ingredient> ingredients;
     
     @Type(type = "jsonb")

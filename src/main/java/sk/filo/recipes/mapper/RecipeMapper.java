@@ -64,5 +64,7 @@ public interface RecipeMapper {
     
     RecipeSimpleSO mapRecipeToRecipeSimpleSO(Recipe recipe);
     
+    List<RecipeSimpleSO> mapRecipeListToRecipeSimpleSOList(List<Recipe> recipe);
+    
     List<RecipeBasicSO> mapRecipeListToRecipeBasicSOList(List<Recipe> recipe);
 }

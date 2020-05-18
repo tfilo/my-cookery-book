@@ -24,3 +24,15 @@ function asyncLoadFragment(target, url) {
     });
     return false; // cancel original event to prevent form submitting
 }
+
+const debounce = (func, delay) => {
+    console.log("debounce");
+    let debounceTimer;
+    return function() { 
+        console.log("debounce");
+        const context = this;
+        const args = arguments;
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => func.apply(context, args), delay);
+    };
+};

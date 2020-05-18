@@ -1,5 +1,6 @@
 package sk.filo.recipes.controller.admin;
 
+import java.util.List;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,9 @@ public class UserController {
     UserService userService;
     
     private void setAllUsers(final Model model) {
-        model.addAttribute(MODEL_USERS, userService.getAll());
+        List<UserSO> all = userService.getAll();
+        LOGGER.debug("setAllUsers {}", all);
+        model.addAttribute(MODEL_USERS, all);
     }
     
     @RequestMapping(value="/all")

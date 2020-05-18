@@ -25,18 +25,23 @@
                     <input th:field="*{sections[__${rowStat.index}__].method}" th:id="|sections__${rowStat.index}__method|" type="hidden" required></input>
                     <div th:id="|method${rowStat.index}|" class="quill-viewer-div"></div>
                     <script th:inline="javascript">
-                        var id = [[${
-                            rowStat.index
-                        }
-                        ]];
+                        var id = [[${rowStat.index}]];
                         var editor = new Quill('#method' + id, quillReadOnlyConfiguration);
                         editor.setContents(JSON.parse($("#sections" + id + "method").val()));
                     </script>
                 </div>
             </section>
-            <hr>
-            <section>
-                <div><b>Sources</b></div>
+            <section class="padding-8" th:each="section,rowStat : *{sections}">
+                <h5>Serve with recipes</h5>
+                <ul>
+                    <li th:each="associatedRecipe,rowStat : *{associatedRecipes}" class="w3-display-container">
+                        <a th:href="|javascript:$('#content').load('@{'/view/recipe/__${associatedRecipe.id}__'}');|" th:text="${associatedRecipe.title}">Recipe title</a>
+                    </li>
+                </ul>
+            </section>
+            <hr th:if="*{not #lists.isEmpty(sources)}">
+            <section th:if="*{not #lists.isEmpty(sources)}">
+                <h5>Sources</h5>
                 <div th:each="source,rowStat : *{sources}"><i><a th:href="${source}" th:text="${source}" target="_blank">Source</a></i></div>
             </section>
             <hr>
@@ -62,6 +67,22 @@
                     </div>
                 </div>
             </th:block>
+        </article>
+        
+        <article th:fragment="recipesList">
+            <h2 class="w3-center" th:text="${title}">Title</h2>
+            <div class="w3-row-padding">
+                <div class="w3-col l3 m6 s12 padding-bottom-16" th:each="recipe, rowStat : ${recipes}">
+                    <div class="w3-card w3-container w3-display-container">
+                        <a th:href="|javascript:$('#content').load('@{'/recipe/edit/__${recipe.id}__'}');|" style="display: inline;" class="w3-button w3-text-green w3-display-topright" sec:authorize="hasRole('USER')"><i class="fas fa-edit"></i></a>
+                        <div class="w3-center"><img th:src="@{image/default_meal.jpg}" class="meal-preview-image w3-circle"></div>
+                        <h3>
+                            <a th:href="|javascript:$('#content').load('@{'/view/recipe/__${recipe.id}__'}');|" style="display: inline;" th:text="${recipe.title}">Recipe title</a>
+                        </h3>
+                        <p th:text="${recipe.description}">Recipe description</p>
+                    </div>
+                </div>
+            </div>
         </article>
     </body>
 </html>

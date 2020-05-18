@@ -58,7 +58,7 @@ body,html{
 }
 
 select[multiple] option:checked {
-    background: gray linear-gradient(0deg, gray 0%, gray 100%);
+    background: #4CAF50 linear-gradient(0deg, #4CAF50 0%, #4CAF50 100%);
 }
 
 .circle-btn{
@@ -121,4 +121,8 @@ hr {
 
 .absolute{
     position: absolute;
+}
+
+.no-padding {
+    padding: 0px;
 }

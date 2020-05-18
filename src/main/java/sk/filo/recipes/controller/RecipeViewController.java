@@ -29,6 +29,8 @@ public class RecipeViewController {
     
     private static final String MODEL_RECIPES = "recipes";
     
+    private static final String TITLE = "title";
+    
     @Autowired
     RecipeService recipeService;
     
@@ -59,9 +61,10 @@ public class RecipeViewController {
     public String viewRecipesInCategory(final Model model, @PathVariable Long categoryId) {
         LOGGER.debug("Getting recipes by category");
         Integer page = 0;
-        Integer size = 16;
+        Integer size = Integer.MAX_VALUE; // TODO paginacia
         PageRequest pr =  PageRequest.of(page, size);
         model.addAttribute(MODEL_RECIPES, recipeService.getAllBasicByCategoryId(pr, categoryId));
+        model.addAttribute(TITLE, categoryService.get(categoryId).getName());
         return "fragments/view::recipesList";
     }
     

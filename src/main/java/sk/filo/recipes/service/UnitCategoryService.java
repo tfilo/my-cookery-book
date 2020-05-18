@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import sk.filo.recipes.domain.UnitCategory;
 import sk.filo.recipes.mapper.UnitCategoryMapper;
@@ -56,12 +57,14 @@ public class UnitCategoryService {
     }
     
     public List<UnitCategorySO> getAll() {
+        Sort sort = Sort.by(Sort.Order.asc("name"));
         List<UnitCategory> allCategories = unitCategoryRepository.findAll();
         return unitCategoryMapper.mapUnitCategoryListToUnitCategorySOList(allCategories);
     }
     
     public List<UnitCategoryBasicSO> getAllBasic() {
-        List<UnitCategory> allCategories = unitCategoryRepository.findAll();
+        Sort sort = Sort.by(Sort.Order.asc("name"));
+        List<UnitCategory> allCategories = unitCategoryRepository.findAll(sort);
         return unitCategoryMapper.mapUnitCategoryListToUnitCategoryBasicSOList(allCategories);
     }
     

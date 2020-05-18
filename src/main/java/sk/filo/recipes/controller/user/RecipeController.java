@@ -1,5 +1,6 @@
 package sk.filo.recipes.controller.user;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -12,12 +13,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.thymeleaf.util.StringUtils;
 import sk.filo.recipes.service.CategoryService;
 import sk.filo.recipes.service.RecipeService;
 import sk.filo.recipes.service.UnitCategoryService;
 import sk.filo.recipes.so.CategorySO;
 import sk.filo.recipes.so.IngredientSO;
-import sk.filo.recipes.so.RecipeBasicSO;
+import sk.filo.recipes.so.RecipeSimpleSO;
 import sk.filo.recipes.so.RecipeSO;
 import sk.filo.recipes.so.SectionSO;
 import sk.filo.recipes.so.SourceSO;
@@ -39,7 +41,7 @@ public class RecipeController {
     
     private static final String MODEL_UNIT_CATEGORIES_WITH_UNITS = "allUnitCategoriesWithUnits";
 
-    private static final String MODEL_RECIPES = "allRecipes";
+    private static final String MODEL_FILTERED_RECIPES = "filteredRecipes";
     
     @Autowired
     RecipeService recipeService;
@@ -64,12 +66,6 @@ public class RecipeController {
     public List<UnitCategorySO> allUnitCategoriesWithUnits() {
         LOGGER.debug("allUnitCategories");
         return unitCategoryService.getAll();
-    }
-    
-    @ModelAttribute(MODEL_RECIPES)
-    public List<RecipeBasicSO> allRecipes() {
-        LOGGER.debug("allRecipes");
-        return recipeService.getAllBasic();
     }
     
     @RequestMapping(value="/add")
@@ -113,7 +109,10 @@ public class RecipeController {
     public String addAssociatedRecipe(final RecipeSO recipeSO, @PathVariable Long recipeId) {
         LOGGER.debug("addAssociatedRecipe {}, {}", recipeSO, recipeId);
         if (recipeId!=null && recipeSO!=null) {
-            recipeSO.getAssociatedRecipes().add(recipeService.getBasic(recipeId));
+            RecipeSimpleSO so = recipeService.getBasic(recipeId);
+            if (!recipeSO.getAssociatedRecipes().contains(so)) {
+                recipeSO.getAssociatedRecipes().add(so);
+            }
         }
         return "fragments/recipe::associatedRecipes";
     }
@@ -179,10 +178,23 @@ public class RecipeController {
         LOGGER.debug("Save recipe action {}", recipe);
         if (bindingResult.hasErrors()) {
             LOGGER.debug(bindingResult.toString());
-            return "recipe";
+            return "fragments/recipe::recipeForm";
         }
         recipeService.save(recipe);
         setAllCategoriesWithRecipes(model);
         return "fragments/view::categoriesPreview";
+    }
+    
+    @RequestMapping(value="/filter")
+    public String filterRecipes(final Model model, final RecipeSO recipeSO, final String title) {
+        LOGGER.debug("filterRecipes {}, {}", title, recipeSO);
+        List<RecipeSimpleSO> filtered;
+        if (StringUtils.isEmptyOrWhitespace(title)) {
+            filtered = new ArrayList<>();
+        } else {
+            filtered = recipeService.findRecipeSimpleByTitle(title);   
+        }
+        model.addAttribute(MODEL_FILTERED_RECIPES, filtered);
+        return "fragments/recipe::filteredRecipes";
     }
 }

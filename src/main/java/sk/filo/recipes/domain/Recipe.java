@@ -15,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import lombok.Getter;
@@ -50,18 +51,21 @@ public class Recipe {
         orphanRemoval = true
     )
     @JoinColumn(name = "recipe_id", nullable = false)
+    @OrderBy("sortNumber ASC")
     private List<Section> sections;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH})
     @JoinTable(name = "cb_recipe_recipe",
             joinColumns = @JoinColumn(name = "recipe_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "associated_recipe_id", nullable = false))
+    @OrderBy("title ASC")
     private List<Recipe> associatedRecipes;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH})
     @JoinTable(name = "cb_recipe_category",
             joinColumns = @JoinColumn(name = "recipe_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "category_id", nullable = false))
+    @OrderBy("name ASC")
     private List<Category> categories;
     
     @OneToMany(
@@ -70,6 +74,7 @@ public class Recipe {
             orphanRemoval = true
     )
     @JoinColumn(name = "recipe_id", nullable = false)
+    @OrderBy("url ASC")
     private List<Source> sources;
     
     @OneToMany(

@@ -1,11 +1,11 @@
 package sk.filo.recipes.service;
 
 import java.util.List;
-import java.util.Objects;
 import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import sk.filo.recipes.domain.Category;
 import sk.filo.recipes.domain.Recipe;
@@ -65,16 +65,18 @@ public class CategoryService {
     }
     
     public List<CategorySO> getAll() {
-        List<Category> allUsers = categoryRepository.findAll();
+        Sort sort = Sort.by(Sort.Order.asc("name"));
+        List<Category> allUsers = categoryRepository.findAll(sort);
         return categoryMapper.mapCategoryListToCategorySOList(allUsers);
     }
     
     public List<CategoryWithRecipeBasicSO> getFist4RecipesForEveryCategory() {
         List<Category> categories = categoryRepository.findAll();
         List<CategoryWithRecipeBasicSO> list = categoryMapper.mapCategoryListToCategoryWithRecipeBasicSOList(categories);
+        Sort sort = Sort.by(Sort.Order.desc("created"));
         
         list.forEach((so) -> {
-            List<Recipe> recipes = recipeRepository.findTop4ByCategoriesIdOrderByCreatedDesc(so.getId());
+            List<Recipe> recipes = recipeRepository.findTop4ByCategoriesId(so.getId(), sort);
             recipes.forEach((r) -> {
                 so.getRecipes().add(recipeMapper.mapRecipeToRecipeBasicSO(r));
             });

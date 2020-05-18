@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -148,6 +149,12 @@ public class RecipeService {
     public List<RecipeBasicSO> getAllBasic() {
         List<Recipe> recipes = recipeRepository.findAll();
         return recipeMapper.mapRecipeListToRecipeBasicSOList(recipes);
+    }
+    
+    public List<RecipeSimpleSO> findRecipeSimpleByTitle(String title) {
+        Sort sort = Sort.by(Sort.Order.asc("title"));
+        List<Recipe> recipes = recipeRepository.findTop4ByTitleIsContainingIgnoreCase(title, sort);
+        return recipeMapper.mapRecipeListToRecipeSimpleSOList(recipes);
     }
     
     public Page<RecipeBasicSO> getAllBasicByCategoryId(Pageable page, Long categoryId) {

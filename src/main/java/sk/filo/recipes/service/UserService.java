@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
@@ -72,8 +73,9 @@ public class UserService {
             }
         }
         Set<Role> roles = new HashSet<>();
+        Sort sort = Sort.by(Sort.Order.asc("name"));
         userSO.getRoles().forEach((roleName) -> {
-            roles.add(roleRepository.findByName(RoleName.valueOf(roleName)));
+            roles.add(roleRepository.findByName(RoleName.valueOf(roleName), sort));
         });
         user.setRoles(roles);
         LOGGER.debug("save user {}", user);
@@ -85,7 +87,8 @@ public class UserService {
     }
     
     public List<UserSO> getAll() {
-        List<User> allUsers = userRepository.findAll();
+        Sort sort = Sort.by(Sort.Order.asc("lastName"), Sort.Order.asc("firstName"), Sort.Order.asc("username"));
+        List<User> allUsers = userRepository.findAll(sort);
         return userMapper.mapUserListToUserSOList(allUsers);
     }
     

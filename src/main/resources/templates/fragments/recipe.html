@@ -96,43 +96,38 @@
             </div>
             </div>
             <div id="associatedRecipes">
-                <div class="padding-8" th:fragment="associatedRecipes" th:object="${recipeSO}">
-                    <label>Associated Recipes - TODO filtering select</label>
-                    <div class="w3-display-container">
-                        <div class="w3-row">
-                            <div class="w3-col w3-right" style="width: 55px;">
-                                &nbsp;
-                            </div>
-                            <div class="w3-rest">
-                                <select class="w3-select w3-border w3-rest" id="recipeToAdd">
-                                    <option th:each="recipe : ${allRecipes}"
-                                            th:value="${recipe.id}" 
-                                            th:text="${recipe.title}"
-                                            class="w3-block">
-                                    </option>
-                                </select>
-                            </div>
+                <div class="padding-8" th:fragment="associatedRecipes">
+                    <label>Associated Recipes</label>
+                    <input class="w3-input w3-border w3-padding" type="text" placeholder="Search for recipes" id="filteringSelect" th:onkeyup="|javascript:var fn = debounce(function() { $('#filteredRecipes').load('@{'/recipe/filter'}', { 'title': $('#filteringSelect').val() });}, 500); fn();|" onkeypress="return event.key != 'Enter';">
+                    <div th:object="${recipeSO}">
+                        <div id="filteredRecipes">
+                            <table class="w3-table-all" th:if="${filteredRecipes}" th:fragment="filteredRecipes">
+                                <tr th:each="recipe : ${filteredRecipes}">
+                                    <td>
+                                        <a th:href="|javascript:submitForm('recipeForm', 'associatedRecipes', '@{'/recipe/associatedRecipe/add/__${recipe.id}__'}');|" class="w3-text-green w3-button"><i class="fas fa-plus-circle"></i></a> <span th:text="${recipe.title}"></span>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
-                        <div class="w3-display-right">
-                            <a th:href="|javascript:submitForm('recipeForm', 'associatedRecipes', '@{'/recipe/associatedRecipe/add/'}' + $('#recipeToAdd').val());|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
-                        </div>
+                        <table class="w3-table-all w3-margin-top" th:if="*{associatedRecipes}">
+                            <tr th:each="associatedRecipe,rowStat : *{associatedRecipes}">
+                                <td>
+                                    <input type="hidden" th:field="*{associatedRecipes[__${rowStat.index}__].title}"></input>
+                                    <input type="hidden" th:field="*{associatedRecipes[__${rowStat.index}__].id}"></input>
+                                    <a th:href="|javascript:submitForm('recipeForm', 'associatedRecipes', '@{'/recipe/associatedRecipe/remove/__${rowStat.index}__'}');|" class="w3-button w3-text-red"><i class="fas fa-minus-circle"></i></a> <span th:text="*{associatedRecipes[__${rowStat.index}__].title}"></span>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                    <ul>
-                        <li th:each="associatedRecipe,rowStat : *{associatedRecipes}" class="w3-display-container">
-                            <input type="hidden" th:field="*{associatedRecipes[__${rowStat.index}__].title}"></input>
-                            <input type="hidden" th:field="*{associatedRecipes[__${rowStat.index}__].id}"></input>
-                            <span th:text="*{associatedRecipes[__${rowStat.index}__].title}"></span><a th:href="|javascript:submitForm('recipeForm', 'associatedRecipes', '@{'/recipe/associatedRecipe/remove/__${rowStat.index}__'}');|" class="w3-button w3-text-red w3-display-right"><i class="fas fa-minus-circle"></i></a>
-                        </li>
-                    </ul>
                 </div>
             </div>
             <div class="padding-8">
                 <label>Categories<span class="w3-text-red"> *</span></label>
-                <select class="w3-select w3-border" th:errorclass="w3-pale-red" multiple th:field="*{categories}" th:size="${#lists.size(allCategories)}">
+                <select class="w3-select w3-border no-padding" th:errorclass="w3-pale-red" multiple th:field="*{categories}" th:size="${#lists.size(allCategories)}">
                     <option th:each="category : ${allCategories}"
                             th:value="${category.id}" 
                             th:text="${category.name}"
-                            class="w3-block">
+                            class="w3-block w3-button w3-left-align">
                     </option>
                 </select>
                 <label class="w3-text-red" th:if="*{#fields.hasErrors('categories')}" th:errors="*{categories}">Incorrect categories</label>
