@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import sk.filo.recipes.domain.Category;
 import sk.filo.recipes.domain.Ingredient;
+import sk.filo.recipes.domain.Picture;
 import sk.filo.recipes.domain.Recipe;
 import sk.filo.recipes.domain.Section;
 import sk.filo.recipes.domain.User;
@@ -25,6 +26,7 @@ import sk.filo.recipes.mapper.IngredientMapper;
 import sk.filo.recipes.mapper.RecipeMapper;
 import sk.filo.recipes.mapper.SectionMapper;
 import sk.filo.recipes.repository.CategoryRepository;
+import sk.filo.recipes.repository.PictureRepository;
 import sk.filo.recipes.repository.RecipeRepository;
 import sk.filo.recipes.repository.UnitRepository;
 import sk.filo.recipes.repository.UserRepository;
@@ -50,6 +52,8 @@ public class RecipeService {
     private IngredientMapper ingredientMapper;
     
     private RecipeRepository recipeRepository;
+    
+    private PictureRepository pictureRepository;
     
     private UserRepository userRepository;
     
@@ -80,6 +84,11 @@ public class RecipeService {
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+    
+    @Autowired
+    public void setPictureRepository(PictureRepository pictureRepository) {
+        this.pictureRepository = pictureRepository;
     }
     
     @Autowired
@@ -132,6 +141,12 @@ public class RecipeService {
         Recipe recipe = recipeRepository.getOne(id);
         LOGGER.debug("get recipe {}", recipe);
         return recipeMapper.mapRecipeToRecipeSO(recipe);
+    }
+    
+    public byte[] getPictureById(Long id) {
+        Picture picture = pictureRepository.getOne(id);
+        LOGGER.debug("get picture {}", picture);
+        return picture.getData();
     }
     
     public RecipeViewSO getView(Long id) {

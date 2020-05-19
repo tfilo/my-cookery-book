@@ -1,14 +1,25 @@
 package sk.filo.recipes.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import javax.imageio.ImageIO;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import sk.filo.recipes.service.CategoryService;
 import sk.filo.recipes.service.RecipeService;
 import sk.filo.recipes.so.view.RecipeViewSO;
@@ -67,5 +78,16 @@ public class RecipeViewController {
         model.addAttribute(TITLE, categoryService.get(categoryId).getName());
         return "fragments/view::recipesList";
     }
-    
+        
+    @RequestMapping(value = "/picture/{id}", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> getPictureById(@PathVariable final Long id) {
+        LOGGER.debug("Getting picture by id");
+        byte[] bytes = recipeService.getPictureById(id);
+
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+
+        return new ResponseEntity<byte[]>(bytes, headers, HttpStatus.CREATED);
+        // <img th:src="@{/view/picture/${id}}" />
+    }
 }
