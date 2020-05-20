@@ -2,11 +2,8 @@ package sk.filo.recipes.controller.user;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 import sk.filo.recipes.service.CategoryService;
+import sk.filo.recipes.service.PictureService;
 import sk.filo.recipes.service.RecipeService;
 import sk.filo.recipes.service.UnitCategoryService;
 import sk.filo.recipes.so.CategorySO;
@@ -65,6 +63,9 @@ public class RecipeController {
     
     @Autowired
     UnitCategoryService unitCategoryService;
+    
+    @Autowired
+    PictureService pictureService;
     
     private void setAllCategoriesWithRecipes(Model model) {
         model.addAttribute("allCategoriesWithRecipes", categoryService.getFist4RecipesForEveryCategory());
@@ -215,7 +216,7 @@ public class RecipeController {
     @RequestMapping(value = "/picture/{id}", method = RequestMethod.GET)
     public ResponseEntity<byte[]> getPictureById(final @PathVariable Long id) {
         LOGGER.debug("Getting picture by id");
-        PictureSO pictureSO= recipeService.getPictureById(id);
+        PictureSO pictureSO= pictureService.get(id);
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
             
@@ -229,7 +230,7 @@ public class RecipeController {
         PictureSO so = new PictureSO();
         so.setTitle(picture.getName());
         so.setData(picture.getBytes());
-        recipeSO.getPictures().add(recipeService.savePicture(so));
+        recipeSO.getPictures().add(pictureService.save(so));
 
         return "fragments/recipe::pictures";
     }

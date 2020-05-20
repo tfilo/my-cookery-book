@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.NullValueCheckStrategy;
 import sk.filo.recipes.domain.Picture;
+import sk.filo.recipes.so.PictureBasicSO;
 import sk.filo.recipes.so.PictureSO;
 
 /**
@@ -20,10 +21,7 @@ public interface SimplePictureMapper {
             @Mapping(target = "data", ignore = true)
     })
     Picture mapPictureSOToPicture(PictureSO pictureSO);
-    
-    @Mappings({
-            @Mapping(target = "data", ignore = true)
-    })
-    PictureSO mapPictureToPictureSO(Picture picture);
+
+    PictureBasicSO mapPictureToPictureBasicSO(Picture picture);
 
 }

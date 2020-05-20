@@ -13,12 +13,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CategorySO {
-
+public class PictureBasicSO {
+    
     private Long id;
     
     @NotBlank
     @Size(max=80)
-    private String name;
-    
+    private String title;
 }

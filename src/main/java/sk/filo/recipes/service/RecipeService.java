@@ -3,7 +3,6 @@ package sk.filo.recipes.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +32,7 @@ import sk.filo.recipes.repository.RecipeRepository;
 import sk.filo.recipes.repository.UnitRepository;
 import sk.filo.recipes.repository.UserRepository;
 import sk.filo.recipes.so.IngredientSO;
-import sk.filo.recipes.so.PictureSO;
+import sk.filo.recipes.so.PictureBasicSO;
 import sk.filo.recipes.so.RecipeBasicSO;
 import sk.filo.recipes.so.RecipeSO;
 import sk.filo.recipes.so.RecipeSimpleSO;
@@ -53,10 +52,6 @@ public class RecipeService {
     private SectionMapper sectionMapper;
     
     private IngredientMapper ingredientMapper;
-    
-    private PictureMapper pictureMapper;
-    
-    private SimplePictureMapper simplePictureMapper;;
     
     private RecipeRepository recipeRepository;
     
@@ -81,16 +76,6 @@ public class RecipeService {
     @Autowired
     public void setIngredientMapper(IngredientMapper ingredientMapper) {
         this.ingredientMapper = ingredientMapper;
-    }
-    
-    @Autowired
-    public void setPictureMapper(PictureMapper pictureMapper) {
-        this.pictureMapper = pictureMapper;
-    }
-    
-    @Autowired
-    public void setSimplePictureMapper(SimplePictureMapper simplePictureMapper) {
-        this.simplePictureMapper = simplePictureMapper;
     }
     
     @Autowired
@@ -159,19 +144,6 @@ public class RecipeService {
         return recipeMapper.mapRecipeToRecipeSO(recipe);
     }
     
-    @Transactional
-    public PictureSO getPictureById(Long id) {
-        LOGGER.debug("get picture by id {}", id);
-        return pictureMapper.mapPictureToPictureSO(pictureRepository.getOne(id));
-    }
-    
-    @Transactional
-    public PictureSO savePicture(PictureSO so) {
-        LOGGER.debug("save picture {}", so.toString());
-        Picture picture = pictureMapper.mapPictureSOToPicture(so);
-        return simplePictureMapper.mapPictureToPictureSO(pictureRepository.saveAndFlush(picture));
-    }
-    
     public RecipeViewSO getView(Long id) {
         Recipe recipe = recipeRepository.getOne(id);
         LOGGER.debug("get view recipe {}", recipe);
@@ -235,14 +207,13 @@ public class RecipeService {
                           .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unit not found!")));
                 s.getIngredients().add(i);
             });
-            // TODO map pictures on section
             sections.add(s);
         });
     }
 
-    private void mapPictures(List<PictureSO> picturesSO, List<Picture> pictures) {
+    private void mapPictures(List<PictureBasicSO> picturesSO, List<Picture> pictures) {
         pictures.clear();
-        picturesSO.forEach((PictureSO so) -> {
+        picturesSO.forEach((PictureBasicSO so) -> {
             Picture picture = pictureRepository.findById(so.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Picture not found!"));
             picture.setTitle(so.getTitle());
             pictures.add(picture);

@@ -37,7 +37,7 @@ public class UnitCategory {
     @GeneratedValue(generator = "unit_category_generator")
     private Long id;
     
-    @Column(name = "name", nullable = false, length = 255)
+    @Column(name = "name", nullable = false, length = 80, unique = true)
     private String name;
     
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)

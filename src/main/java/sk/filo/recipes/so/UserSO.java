@@ -22,13 +22,13 @@ public class UserSO {
     private Long id;
 
     @NotBlank
-    @Size(max=255, min=4)
+    @Size(max=25, min=4)
     private String username;
 
-    @Size(max=255)
+    @Size(max=50)
     private String firstName;
 
-    @Size(max=255)
+    @Size(max=50)
     private String lastName;
     
     @Size(max=255)

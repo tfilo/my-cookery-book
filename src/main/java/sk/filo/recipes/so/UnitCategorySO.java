@@ -21,7 +21,7 @@ public class UnitCategorySO {
     private Long id;
     
     @NotBlank
-    @Size(max=255)
+    @Size(max=80)
     private String name;
     
     private List<UnitSO> units;

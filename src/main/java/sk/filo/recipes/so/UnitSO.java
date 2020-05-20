@@ -19,11 +19,11 @@ public class UnitSO {
     private Long id;
 
     @NotBlank
-    @Size(max=255)
+    @Size(max=80)
     private String name;
     
     @NotBlank
-    @Size(max=255)
+    @Size(max=20)
     private String abbreviation;
 
     @NotNull

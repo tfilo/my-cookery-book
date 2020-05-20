@@ -2,10 +2,8 @@ package sk.filo.recipes.so;
         
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -38,7 +36,7 @@ public class RecipeSO {
 
     private List<RecipeSimpleSO> associatedRecipes;
     
-    private List<PictureSO> pictures;
+    private List<PictureBasicSO> pictures;
     
     @NotEmpty
     private List<Long> categories;
@@ -68,7 +66,7 @@ public class RecipeSO {
         return associatedRecipes;
     }
     
-    public List<PictureSO> getPictures() {
+    public List<PictureBasicSO> getPictures() {
         if (Objects.isNull(pictures)) {
             pictures = new ArrayList<>();
         }

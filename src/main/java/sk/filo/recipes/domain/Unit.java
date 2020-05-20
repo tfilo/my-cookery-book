@@ -33,10 +33,10 @@ public class Unit {
     @GeneratedValue(generator = "unit_generator")
     private Long id;
     
-    @Column(name = "name", nullable = false, length = 255)
+    @Column(name = "name", nullable = false, length = 80)
     private String name;
     
-    @Column(name = "abbreviation", nullable = false, length = 255)
+    @Column(name = "abbreviation", nullable = false, length = 20)
     private String abbreviation;
     
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)

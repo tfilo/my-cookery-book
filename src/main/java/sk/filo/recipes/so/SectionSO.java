@@ -25,29 +25,20 @@ public class SectionSO {
     @Min(value=0)
     private Integer sortNumber;
     
-    @Size(max=100)
+    @Size(max=80)
     private String name;
     
     @Valid
     private List<IngredientSO> ingredients;
     
     @NotBlank
-    @Size(max=2000)
+    @Size(max=Integer.MAX_VALUE)
     private String method;
-        
-    private List<PictureSO> pictures;
     
     public List<IngredientSO> getIngredients() {
         if (Objects.isNull(ingredients)) {
             ingredients = new ArrayList<>();
         }
         return ingredients;
-    }
-
-    public List<PictureSO> getPictures() {
-        if (Objects.isNull(pictures)) {
-            pictures = new ArrayList<>();
-        }
-        return pictures;
     }
 }

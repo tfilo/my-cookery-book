@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import sk.filo.recipes.service.CategoryService;
+import sk.filo.recipes.service.PictureService;
 import sk.filo.recipes.service.RecipeService;
 import sk.filo.recipes.so.PictureSO;
 import sk.filo.recipes.so.view.RecipeViewSO;
@@ -42,6 +43,9 @@ public class RecipeViewController {
     
     @Autowired
     CategoryService categoryService;
+    
+    @Autowired
+    PictureService pictureService;
     
     private void setAllCategoriesWithRecipes(Model model) {
         model.addAttribute(MODEL_CATEGORIES_WITH_RECIPES_SO, categoryService.getFist4RecipesForEveryCategory());
@@ -77,10 +81,21 @@ public class RecipeViewController {
     @RequestMapping(value = "/picture/{id}", method = RequestMethod.GET)
     public ResponseEntity<byte[]> getPictureById(final @PathVariable Long id) {
         LOGGER.debug("Getting picture by id");
-        PictureSO pictureSO= recipeService.getPictureById(id);
+        PictureSO pictureSO= pictureService.get(id);
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
             
         return new ResponseEntity<>(pictureSO.getData(), headers, HttpStatus.CREATED);
     }
+    
+    @RequestMapping(value = "/picture/thumbnail/{recipeId}", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> getPictureThumbnailByRecipeId(final @PathVariable Long recipeId) {
+        LOGGER.debug("Getting picture thumbnail by recipeId");
+        PictureSO pictureSO= pictureService.getThumbnailByRecipeId(recipeId);
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+            
+        return new ResponseEntity<>(pictureSO.getData(), headers, HttpStatus.CREATED);
+    }
+    
 }

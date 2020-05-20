@@ -2,7 +2,7 @@
 
 CREATE TABLE cb_category (
     id bigint NOT NULL,
-    name character varying(255) NOT NULL
+    name character varying(80) NOT NULL
 );
 
 CREATE SEQUENCE cb_category_seq
@@ -14,7 +14,7 @@ CREATE SEQUENCE cb_category_seq
 
 CREATE TABLE cb_ingredient (
     id bigint NOT NULL,
-    name character varying(255) NOT NULL,
+    name character varying(80) NOT NULL,
     sort_number integer,
     value real NOT NULL,
     unit_id bigint NOT NULL,
@@ -31,10 +31,18 @@ CREATE SEQUENCE cb_ingredient_seq
 CREATE TABLE cb_picture (
     id bigint NOT NULL,
     data oid NOT NULL,
-    name character varying(255),
-    section_id bigint,
+    thumbnail oid NOT NULL,
+    title character varying(80),
+    uploaded timestamp without time zone,
     recipe_id bigint
 );
+
+CREATE SEQUENCE cb_picture_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
 
 CREATE TABLE cb_recipe (
     id bigint NOT NULL,
@@ -45,6 +53,14 @@ CREATE TABLE cb_recipe (
     creator_id bigint NOT NULL,
     modifier_id bigint
 );
+
+CREATE SEQUENCE cb_recipe_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
 
 CREATE TABLE cb_recipe_category (
     recipe_id bigint NOT NULL,
@@ -71,7 +87,7 @@ CREATE SEQUENCE cb_role_seq
 CREATE TABLE cb_section (
     id bigint NOT NULL,
     method jsonb NOT NULL,
-    name character varying(255),
+    name character varying(80),
     sort_number integer,
     recipe_id bigint NOT NULL
 );
@@ -98,14 +114,21 @@ CREATE SEQUENCE cb_source_seq
 
 CREATE TABLE cb_unit (
     id bigint NOT NULL,
-    abbreviation character varying(255) NOT NULL,
-    name character varying(255) NOT NULL,
+    abbreviation character varying(80) NOT NULL,
+    name character varying(20) NOT NULL,
     unit_category_id bigint NOT NULL
 );
 
+CREATE SEQUENCE cb_unit_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
 CREATE TABLE cb_unit_category (
     id bigint NOT NULL,
-    name character varying(255) NOT NULL
+    name character varying(80) NOT NULL
 );
 
 CREATE SEQUENCE cb_unit_category_seq
@@ -115,25 +138,13 @@ CREATE SEQUENCE cb_unit_category_seq
     NO MAXVALUE
     CACHE 1;
 
-CREATE SEQUENCE cb_unit_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
 CREATE TABLE cb_user (
     id bigint NOT NULL,
     enabled boolean NOT NULL,
-    first_name character varying(255),
-    last_name character varying(255),
+    first_name character varying(50),
+    last_name character varying(50),
     password character varying(255) NOT NULL,
-    username character varying(255) NOT NULL
-);
-
-CREATE TABLE cb_user_role (
-    user_id bigint NOT NULL,
-    role_id bigint NOT NULL
+    username character varying(25) NOT NULL
 );
 
 CREATE SEQUENCE cb_user_seq
@@ -142,6 +153,11 @@ CREATE SEQUENCE cb_user_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
+
+CREATE TABLE cb_user_role (
+    user_id bigint NOT NULL,
+    role_id bigint NOT NULL
+);
 
 ALTER TABLE ONLY cb_category
     ADD CONSTRAINT cb_category_pkey PRIMARY KEY (id);
@@ -180,10 +196,16 @@ ALTER TABLE ONLY cb_role
     ADD CONSTRAINT uk_cb_role_name UNIQUE (name);
 
 ALTER TABLE ONLY cb_unit
-    ADD CONSTRAINT uk_cb_unit_abbreviation UNIQUE (name, abbreviation);
+    ADD CONSTRAINT uk_cb_unit_name_abbreviation UNIQUE (name, abbreviation);
 
-ALTER TABLE ONLY cb_picture
-    ADD CONSTRAINT fk_cb_picture_section_id FOREIGN KEY (section_id) REFERENCES cb_section(id);
+ALTER TABLE ONLY cb_category
+    ADD CONSTRAINT uk_cb_category_name UNIQUE (name);
+
+ALTER TABLE ONLY cb_unit_category
+    ADD CONSTRAINT uk_cb_unit_category_name UNIQUE (name);
+
+ALTER TABLE ONLY cb_user
+    ADD CONSTRAINT uk_cb_user_username UNIQUE (username);
 
 ALTER TABLE ONLY cb_user_role
     ADD CONSTRAINT fk_cb_user_role_role_id FOREIGN KEY (role_id) REFERENCES cb_role(id);

@@ -45,7 +45,7 @@ public class Section {
     @Column(name = "sort_number")
     private Integer sortNumber;
 
-    @Column(name = "name", length = 255)
+    @Column(name = "name", length = 80)
     private String name;
    
     @OneToMany(
@@ -61,26 +61,10 @@ public class Section {
     @Column(columnDefinition = "jsonb", name = "method", nullable = false)
     private String method;
     
-    @OneToMany(
-        fetch = FetchType.LAZY,
-        cascade = CascadeType.ALL,
-        orphanRemoval = true
-    )
-    @JoinColumn(name = "section_id")
-    private List<Picture> pictures;
-    
     public List<Ingredient> getIngredients() {
         if (Objects.isNull(ingredients)) {
             ingredients = new ArrayList<>();
         }
         return ingredients;
-    }
-    
-    public List<Picture> getPictures() {
-        if (Objects.isNull(pictures)) {
-            pictures = new ArrayList<>();
-        }
-        return pictures;
-    }
-    
+    }    
 }

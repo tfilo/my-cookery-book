@@ -58,6 +58,12 @@
             <artifactId>hibernate-types-52</artifactId>
             <version>${hibernate-types.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.11</version>
+        </dependency>
 
         <!-- IBA pre developerov --> 
         <dependency>

@@ -61,14 +61,18 @@
             <th:block th:each="category, rowStat : ${allCategoriesWithRecipes}" th:if="${not #lists.isEmpty(category.recipes)}">
                 <h2 class="w3-center" th:id="${'category_' + category.id}" th:text="${category.name}">Category name</h2>
                 <div class="w3-row-padding" th:classappend="${rowStat.last} ? 'w3-margin-bottom'">
-                    <div class="w3-col l3 m6 s12 padding-bottom-16" th:each="recipe, rowStat : ${category.recipes}">
-                        <div class="w3-card w3-container w3-display-container">
+                    <div class="w3-col l3 m6 s12 w3-container padding-bottom-16" th:each="recipe, rowStat : ${category.recipes}">
+                        <div class="w3-display-container">
                             <a th:href="|javascript:$('#content').load('@{'/recipe/edit/__${recipe.id}__'}');|" style="display: inline;" class="w3-button w3-text-green w3-display-topright" sec:authorize="hasRole('USER')"><i class="fas fa-edit"></i></a>
-                            <div class="w3-center"><img th:src="@{image/default_meal.jpg}" class="meal-preview-image w3-circle"></div>
-                            <h3>
-                                <a th:href="|javascript:$('#content').load('@{'/view/recipe/__${recipe.id}__'}');|" style="display: inline;" th:text="${recipe.title}">Recipe title</a>
-                            </h3>
-                            <p th:text="${recipe.description}">Recipe description</p>
+                            <div class="w3-center">
+                                <img th:src="@{/view/picture/thumbnail/__${recipe.id}__}" class="uploaded-picture">
+                            </div>
+                            <div class="w3-block w3-text-white w3-display-bottomleft picture-title">
+                                <h4>
+                                    <a th:href="|javascript:$('#content').load('@{'/view/recipe/__${recipe.id}__'}');|" style="display: inline;" th:text="${recipe.title}">Recipe title</a>
+                                </h4>
+                                <p class="w3-small" th:text="${recipe.description}">Recipe description</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -78,14 +82,18 @@
         <article th:fragment="recipesList">
             <h2 class="w3-center" th:text="${title}">Title</h2>
             <div class="w3-row-padding">
-                <div class="w3-col l3 m6 s12 padding-bottom-16" th:each="recipe, rowStat : ${recipes}">
-                    <div class="w3-card w3-container w3-display-container">
+                <div class="w3-col l3 m6 s12 w3-container padding-bottom-16" th:each="recipe, rowStat : ${recipes}">
+                    <div class="w3-display-container">
                         <a th:href="|javascript:$('#content').load('@{'/recipe/edit/__${recipe.id}__'}');|" style="display: inline;" class="w3-button w3-text-green w3-display-topright" sec:authorize="hasRole('USER')"><i class="fas fa-edit"></i></a>
-                        <div class="w3-center"><img th:src="@{image/default_meal.jpg}" class="meal-preview-image w3-circle"></div>
-                        <h3>
-                            <a th:href="|javascript:$('#content').load('@{'/view/recipe/__${recipe.id}__'}');|" style="display: inline;" th:text="${recipe.title}">Recipe title</a>
-                        </h3>
-                        <p th:text="${recipe.description}">Recipe description</p>
+                        <div class="w3-center">
+                            <img th:src="@{/view/picture/thumbnail/__${recipe.id}__}" class="uploaded-picture">
+                        </div>
+                        <div class="w3-block w3-text-white w3-display-bottomleft picture-title">
+                            <h4>
+                                <a th:href="|javascript:$('#content').load('@{'/view/recipe/__${recipe.id}__'}');|" style="display: inline;" th:text="${recipe.title}">Recipe title</a>
+                            </h4>
+                            <p class="w3-small" th:text="${recipe.description}">Recipe description</p>
+                        </div>
                     </div>
                 </div>
             </div>

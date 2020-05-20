@@ -23,7 +23,7 @@ public class IngredientSO {
     private Integer sortNumber;
     
     @NotBlank
-    @Size(max=255)
+    @Size(max=80)
     private String name;
     
     @NotNull
