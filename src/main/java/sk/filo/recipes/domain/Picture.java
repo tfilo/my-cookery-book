@@ -19,7 +19,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "data")
 @Entity
 @Table(name = "cb_picture")
 @SequenceGenerator(name = "unit_generator", allocationSize = 1, sequenceName = "cb_unit_seq")

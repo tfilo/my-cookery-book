@@ -1,12 +1,6 @@
 package sk.filo.recipes.controller;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import javax.imageio.ImageIO;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import sk.filo.recipes.service.CategoryService;
 import sk.filo.recipes.service.RecipeService;
+import sk.filo.recipes.so.PictureSO;
 import sk.filo.recipes.so.view.RecipeViewSO;
 
 /**
@@ -80,14 +75,12 @@ public class RecipeViewController {
     }
         
     @RequestMapping(value = "/picture/{id}", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> getPictureById(@PathVariable final Long id) {
+    public ResponseEntity<byte[]> getPictureById(final @PathVariable Long id) {
         LOGGER.debug("Getting picture by id");
-        byte[] bytes = recipeService.getPictureById(id);
-
+        PictureSO pictureSO= recipeService.getPictureById(id);
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
-
-        return new ResponseEntity<byte[]>(bytes, headers, HttpStatus.CREATED);
-        // <img th:src="@{/view/picture/${id}}" />
+            
+        return new ResponseEntity<>(pictureSO.getData(), headers, HttpStatus.CREATED);
     }
 }

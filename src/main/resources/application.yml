@@ -11,17 +11,28 @@ spring:
     #jpa
     #drop n create table again, good for testing, comment this in production
     jpa:
-        hibernate:
-            ddl-auto: validate
+        show-sql: true
         properties:
             hibernate:
+                format_sql: true
                 enable_lazy_load_no_trans: true
                 event:
                     merge:
                         entity_copy_observer: allow
+                jdbc:
+                    lob:
+                        non_contextual_creation: true
+
+    #flyway                    
+    flyway:
+    check-location: true              
     #thymeleaf
     thymeleaf:
         cache: false
+    servlet:
+        multipart:
+            max-file-size: 5MB
+            max-request-size: 10MB
 #log
 logging:
     level:

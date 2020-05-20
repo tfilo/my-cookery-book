@@ -18,7 +18,7 @@ import sk.filo.recipes.so.view.RecipeViewSO;
  */
 @Mapper(
     nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
-    uses = { SimpleCategoryMapper.class, SimpleSourceMapper.class, SimpleRecipeMapper.class, IngredientMapper.class}
+    uses = { SimpleCategoryMapper.class, SimpleSourceMapper.class, SimpleRecipeMapper.class, IngredientMapper.class, SimplePictureMapper.class}
 )
 public interface RecipeMapper {
 

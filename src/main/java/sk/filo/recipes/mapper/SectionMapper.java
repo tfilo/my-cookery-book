@@ -12,13 +12,13 @@ import sk.filo.recipes.so.SectionSO;
  * @author tomas
  */
 @Mapper(
-    nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
+    nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
+    uses = { SimplePictureMapper. class }
 )
 public interface SectionMapper {
 
     @Mappings({
-        @Mapping(target = "ingredients", ignore = true),
-        @Mapping(target = "pictures", ignore = true)
+        @Mapping(target = "ingredients", ignore = true)
     })
     Section mapSectionSOToSection(SectionSO sectionSO);
     

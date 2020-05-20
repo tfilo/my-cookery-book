@@ -1,24 +1,36 @@
 package sk.filo.recipes.controller.user;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 import sk.filo.recipes.service.CategoryService;
 import sk.filo.recipes.service.RecipeService;
 import sk.filo.recipes.service.UnitCategoryService;
 import sk.filo.recipes.so.CategorySO;
 import sk.filo.recipes.so.IngredientSO;
+import sk.filo.recipes.so.PictureSO;
 import sk.filo.recipes.so.RecipeSimpleSO;
 import sk.filo.recipes.so.RecipeSO;
 import sk.filo.recipes.so.SectionSO;
@@ -40,6 +52,8 @@ public class RecipeController {
     private static final String MODEL_CATEGORIES = "allCategories";
     
     private static final String MODEL_UNIT_CATEGORIES_WITH_UNITS = "allUnitCategoriesWithUnits";
+    
+    private static final String SESSION_PICTURES = "pictures";
 
     private static final String MODEL_FILTERED_RECIPES = "filteredRecipes";
     
@@ -196,5 +210,37 @@ public class RecipeController {
         }
         model.addAttribute(MODEL_FILTERED_RECIPES, filtered);
         return "fragments/recipe::filteredRecipes";
+    }
+
+    @RequestMapping(value = "/picture/{id}", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> getPictureById(final @PathVariable Long id) {
+        LOGGER.debug("Getting picture by id");
+        PictureSO pictureSO= recipeService.getPictureById(id);
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+            
+        return new ResponseEntity<>(pictureSO.getData(), headers, HttpStatus.CREATED);
+    }
+
+    // Upload picture to database temporarily - after saving recipe, remove all picture not linked to any repice
+    @RequestMapping(value = "/picture/save", method = RequestMethod.POST)
+    public String uploadPicture(final @RequestParam("picture") MultipartFile picture, final HttpServletRequest request, final RecipeSO recipeSO) throws IOException {
+        LOGGER.debug("Upload file {} {}", picture.getName(), recipeSO);
+        PictureSO so = new PictureSO();
+        so.setTitle(picture.getName());
+        so.setData(picture.getBytes());
+        recipeSO.getPictures().add(recipeService.savePicture(so));
+
+        return "fragments/recipe::pictures";
+    }
+    
+    // Remove only from object not from DB!!!  - after saving recipe, remove all picture not linked to any repice
+    @RequestMapping(value = "/picture/remove/{rowId}")
+    public String removePicture(final RecipeSO recipeSO, @PathVariable Integer rowId) {
+        LOGGER.debug("removePicture rowId {} {}", rowId, recipeSO);
+        if (recipeSO != null) {
+            recipeSO.getPictures().remove(rowId.intValue());
+        }
+        return "fragments/recipe::pictures";
     }
 }

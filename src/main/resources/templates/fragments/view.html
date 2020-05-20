@@ -39,6 +39,12 @@
                     </li>
                 </ul>
             </section>
+            <div class="padding-8  w3-row">
+                <div class="w3-col l3 m6 s12 w3-display-container" th:each="picture,rowStat : *{pictures}">
+                    <img th:src="@{/view/picture/__${picture.id}__}" class="uploaded-picture" th:alt="*{pictures[__${rowStat.index}__].title}" />
+                    <span style="display: inline;" class="w3-block w3-text-white w3-display-bottomleft picture-title" th:text="*{pictures[__${rowStat.index}__].title}"></span>
+                </div>
+            </div>
             <hr th:if="*{not #lists.isEmpty(sources)}">
             <section th:if="*{not #lists.isEmpty(sources)}">
                 <h5>Sources</h5>

@@ -23,14 +23,17 @@ import sk.filo.recipes.domain.Recipe;
 import sk.filo.recipes.domain.Section;
 import sk.filo.recipes.domain.User;
 import sk.filo.recipes.mapper.IngredientMapper;
+import sk.filo.recipes.mapper.PictureMapper;
 import sk.filo.recipes.mapper.RecipeMapper;
 import sk.filo.recipes.mapper.SectionMapper;
+import sk.filo.recipes.mapper.SimplePictureMapper;
 import sk.filo.recipes.repository.CategoryRepository;
 import sk.filo.recipes.repository.PictureRepository;
 import sk.filo.recipes.repository.RecipeRepository;
 import sk.filo.recipes.repository.UnitRepository;
 import sk.filo.recipes.repository.UserRepository;
 import sk.filo.recipes.so.IngredientSO;
+import sk.filo.recipes.so.PictureSO;
 import sk.filo.recipes.so.RecipeBasicSO;
 import sk.filo.recipes.so.RecipeSO;
 import sk.filo.recipes.so.RecipeSimpleSO;
@@ -50,6 +53,10 @@ public class RecipeService {
     private SectionMapper sectionMapper;
     
     private IngredientMapper ingredientMapper;
+    
+    private PictureMapper pictureMapper;
+    
+    private SimplePictureMapper simplePictureMapper;;
     
     private RecipeRepository recipeRepository;
     
@@ -74,6 +81,16 @@ public class RecipeService {
     @Autowired
     public void setIngredientMapper(IngredientMapper ingredientMapper) {
         this.ingredientMapper = ingredientMapper;
+    }
+    
+    @Autowired
+    public void setPictureMapper(PictureMapper pictureMapper) {
+        this.pictureMapper = pictureMapper;
+    }
+    
+    @Autowired
+    public void setSimplePictureMapper(SimplePictureMapper simplePictureMapper) {
+        this.simplePictureMapper = simplePictureMapper;
     }
     
     @Autowired
@@ -125,8 +142,7 @@ public class RecipeService {
         mapAssociatedRecipes(recipeSO.getAssociatedRecipes(), recipe.getAssociatedRecipes());
         mapCategories(recipeSO.getCategories(), recipe.getCategories());
         mapSections(recipeSO.getSections(), recipe.getSections());
-        
-        // TODO map pictures on recipe
+        mapPictures(recipeSO.getPictures(), recipe.getPictures());
         
         LOGGER.debug("save recipe {}", recipe);
         recipeRepository.save(recipe);
@@ -143,10 +159,17 @@ public class RecipeService {
         return recipeMapper.mapRecipeToRecipeSO(recipe);
     }
     
-    public byte[] getPictureById(Long id) {
-        Picture picture = pictureRepository.getOne(id);
-        LOGGER.debug("get picture {}", picture);
-        return picture.getData();
+    @Transactional
+    public PictureSO getPictureById(Long id) {
+        LOGGER.debug("get picture by id {}", id);
+        return pictureMapper.mapPictureToPictureSO(pictureRepository.getOne(id));
+    }
+    
+    @Transactional
+    public PictureSO savePicture(PictureSO so) {
+        LOGGER.debug("save picture {}", so.toString());
+        Picture picture = pictureMapper.mapPictureSOToPicture(so);
+        return simplePictureMapper.mapPictureToPictureSO(pictureRepository.saveAndFlush(picture));
     }
     
     public RecipeViewSO getView(Long id) {
@@ -214,6 +237,15 @@ public class RecipeService {
             });
             // TODO map pictures on section
             sections.add(s);
+        });
+    }
+
+    private void mapPictures(List<PictureSO> picturesSO, List<Picture> pictures) {
+        pictures.clear();
+        picturesSO.forEach((PictureSO so) -> {
+            Picture picture = pictureRepository.findById(so.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Picture not found!"));
+            picture.setTitle(so.getTitle());
+            pictures.add(picture);
         });
     }
 }

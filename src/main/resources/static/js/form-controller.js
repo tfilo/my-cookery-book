@@ -25,6 +25,24 @@ function asyncLoadFragment(target, url) {
     return false; // cancel original event to prevent form submitting
 }
 
+function uploadPicture(formId, fileInputId, target, url) {
+    var form = $('#' + formId)[0];
+    var formData = new FormData(form);
+    formData.append('picture', $('#' + fileInputId)[0].files[0]);
+
+    $.ajax({
+        type: "POST",
+        data: formData,
+        url: url,
+        contentType: false,
+        processData: false,
+        success: function (response) { // on success..
+            $('#' + target).html(response); // update the DIV
+        }
+    });
+    return false; // cancel original event to prevent form submitting
+}
+
 const debounce = (func, delay) => {
     console.log("debounce");
     let debounceTimer;

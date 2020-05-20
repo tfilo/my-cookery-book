@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class PictureViewSO {
     
-    private String title;
+    private Long id;
     
-    private byte[] data;
+    private String title;
 }

@@ -12,7 +12,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "data")
 public class PictureSO {
     
     private Long id;
@@ -20,4 +20,6 @@ public class PictureSO {
     @NotBlank
     @Size(max=255)
     private String title;
+    
+    private byte[] data;
 }

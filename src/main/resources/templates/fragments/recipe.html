@@ -83,7 +83,10 @@
                             <script th:inline="javascript">
                                 var id = [[${rowStat.index}]];
                                 var editor = new Quill('#method' + id, getQuillEditConfiguration("#method" + id + "length", "#sections" + id + "method"));
-                                editor.setContents(JSON.parse($("#sections" + id + "method").val()));
+                                var json = $("#sections" + id + "method").val();
+                                if (json) {
+                                    editor.setContents(JSON.parse(json));
+                                }
                             </script>
 
                             <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].method')}" th:errors="*{sections[__${rowStat.index}__].method}">Incorrect method</label>
@@ -132,7 +135,20 @@
                 </select>
                 <label class="w3-text-red" th:if="*{#fields.hasErrors('categories')}" th:errors="*{categories}">Incorrect categories</label>
             </div>
-
+            
+            <div id="pictures">
+                <div class="padding-8  w3-row" th:fragment="pictures" th:object="${recipeSO}">
+                    <label>Pictures</label>
+                    <input type="file" class="w3-input w3-border" id="pictureInput" value="Upload picture" th:onchange="|javascript:uploadPicture('recipeForm', 'pictureInput', 'pictures', '@{'/recipe/picture/save'}');|" />
+                    <div class="w3-col l3 m6 s12 w3-display-container" th:each="picture,rowStat : *{pictures}">
+                        <input type="hidden" th:field="*{pictures[__${rowStat.index}__].id}"></input>
+                        <img th:src="@{/recipe/picture/__${picture.id}__}" class="uploaded-picture" th:alt="*{pictures[__${rowStat.index}__].title}" />
+                        <input class="w3-input w3-border" th:field="*{pictures[__${rowStat.index}__].title}" placeholder="Insert image title"></input>
+                        <a th:href="|javascript:submitForm('recipeForm', 'pictures', '@{'/recipe/picture/remove/__${rowStat.index}__'}');|" style="display: inline;" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
+                    </div>
+                </div>
+            </div>
+            
             <div class="padding-8">
                 <div>
                     <label>Sources</label>
