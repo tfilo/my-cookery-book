@@ -63,10 +63,8 @@ function load(target, url, data) {
 }
 
 const debounce = (func, delay) => {
-    console.log("debounce");
     let debounceTimer;
     return function() { 
-        console.log("debounce");
         const context = this;
         const args = arguments;
         clearTimeout(debounceTimer);
@@ -89,12 +87,3 @@ function processError(err) {
         $('#error').hide(1000);
     }, 5000);
 }
-
-$('#iconified').on('keyup', function() {
-    var input = $(this);
-    if(input.val().length === 0) {
-        input.addClass('empty');
-    } else {
-        input.removeClass('empty');
-    }
-});

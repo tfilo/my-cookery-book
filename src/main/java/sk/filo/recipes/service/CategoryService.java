@@ -5,9 +5,6 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,7 +17,6 @@ import sk.filo.recipes.repository.CategoryRepository;
 import sk.filo.recipes.repository.RecipeRepository;
 import sk.filo.recipes.so.CategorySO;
 import sk.filo.recipes.so.CategoryWithRecipeBasicSO;
-import sk.filo.recipes.so.RecipeBasicSO;
 
 /**
  *
@@ -95,20 +91,5 @@ public class CategoryService {
     public CategorySO get(Long id) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found!"));
         return categoryMapper.mapCategoryToCategorySO(category);
-    }
-
-    public List<CategoryWithRecipeBasicSO> getRecipesForEveryCategoryByTitle(PageRequest pr, String title, Pageable page) {
-        Sort sortCategories = Sort.by(Sort.Order.asc("name"));
-        List<Category> categories = categoryRepository.findAll(sortCategories);
-        List<CategoryWithRecipeBasicSO> list = categoryMapper.mapCategoryListToCategoryWithRecipeBasicSOList(categories);
-        
-        list.forEach((so) -> {
-            Page<Recipe> recipes = recipeRepository.findAllByCategoriesIdAndTitleIsContainingIgnoreCase(so.getId(), title, page);
-            recipes.forEach((r) -> {
-                so.getRecipes().add(recipeMapper.mapRecipeToRecipeBasicSO(r));
-            });
-        });
-        
-        return list;
     }
 }

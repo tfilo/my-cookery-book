@@ -51,6 +51,9 @@
                 <button type="button" class="w3-button w3-red" th:if="*{id}" th:onclick="|submitForm('userForm', 'content', '@{'/admin/user/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span>Delete</span></button>
                 <button type="button" class="w3-button w3-red" th:onclick="|javascript:load('content', '@{'/admin/user/all'}');|"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></button>
             </div>
+            <script>
+                $('#searchDiv').hide();
+            </script>
         </form>
         <div th:fragment="usersList">
             <div>
@@ -72,6 +75,9 @@
                     </span>
                 </li>
             </ul>
+            <script>
+                $('#searchDiv').hide();
+            </script>
         </div>
     </body>
 </html>

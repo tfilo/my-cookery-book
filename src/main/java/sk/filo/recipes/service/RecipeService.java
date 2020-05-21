@@ -170,8 +170,13 @@ public class RecipeService {
         return mapToRecipeBasicSO(recipes);
     }
     
-    public Page<RecipeBasicSO> getAllBasicByCategoryIdAndTitle(Pageable page, Long categoryId, String criteria) {
-        Page<Recipe> recipes = recipeRepository.findAllByCategoriesIdAndTitleIsContainingIgnoreCase(categoryId, criteria, page);
+    public Page<RecipeBasicSO> getAllBasicByCategoryIdAndTitle(Pageable page, Long categoryId, String title) {
+        Page<Recipe> recipes;
+        if (categoryId!=null) {
+            recipes = recipeRepository.findAllByCategoriesIdAndTitleIsContainingIgnoreCase(categoryId, title, page);
+        } else {
+            recipes = recipeRepository.findAllByTitleIsContainingIgnoreCase(title,page);
+        }
         return mapToRecipeBasicSO(recipes);
     }
     

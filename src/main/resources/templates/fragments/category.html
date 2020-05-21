@@ -16,6 +16,9 @@
                 <button type="button" class="w3-button w3-red" th:if="*{id}" th:onclick="|submitForm('categoryForm', 'content', '@{'/admin/category/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span>Delete</span></button>
                 <button type="button" class="w3-button w3-red" th:onclick="|javascript:load('content', '@{'/admin/category/all'}');|"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></button>
             </div>
+            <script>
+                $('#searchDiv').hide();
+            </script>
         </form>
         <div th:fragment="categoriesList">
             <div>
@@ -30,6 +33,9 @@
                     <a class="w3-col l12 m12 s12" th:href="|javascript:load('content', '@{'/admin/category/get/__${category.id}__'}');|" th:text="${category.name}"></a>
                 </li>
             </ul>
+            <script>
+                $('#searchDiv').hide();
+            </script>
         </div>
     </body>
 </html>

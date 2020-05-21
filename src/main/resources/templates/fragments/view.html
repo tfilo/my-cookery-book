@@ -55,6 +55,9 @@
                 <div th:if="*{creator}">Created by <i th:text="*{creator}">username</i><span th:if="*{created}"> at <i th:text="*{#temporals.format(created, 'dd.MM.yyyy HH:mm')}" >date</i></span>.</div>
                 <div th:if="*{modifier}">Modified by <i th:text="*{modifier}">username</i><span th:if="*{modified}"> at <i th:text="*{#temporals.format(modified, 'dd.MM.yyyy HH:mm')}">date</i></span>.</div>
             </div>
+            <script>
+                $('#searchDiv').hide();
+            </script>
         </article>
         
         <article th:fragment="categoriesPreview">
@@ -79,6 +82,11 @@
                     </div>
                 </div>
             </th:block>
+            <script>
+                $('#searchDiv').show();
+                $('#searchCategoryId').val(null);
+                $('#search').val("");
+            </script>
         </article>
         
         <article th:fragment="recipesList">
@@ -101,6 +109,13 @@
                     </div>
                 </div>
             </div>
+            <script th:inline="javascript">
+                $('#searchDiv').show();
+                var categoryId = [[${categoryId != null ? categoryId : null}]] ;
+                var title = [[${searchedTitle} ? ${searchedTitle}]];
+                $('#searchCategoryId').val(categoryId);
+                $('#search').val(title);
+            </script>
         </article>
     </body>
 </html>

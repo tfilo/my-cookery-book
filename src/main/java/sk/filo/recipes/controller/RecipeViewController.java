@@ -1,6 +1,5 @@
 package sk.filo.recipes.controller;
 
-import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.thymeleaf.util.StringUtils;
 import sk.filo.recipes.service.CategoryService;
 import sk.filo.recipes.service.PictureService;
 import sk.filo.recipes.service.RecipeService;
@@ -41,6 +41,7 @@ public class RecipeViewController {
     private static final String TITLE = "title";
     
     private static final String CATEGORY_ID = "categoryId";
+    private static final String SEARCHED_TITLE = "searchedTitle";
     
     @Autowired
     RecipeService recipeService;
@@ -55,13 +56,6 @@ public class RecipeViewController {
         model.addAttribute(MODEL_CATEGORIES_WITH_RECIPES_SO, categoryService.getFist4RecipesForEveryCategory());
     }
     
-    private void setAllCategoriesWithRecipesByTitle(Model model, String title) {
-        Integer page = 0;
-        Integer size = Integer.MAX_VALUE;
-        PageRequest pr =  PageRequest.of(page, size, Direction.ASC, "title");
-        model.addAttribute(MODEL_CATEGORIES_WITH_RECIPES_SO, categoryService.getRecipesForEveryCategoryByTitle(pr, title, pr));
-    }
-    
     @RequestMapping(value="recipe/{recipeId}")
     public String viewRecipe(final Model model, final @PathVariable Long recipeId, final HttpServletRequest req) {
         LOGGER.debug("View recipe by id {}", recipeId);
@@ -72,33 +66,47 @@ public class RecipeViewController {
     }
     
     @RequestMapping(value="/categoriesPreview")
-    public String viewRecipeCategoriesPreview(final Model model, String value) {
+    public String viewRecipeCategoriesPreview(final Model model) {
         LOGGER.debug("Getting categoriesPreview");
-        if (value!=null) {
-            setAllCategoriesWithRecipesByTitle(model, value);
-        } else {
-            setAllCategoriesWithRecipes(model);
-        }
+        setAllCategoriesWithRecipes(model);
         return "fragments/view::categoriesPreview";
     }
 
     @RequestMapping(value="/recipesByCategory/{categoryId}")
-    public String viewRecipesInCategory(final Model model, final @PathVariable Long categoryId, String value) {
+    public String viewRecipesInCategory(final Model model, final @PathVariable Long categoryId) {
         LOGGER.debug("Getting recipes by category");
         Integer page = 0;
         Integer size = Integer.MAX_VALUE; // TODO paginacia
         PageRequest pr =  PageRequest.of(page, size, Direction.ASC, "title");
-
-        if (value!=null) {
-            model.addAttribute(MODEL_RECIPES, recipeService.getAllBasicByCategoryIdAndTitle(pr, categoryId, value));
-            model.addAttribute(TITLE, "Recipes found for '" + value + "' in category " + categoryService.get(categoryId).getName());
-        } else {
-            model.addAttribute(MODEL_RECIPES, recipeService.getAllBasicByCategoryId(pr, categoryId));
-            model.addAttribute(TITLE, categoryService.get(categoryId).getName());
+        model.addAttribute(MODEL_RECIPES, recipeService.getAllBasicByCategoryId(pr, categoryId));
+        model.addAttribute(TITLE, categoryService.get(categoryId).getName());
+        model.addAttribute(CATEGORY_ID, categoryId);
+        return "fragments/view::recipesList";
+    }
+    
+    @RequestMapping(value={"/find/{categoryId}", "/find"})
+    public String viewRecipesInCategory(final Model model, @PathVariable(required = false) Long categoryId, String title) {
+        LOGGER.debug("Getting recipes by criteria");
+        Integer page = 0;
+        Integer size = Integer.MAX_VALUE; // TODO paginacia
+        PageRequest pr =  PageRequest.of(page, size, Direction.ASC, "title");
+        
+        model.addAttribute(MODEL_RECIPES, recipeService.getAllBasicByCategoryIdAndTitle(pr, categoryId, title));
+        String titleString = "";
+        
+        if (categoryId != null) {
+            titleString += categoryService.get(categoryId).getName();
+            model.addAttribute(CATEGORY_ID, categoryId);
         }
         
-        model.addAttribute(CATEGORY_ID, categoryId);
-        
+        if (title != null && !StringUtils.isEmptyOrWhitespace(title)) {
+            if (categoryId != null) {
+                titleString += ", ";
+            }
+            titleString += "Filtered by title '" + title + "'";
+            model.addAttribute(SEARCHED_TITLE, title);
+        }
+        model.addAttribute(TITLE, titleString);
         return "fragments/view::recipesList";
     }
         

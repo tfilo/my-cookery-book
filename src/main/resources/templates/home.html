@@ -14,10 +14,11 @@
                 <h3>Error!</h3>
                 <p id="errorMessage"></p>
             </div>
-            <div class="w3-row w3-padding">
+            <div class="w3-row w3-content w3-padding" id="searchDiv">
                 <div class="w3-col icon"><i class="fas fa-search" style="padding-top:12px;"></i></div>
                 <div class="w3-rest">
-                    <input class="w3-input" type="text" id="search" placeholder="Search" th:onkeyup="|javascript:var fn = debounce(function() { load('content', '@{'/view/categoriesPreview'}', { 'value': $('#search').val() }); }, 500); fn();|" onkeypress="return event.key != 'Enter';"/>
+                    <input type="hidden" id="searchCategoryId" />
+                    <input class="w3-input" type="text" id="search" placeholder="Search" th:onkeyup="|javascript:var fn = debounce(function() { load('content', ($('#searchCategoryId').val() ? '@{'/view/find/'}' + $('#searchCategoryId').val() : '@{'/view/find'}') , { 'title': $('#search').val() }); }, 500); fn();|" onkeypress="return event.key != 'Enter';"/>
                 </div>
             </div>
             <div class="w3-main w3-content w3-padding" id="content" th:insert="fragments/view :: categoriesPreview">&nbsp;</div>
