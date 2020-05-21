@@ -137,3 +137,18 @@ hr {
     background-color: rgba(0,0,0,0.5);
     padding: 8px;
 }
+
+.margin-none {
+    margin: 0px;
+}
+
+.margin-bottom-32 {
+    margin-bottom: 32px;
+} 
+
+input.empty {
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+}

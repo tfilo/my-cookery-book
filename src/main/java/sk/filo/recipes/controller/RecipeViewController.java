@@ -1,10 +1,12 @@
 package sk.filo.recipes.controller;
 
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -38,6 +40,8 @@ public class RecipeViewController {
     
     private static final String TITLE = "title";
     
+    private static final String CATEGORY_ID = "categoryId";
+    
     @Autowired
     RecipeService recipeService;
     
@@ -51,8 +55,15 @@ public class RecipeViewController {
         model.addAttribute(MODEL_CATEGORIES_WITH_RECIPES_SO, categoryService.getFist4RecipesForEveryCategory());
     }
     
+    private void setAllCategoriesWithRecipesByTitle(Model model, String title) {
+        Integer page = 0;
+        Integer size = Integer.MAX_VALUE;
+        PageRequest pr =  PageRequest.of(page, size, Direction.ASC, "title");
+        model.addAttribute(MODEL_CATEGORIES_WITH_RECIPES_SO, categoryService.getRecipesForEveryCategoryByTitle(pr, title, pr));
+    }
+    
     @RequestMapping(value="recipe/{recipeId}")
-    public String viewRecipe(final Model model, @PathVariable Long recipeId, final HttpServletRequest req) {
+    public String viewRecipe(final Model model, final @PathVariable Long recipeId, final HttpServletRequest req) {
         LOGGER.debug("View recipe by id {}", recipeId);
         RecipeViewSO recipeSO = recipeService.getView(recipeId);
         LOGGER.debug("Loaded recipe view {}", recipeSO);
@@ -61,34 +72,47 @@ public class RecipeViewController {
     }
     
     @RequestMapping(value="/categoriesPreview")
-    public String viewRecipeCategoriesPreview(final Model model) {
+    public String viewRecipeCategoriesPreview(final Model model, String value) {
         LOGGER.debug("Getting categoriesPreview");
-        setAllCategoriesWithRecipes(model);
+        if (value!=null) {
+            setAllCategoriesWithRecipesByTitle(model, value);
+        } else {
+            setAllCategoriesWithRecipes(model);
+        }
         return "fragments/view::categoriesPreview";
     }
 
     @RequestMapping(value="/recipesByCategory/{categoryId}")
-    public String viewRecipesInCategory(final Model model, @PathVariable Long categoryId) {
+    public String viewRecipesInCategory(final Model model, final @PathVariable Long categoryId, String value) {
         LOGGER.debug("Getting recipes by category");
         Integer page = 0;
         Integer size = Integer.MAX_VALUE; // TODO paginacia
-        PageRequest pr =  PageRequest.of(page, size);
-        model.addAttribute(MODEL_RECIPES, recipeService.getAllBasicByCategoryId(pr, categoryId));
-        model.addAttribute(TITLE, categoryService.get(categoryId).getName());
+        PageRequest pr =  PageRequest.of(page, size, Direction.ASC, "title");
+
+        if (value!=null) {
+            model.addAttribute(MODEL_RECIPES, recipeService.getAllBasicByCategoryIdAndTitle(pr, categoryId, value));
+            model.addAttribute(TITLE, "Recipes found for '" + value + "' in category " + categoryService.get(categoryId).getName());
+        } else {
+            model.addAttribute(MODEL_RECIPES, recipeService.getAllBasicByCategoryId(pr, categoryId));
+            model.addAttribute(TITLE, categoryService.get(categoryId).getName());
+        }
+        
+        model.addAttribute(CATEGORY_ID, categoryId);
+        
         return "fragments/view::recipesList";
     }
         
-    @RequestMapping(value = "/picture/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/picture/thumbnail/{id}", method = RequestMethod.GET)
     public ResponseEntity<byte[]> getPictureById(final @PathVariable Long id) {
         LOGGER.debug("Getting picture by id");
-        PictureSO pictureSO= pictureService.get(id);
+        PictureSO pictureSO= pictureService.getThumbnail(id);
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
             
         return new ResponseEntity<>(pictureSO.getData(), headers, HttpStatus.CREATED);
     }
     
-    @RequestMapping(value = "/picture/thumbnail/{recipeId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/picture/thumbnail/byrecipe/{recipeId}", method = RequestMethod.GET)
     public ResponseEntity<byte[]> getPictureThumbnailByRecipeId(final @PathVariable Long recipeId) {
         LOGGER.debug("Getting picture thumbnail by recipeId");
         PictureSO pictureSO= pictureService.getThumbnailByRecipeId(recipeId);

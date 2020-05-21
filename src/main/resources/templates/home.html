@@ -8,6 +8,18 @@
         
         <main class="content">
             <div class="spacer">&nbsp;</div>
+            <div class="w3-panel w3-red w3-display-container margin-none" style="display: none;" id="error">
+                <span onclick="this.parentElement.style.display='none'"
+                      class="w3-button w3-large w3-display-topright">&times;</span>
+                <h3>Error!</h3>
+                <p id="errorMessage"></p>
+            </div>
+            <div class="w3-row w3-padding">
+                <div class="w3-col icon"><i class="fas fa-search" style="padding-top:12px;"></i></div>
+                <div class="w3-rest">
+                    <input class="w3-input" type="text" id="search" placeholder="Search" th:onkeyup="|javascript:var fn = debounce(function() { load('content', '@{'/view/categoriesPreview'}', { 'value': $('#search').val() }); }, 500); fn();|" onkeypress="return event.key != 'Enter';"/>
+                </div>
+            </div>
             <div class="w3-main w3-content w3-padding" id="content" th:insert="fragments/view :: categoriesPreview">&nbsp;</div>
         </main>
     </body>

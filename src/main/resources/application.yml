@@ -11,7 +11,7 @@ spring:
     #jpa
     #drop n create table again, good for testing, comment this in production
     jpa:
-        show-sql: false
+        show-sql: true
         properties:
             hibernate:
                 format_sql: true

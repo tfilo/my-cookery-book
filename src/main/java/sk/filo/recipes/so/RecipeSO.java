@@ -27,7 +27,7 @@ public class RecipeSO {
     @Size(max=80)
     private String title;
     
-    @Size(max=255)
+    @Size(max=160)
     private String description;
     
     @Valid

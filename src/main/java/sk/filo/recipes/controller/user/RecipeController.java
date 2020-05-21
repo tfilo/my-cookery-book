@@ -87,7 +87,9 @@ public class RecipeController {
     public String addRecipe(final Model model, final HttpServletRequest req) {
         LOGGER.debug("Add recipe");
         RecipeSO recipeSO = new RecipeSO();
-        recipeSO.getSections().add(new SectionSO());
+        SectionSO sectionSO = new SectionSO();
+        sectionSO.setSortNumber(1); // set default sort number
+        recipeSO.getSections().add(sectionSO);
         recipeSO.setCreator(req.getUserPrincipal().getName());
         model.addAttribute(MODEL_RECIPE_SO, recipeSO);
         return "fragments/recipe::recipeForm";
@@ -145,7 +147,10 @@ public class RecipeController {
     public String addSection(final RecipeSO recipeSO) {
         LOGGER.debug("addRow section {}", recipeSO);
         if (recipeSO!=null) {
-            recipeSO.getSections().add(new SectionSO());
+            SectionSO sectionSO = new SectionSO();
+            sectionSO.setSortNumber(recipeSO.getSections().size() + 1);
+            recipeSO.getSections().add(sectionSO);
+            recipeSO.getSections().add(sectionSO);
         }
         return "fragments/recipe::sections";
     }
@@ -157,6 +162,12 @@ public class RecipeController {
             if (recipeSO.getSections().size() > 1) {
                 recipeSO.getSections().remove(rowId.intValue());
             }
+            
+            // fix sort numbers
+            int sortNo = 1; 
+            for (SectionSO sectionSO : recipeSO.getSections()) {
+                sectionSO.setSortNumber(sortNo++);
+            }
         }
         return "fragments/recipe::sections";
     }
@@ -165,7 +176,9 @@ public class RecipeController {
     public String addIngredient(final RecipeSO recipeSO, @PathVariable Integer sectionRowId) {
         LOGGER.debug("addRow ingredient {}, {}", recipeSO, sectionRowId);
         if (recipeSO!=null) {
-            recipeSO.getSections().get(sectionRowId).getIngredients().add(new IngredientSO());
+            IngredientSO ingredientSO = new IngredientSO();
+            ingredientSO.setSortNumber(recipeSO.getSections().get(sectionRowId).getIngredients().size() + 1);
+            recipeSO.getSections().get(sectionRowId).getIngredients().add(ingredientSO);
         }
         LOGGER.debug("new ingredient {}", recipeSO);
         return "fragments/recipe::sections";
@@ -176,6 +189,12 @@ public class RecipeController {
         LOGGER.debug("removeRow ingredient {}, {}, {}", recipeSO, sectionRowId, rowId);
         if (recipeSO != null) {
             recipeSO.getSections().get(sectionRowId).getIngredients().remove(rowId.intValue());
+            
+            // fix sort numbers
+            int sortNo = 1; 
+            for (IngredientSO ingredientSO : recipeSO.getSections().get(sectionRowId).getIngredients()) {
+                ingredientSO.setSortNumber(sortNo++);
+            }
         }
         return "fragments/recipe::sections";
     }
@@ -213,10 +232,10 @@ public class RecipeController {
         return "fragments/recipe::filteredRecipes";
     }
 
-    @RequestMapping(value = "/picture/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/picture/thumbnail/{id}", method = RequestMethod.GET)
     public ResponseEntity<byte[]> getPictureById(final @PathVariable Long id) {
         LOGGER.debug("Getting picture by id");
-        PictureSO pictureSO= pictureService.get(id);
+        PictureSO pictureSO= pictureService.getThumbnail(id);
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
             

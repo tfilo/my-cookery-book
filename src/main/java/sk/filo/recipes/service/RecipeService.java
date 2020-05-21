@@ -22,15 +22,14 @@ import sk.filo.recipes.domain.Recipe;
 import sk.filo.recipes.domain.Section;
 import sk.filo.recipes.domain.User;
 import sk.filo.recipes.mapper.IngredientMapper;
-import sk.filo.recipes.mapper.PictureMapper;
 import sk.filo.recipes.mapper.RecipeMapper;
 import sk.filo.recipes.mapper.SectionMapper;
-import sk.filo.recipes.mapper.SimplePictureMapper;
 import sk.filo.recipes.repository.CategoryRepository;
 import sk.filo.recipes.repository.PictureRepository;
 import sk.filo.recipes.repository.RecipeRepository;
 import sk.filo.recipes.repository.UnitRepository;
 import sk.filo.recipes.repository.UserRepository;
+import sk.filo.recipes.so.CategoryWithRecipeBasicSO;
 import sk.filo.recipes.so.IngredientSO;
 import sk.filo.recipes.so.PictureBasicSO;
 import sk.filo.recipes.so.RecipeBasicSO;
@@ -118,7 +117,7 @@ public class RecipeService {
             recipe.setCreated(LocalDateTime.now());
             recipe.setCreator(authenticatedUser);
         } else {
-            recipe = recipeRepository.getOne(recipeSO.getId());
+            recipe = recipeRepository.findById(recipeSO.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Recipe with id not found!"));
             recipeMapper.mapRecipeSOToRecipe(recipeSO, recipe);
             recipe.setModified(LocalDateTime.now());
             recipe.setModifier(authenticatedUser);
@@ -134,24 +133,23 @@ public class RecipeService {
     }
     
     public void delete(Long id) {
-        Recipe one = recipeRepository.getOne(id);
-        recipeRepository.delete(one);
+        recipeRepository.deleteById(id);
     }
     
     public RecipeSO get(Long id) {
-        Recipe recipe = recipeRepository.getOne(id);
+        Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Recipe not found!"));
         LOGGER.debug("get recipe {}", recipe);
         return recipeMapper.mapRecipeToRecipeSO(recipe);
     }
     
     public RecipeViewSO getView(Long id) {
-        Recipe recipe = recipeRepository.getOne(id);
+        Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Recipe not found!"));
         LOGGER.debug("get view recipe {}", recipe);
         return recipeMapper.mapRecipeToRecipeViewSO(recipe);
     }
     
     public RecipeSimpleSO getBasic(Long id) {
-        Recipe recipe = recipeRepository.getOne(id);
+        Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Recipe not found!"));
         LOGGER.debug("get recipe {}", recipe);
         return recipeMapper.mapRecipeToRecipeSimpleSO(recipe);
     }
@@ -172,6 +170,11 @@ public class RecipeService {
         return mapToRecipeBasicSO(recipes);
     }
     
+    public Page<RecipeBasicSO> getAllBasicByCategoryIdAndTitle(Pageable page, Long categoryId, String criteria) {
+        Page<Recipe> recipes = recipeRepository.findAllByCategoriesIdAndTitleIsContainingIgnoreCase(categoryId, criteria, page);
+        return mapToRecipeBasicSO(recipes);
+    }
+    
     private Page<RecipeBasicSO> mapToRecipeBasicSO(Page<Recipe> recipes) {
         return recipes.map(
                 (recipe) -> {
@@ -180,6 +183,7 @@ public class RecipeService {
                 }
         );
     }
+    
     
     private void mapAssociatedRecipes(final List<RecipeSimpleSO> associatedRecipeSOs, final List<Recipe> associatedRecipes) {
         associatedRecipes.clear();

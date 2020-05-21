@@ -20,23 +20,23 @@
     <body>
         <nav th:fragment="menu(content)" onmouseleave="closeSidebar()" class="w3-sidebar w3-bar-block w3-border-right w3-animate-left menu" id="mySidebar">
             <div class="w3-button w3-padding-16 w3-left" onclick="closeSidebar()"><i class="fas fa-angle-double-left"></i></div>
-            <a th:href="|javascript:$('#content').load('@{'/admin/user/all'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-user icon"></i> Users</a>
-            <a th:href="|javascript:$('#content').load('@{'/admin/category/all'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-list icon"></i> Categories</a>
-            <a th:href="|javascript:$('#content').load('@{'/admin/unitcategory/all'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-prescription-bottle icon"></i> Units</a>
-            <a th:href="|javascript:$('#content').load('@{'/recipe/add'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('USER')"><i class="fas fa-pizza-slice icon"></i> Add recipe</a>
+            <a th:href="|javascript:load('content', '@{'/admin/user/all'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-user icon"></i> Users</a>
+            <a th:href="|javascript:load('content', '@{'/admin/category/all'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-list icon"></i> Categories</a>
+            <a th:href="|javascript:load('content', '@{'/admin/unitcategory/all'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-prescription-bottle icon"></i> Units</a>
+            <a th:href="|javascript:load('content', '@{'/recipe/add'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('USER')"><i class="fas fa-pizza-slice icon"></i> Add recipe</a>
             <hr sec:authorize="isAuthenticated()">
-            <a th:href="|javascript:$('#content').load('@{'/view/categoriesPreview'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button">Homepage</a>
+            <a th:href="|javascript:load('content', '@{'/view/categoriesPreview'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button">Homepage</a>
             <hr>
             <div id="categoryLinks">
-                <th:block th:each="category : ${allCategoriesWithRecipes}">
-                    <a th:href="|javascript:$('#content').load('@{'/view/recipesByCategory/__${category.id}__'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" th:text="${category.name}">Category name</a>
+                <th:block th:each="category, rowStat : ${allCategoriesWithRecipes}">
+                    <a th:href="|javascript:load('content', '@{'/view/recipesByCategory/__${category.id}__'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" th:text="${category.name}" th:classappend="${rowStat.last} ? 'margin-bottom-32'">Category name</a>
                 </th:block>
             </div>
         </nav>
         <header id="header" th:fragment="header" class="w3-top w3-card transparent-white">
             <div class="w3-button w3-padding-16 w3-left" onclick="openSidebar()"><i class="fas fa-bars"></i></div>
             <div class="w3-right w3-padding-16 padding-right" sec:authorize="!isAuthenticated()">
-                <a th:href="@{'/login'}"><i class="fas fa-sign-in-alt"></i></a>
+                <a th:href="@{'/login.html'}"><i class="fas fa-sign-in-alt"></i></a>
             </div>
             <div class="w3-right w3-padding-16 padding-right" sec:authorize="isAuthenticated()">
                 <b sec:authentication="name"></b><span> </span>

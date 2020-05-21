@@ -5,13 +5,12 @@ function submitForm(formId, target, url) {
         url: url, // the file to call
         success: function (response) { // on success..
             $('#' + target).html(response); // update the DIV
+        },
+        error: function (err) {
+            processError(err);
         }
     });
     return false; // cancel original event to prevent form submitting
-}
-
-function submitFormSynchronous(formId, url) {
-    $("#" + formId).attr("action", url).submit();
 }
 
 function asyncLoadFragment(target, url) {
@@ -20,6 +19,9 @@ function asyncLoadFragment(target, url) {
         url: url,
         success: function (response) { // on success..
             $('#' + target).html(response); // update the DIV
+        },
+        error: function (err) {
+            processError(err);
         }
     });
     return false; // cancel original event to prevent form submitting
@@ -38,9 +40,26 @@ function uploadPicture(formId, fileInputId, target, url) {
         processData: false,
         success: function (response) { // on success..
             $('#' + target).html(response); // update the DIV
+        },
+        error: function (err) {
+            processError(err);
         }
     });
     return false; // cancel original event to prevent form submitting
+}
+
+function load(target, url, data) {
+    $.ajax({
+        type: "GET",
+        data: data ? data : null,
+        url: url,
+        success: function (response) { // on success..
+            $('#' + target).html(response); // update the DIV
+        },
+        error: function (err) {
+            processError(err);
+        }
+    });
 }
 
 const debounce = (func, delay) => {
@@ -54,3 +73,28 @@ const debounce = (func, delay) => {
         debounceTimer = setTimeout(() => func.apply(context, args), delay);
     };
 };
+
+function processError(err) {
+    var message;
+    if (err && err.responseJSON && err.responseJSON.message) {
+        message = err.responseJSON.message;
+    } else {
+        message = "General error!";
+    }
+    $('#errorMessage').html(message);
+    $('#error').show(1000);
+    $('#error').focus();
+    
+    setTimeout(function() {
+        $('#error').hide(1000);
+    }, 5000);
+}
+
+$('#iconified').on('keyup', function() {
+    var input = $(this);
+    if(input.val().length === 0) {
+        input.addClass('empty');
+    } else {
+        input.removeClass('empty');
+    }
+});

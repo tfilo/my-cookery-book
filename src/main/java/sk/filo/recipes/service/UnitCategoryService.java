@@ -7,7 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import sk.filo.recipes.domain.UnitCategory;
 import sk.filo.recipes.mapper.UnitCategoryMapper;
 import sk.filo.recipes.repository.UnitCategoryRepository;
@@ -44,7 +46,7 @@ public class UnitCategoryService {
         if (Objects.isNull(unitCategoryBasicSO.getId())) {
             unitCategory = unitCategoryMapper.mapUnitCategoryBasicSOToUnitCategory(unitCategoryBasicSO);
         } else {
-            unitCategory = unitCategoryRepository.getOne(unitCategoryBasicSO.getId());
+            unitCategory = unitCategoryRepository.findById(unitCategoryBasicSO.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "UnitCategory by id not found!"));
             unitCategory.setName(unitCategoryBasicSO.getName());
         }
         
@@ -69,7 +71,7 @@ public class UnitCategoryService {
     }
     
     public UnitCategoryBasicSO get(Long id) {
-        UnitCategory unit = unitCategoryRepository.getOne(id);
+        UnitCategory unit = unitCategoryRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "UnitCategory not found!"));
         return unitCategoryMapper.mapUnitCategoryToUnitCategoryBasicSO(unit);
     }
     

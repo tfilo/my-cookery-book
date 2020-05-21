@@ -42,7 +42,7 @@ public class Recipe {
     @Column(name = "title", nullable = false, length = 80)
     private String title;
     
-    @Column(name = "description", length = 255)
+    @Column(name = "description", length = 160)
     private String description;
 
     @OneToMany(
@@ -83,6 +83,7 @@ public class Recipe {
         orphanRemoval = true
     )
     @JoinColumn(name = "recipe_id")
+    @OrderBy("id ASC")
     private List<Picture> pictures;
     
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)

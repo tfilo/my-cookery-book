@@ -13,12 +13,12 @@
             <input type="hidden" th:field="*{modified}"/>
             <div class="padding-8">
                 <label>Title<span class="w3-text-red"> *</span></label>
-                <input class="w3-input w3-border" type="text" th:field="*{title}" maxlength="100">
+                <input class="w3-input w3-border" type="text" th:field="*{title}" maxlength="80">
                 <label class="w3-text-red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Incorrect title</label>
             </div>
             <div class="padding-8">
                 <label>Description</label>
-                <textarea class="w3-input w3-border" th:field="*{description}" style="resize:none" maxlength="255"></textarea>
+                <textarea class="w3-input w3-border" th:field="*{description}" style="resize:none" maxlength="160"></textarea>
                 <label class="w3-text-red" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Incorrect description</label>
             </div>
             <div id="sections">
@@ -30,9 +30,10 @@
                 <div class="w3-border">
                     <div th:each="section,rowStat : *{sections}" class="w3-padding w3-display-container" th:classappend="${rowStat.even} ? 'w3-light-grey'">
                         <input type="hidden" th:field="*{sections[__${rowStat.index}__].id}"/>
+                        <input type="hidden" th:field="*{sections[__${rowStat.index}__].sortNumber}"/>
                         <div class="padding-8">
                             <label>Name</label>
-                            <input class="w3-input w3-border" type="text" th:field="*{sections[__${rowStat.index}__].name}" maxlength="100">
+                            <input class="w3-input w3-border" type="text" th:field="*{sections[__${rowStat.index}__].name}" maxlength="80">
                             <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].name')}" th:errors="*{sections[__${rowStat.index}__].name}">Incorrect name</label>
                         </div>
                         <div class="padding-8">
@@ -44,9 +45,10 @@
                                 <div th:each="ingredient,rowStat2 : *{sections[__${rowStat.index}__].ingredients}" class="w3-display-container" th:classappend="${rowStat2.even} ? 'w3-light-grey'">
                                     <div class="padding-8 w3-row-padding">
                                         <input type="hidden" th:field="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].id}"/>
+                                        <input type="hidden" th:field="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].sortNumber}"/>
                                         <div class="w3-col l6 m5 s5 padding-8">
                                             <label class="source-label">Name<span class="w3-text-red"> *</span></label>
-                                            <input class="w3-input w3-border" type="text" th:errorclass="w3-pale-red" th:field="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].name}" maxlength="255" required>
+                                            <input class="w3-input w3-border" type="text" th:errorclass="w3-pale-red" th:field="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].name}" maxlength="80" required>
                                             <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].name')}" th:errors="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].name}">Incorrect name</label>
                                         </div>
                                         <div class="w3-col l2 m3 s3 padding-8">
@@ -96,12 +98,13 @@
 
                     </div>
                 </div>
+                <label class="w3-text-red" th:if="${#fields.hasErrors('sections')}" th:errors="*{sections}">Incorrect sections</label>
             </div>
             </div>
             <div id="associatedRecipes">
                 <div class="padding-8" th:fragment="associatedRecipes">
                     <label>Associated Recipes</label>
-                    <input class="w3-input w3-border w3-padding" type="text" placeholder="Search for recipes" id="filteringSelect" th:onkeyup="|javascript:var fn = debounce(function() { $('#filteredRecipes').load('@{'/recipe/filter'}', { 'title': $('#filteringSelect').val() });}, 500); fn();|" onkeypress="return event.key != 'Enter';">
+                    <input class="w3-input w3-border w3-padding" type="text" placeholder="Search for recipes" id="filteringSelect" th:onkeyup="|javascript:var fn = debounce(function() { load('filteredRecipes', '@{'/recipe/filter'}', { 'title': $('#filteringSelect').val() }); }, 500); fn();|" onkeypress="return event.key != 'Enter';">
                     <div th:object="${recipeSO}">
                         <div id="filteredRecipes">
                             <table class="w3-table-all" th:if="${filteredRecipes}" th:fragment="filteredRecipes">
@@ -142,7 +145,7 @@
                     <input type="file" class="w3-input w3-border" id="pictureInput" value="Upload picture" th:onchange="|javascript:uploadPicture('recipeForm', 'pictureInput', 'pictures', '@{'/recipe/picture/save'}');|" />
                     <div class="w3-col l3 m6 s12 w3-display-container" th:each="picture,rowStat : *{pictures}">
                         <input type="hidden" th:field="*{pictures[__${rowStat.index}__].id}"></input>
-                        <img th:src="@{/recipe/picture/__${picture.id}__}" class="uploaded-picture" th:alt="*{pictures[__${rowStat.index}__].title}" />
+                        <img th:src="@{/recipe/picture/thumbnail/__${picture.id}__}" class="uploaded-picture" th:alt="*{pictures[__${rowStat.index}__].title}" />
                         <input class="w3-input w3-border" th:field="*{pictures[__${rowStat.index}__].title}" placeholder="Insert image title"></input>
                         <a th:href="|javascript:submitForm('recipeForm', 'pictures', '@{'/recipe/picture/remove/__${rowStat.index}__'}');|" style="display: inline;" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
                     </div>
@@ -173,7 +176,7 @@
             <div class="padding-8">
                 <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/save'}');|"><i class="fas fa-save"></i>&nbsp;<span>Save</span></button>
                 <button type="button" class="w3-button w3-red" th:if="*{id}" th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span>Delete</span></button>
-                <button type="button" class="w3-button w3-red" th:onclick="|javascript:$('#content').load('@{'/view/categoriesPreview'}');|"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></button>
+                <button type="button" class="w3-button w3-red" th:onclick="|javascript:load('content', '@{'/view/categoriesPreview'}');|"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></button>
             </div>
         </form>
     </body>

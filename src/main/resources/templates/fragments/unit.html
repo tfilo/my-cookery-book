@@ -8,12 +8,12 @@
             <input type="hidden" th:field="*{id}"/>
             <div class="padding-8">
                 <label class="w3-center">Name <span class="w3-text-red">*</span></label>
-                <input class="w3-input w3-border" type="text" th:field="*{name}" maxlength="255">
+                <input class="w3-input w3-border" type="text" th:field="*{name}" maxlength="80">
                 <label class="w3-text-red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect name</label>
             </div>
             <div class="padding-8">
                 <label class="w3-center">Abbreviation <span class="w3-text-red">*</span></label>
-                <input class="w3-input w3-border" type="text" th:field="*{abbreviation}" maxlength="255">
+                <input class="w3-input w3-border" type="text" th:field="*{abbreviation}" maxlength="20">
                 <label class="w3-text-red" th:if="${#fields.hasErrors('abbreviation')}" th:errors="*{abbreviation}">Incorrect abbreviation</label>
             </div>
             <div class="padding-8">
@@ -28,7 +28,7 @@
             <div class="padding-8">
                 <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('unitForm', 'content', '@{'/admin/unit/save'}');|"><i class="fas fa-save"></i>&nbsp;<span>Save</span></button>
                 <button type="button" class="w3-button w3-red" th:if="*{id}" th:onclick="|submitForm('unitForm', 'content', '@{'/admin/unit/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span>Delete</span></button>
-                <button type="button" class="w3-button w3-red" th:onclick="|javascript:$('#content').load('@{'/admin/unitcategory/all'}');|"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></button>
+                <button type="button" class="w3-button w3-red" th:onclick="|javascript:load('content', '@{'/admin/unitcategory/all'}');|"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></button>
             </div>
         </form>
     </body>

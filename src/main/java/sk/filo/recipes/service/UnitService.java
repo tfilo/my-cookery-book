@@ -63,7 +63,7 @@ public class UnitService {
     }
     
     public UnitSO get(Long id) {
-        Unit unit = unitRepository.getOne(id);
+        Unit unit = unitRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unit not found!"));
         return unitMapper.mapUnitToUnitSO(unit);
     }
 }

@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="sk">
+    <head th:fragment="htmlHeader">
+        <title>Recipes - Login page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" th:href="@{'/fontawesome-free-5.13.0-web/css/fontawesome.min.css'}">
+        <link rel="stylesheet" th:href="@{'/fontawesome-free-5.13.0-web/css/solid.min.css'}">
+        <link rel="stylesheet" th:href="@{'/css/w3.css'}">
+        <link rel="stylesheet" th:href="@{'/css/style.css'}">
+    </head>
+    <body>
+        <div class="w3-container w3-content" style="max-width: 400px">
+            <h1>Login page</h1>
+            <div class="w3-panel w3-red" th:if="${loginError}">
+                <p>Wrong user or password</p>
+            </div>
+            <form th:action="@{/login.html}" method="post">
+                <label for="username">Username</label>:
+                <input class="w3-input w3-border" type="text" id="username" name="username" autofocus="autofocus" /> <br />
+                <label for="password">Password</label>:
+                <input class="w3-input w3-border" type="password" id="password" name="password" /> <br />
+                <button type="submit" class="w3-button w3-green">
+                    <i class="fas fa-sign-in-alt"></i> Log in
+                </button>
+            </form>
+        </div>
+    </body>
+</html>

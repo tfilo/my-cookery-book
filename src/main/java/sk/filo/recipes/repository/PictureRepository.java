@@ -15,8 +15,8 @@ public interface PictureRepository extends JpaRepository<Picture, Long> {
 
     @Modifying
     @Query("DELETE FROM Picture p where p.recipe IS NULL AND p.uploaded<=:uploaded")
-    void deleteOrphanedPictures(@Param("uploaded") LocalDateTime uploaded);
+    public void deleteOrphanedPictures(@Param("uploaded") LocalDateTime uploaded);
     
-    Picture findTopByRecipeId(Long recipeId);
+    public Picture findTopByRecipeId(Long recipeId);
     
 }

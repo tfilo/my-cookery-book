@@ -32,6 +32,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
+                .loginPage("/login.html")
+                .failureUrl("/login-error.html")
                 .and()
                 .logout()
                     .invalidateHttpSession(true)

@@ -9,8 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import org.thymeleaf.util.StringUtils;
 import sk.filo.recipes.domain.Role;
 import sk.filo.recipes.domain.RoleName;
@@ -66,7 +68,7 @@ public class UserService {
             user = userMapper.mapUserSOToUser(userSO);
             user.setPassword(passwordEncoder.encode(userSO.getPassword()));
         } else {
-            user = userRepository.getOne(userSO.getId());
+            user = userRepository.findById(userSO.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found!"));
             userMapper.mapUserSOToUser(userSO, user);
             if (!StringUtils.isEmptyOrWhitespace(userSO.getPassword())) {
                 user.setPassword(passwordEncoder.encode(userSO.getPassword()));
@@ -75,7 +77,7 @@ public class UserService {
         Set<Role> roles = new HashSet<>();
         Sort sort = Sort.by(Sort.Order.asc("name"));
         userSO.getRoles().forEach((roleName) -> {
-            roles.add(roleRepository.findByName(RoleName.valueOf(roleName), sort));
+            roles.add(roleRepository.findByName(RoleName.valueOf(roleName), sort).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role not found!")));
         });
         user.setRoles(roles);
         LOGGER.debug("save user {}", user);
@@ -93,7 +95,7 @@ public class UserService {
     }
     
     public UserSO get(Long id) {
-        User user = userRepository.getOne(id);
+        User user = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found!"));
         return userMapper.mapUserToUserSO(user);
     }
 }

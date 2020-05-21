@@ -47,7 +47,7 @@ CREATE SEQUENCE cb_picture_seq
 CREATE TABLE cb_recipe (
     id bigint NOT NULL,
     created timestamp without time zone NOT NULL,
-    description character varying(255),
+    description character varying(160),
     modified timestamp without time zone,
     title character varying(80) NOT NULL,
     creator_id bigint NOT NULL,

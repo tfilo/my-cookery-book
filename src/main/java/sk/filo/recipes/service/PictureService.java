@@ -1,20 +1,23 @@
 package sk.filo.recipes.service;
 
-import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.transaction.Transactional;
-import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import sk.filo.recipes.domain.Picture;
 import sk.filo.recipes.mapper.PictureMapper;
 import sk.filo.recipes.mapper.SimplePictureMapper;
@@ -35,7 +38,7 @@ public class PictureService {
     private SimplePictureMapper simplePictureMapper;;
     
     private PictureRepository pictureRepository;
-    
+
     @Autowired
     public void setPictureMapper(PictureMapper pictureMapper) {
         this.pictureMapper = pictureMapper;
@@ -60,9 +63,34 @@ public class PictureService {
     }
     
     @Transactional
+    public PictureSO getThumbnail(Long id) {
+        LOGGER.debug("get picture thumbnail by id {}", id);   
+        return pictureMapper.mapPictureToPictureSOThumbnail(pictureRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Picture thumbnail not found!")));
+    }
+    
+    @Transactional
     public PictureSO getThumbnailByRecipeId(Long recipeId) {
-        LOGGER.debug("get picture thumbnail by recipeId {}", recipeId);   
-        return pictureMapper.mapPictureToPictureSOThumbnail(pictureRepository.findTopByRecipeId(recipeId));
+        LOGGER.debug("get picture thumbnail by recipeId {}", recipeId);  
+        
+        Picture picture = pictureRepository.findTopByRecipeId(recipeId);
+        if (picture == null || picture.getThumbnail() == null) {
+            LOGGER.debug("Picture is null, reading default.");
+            picture = getDefaultPictureThumbnail();
+        } else {
+            LOGGER.debug("Picture found.");
+        }
+        
+        return pictureMapper.mapPictureToPictureSOThumbnail(picture);
+    }
+    
+    private Picture getDefaultPictureThumbnail() {
+        Picture p = new Picture();
+        try {
+            p.setThumbnail(this.getClass().getClassLoader().getResourceAsStream("static/image/default_meal.jpg").readAllBytes());
+        } catch (IOException ex) {
+            LOGGER.debug("Can't load picture. {}", ex);
+        }
+        return p;
     }
     
     @Transactional
@@ -72,6 +100,7 @@ public class PictureService {
             Picture picture = pictureMapper.mapPictureSOToPicture(so);
             picture.setUploaded(LocalDateTime.now());
             picture.setThumbnail(generateThumbnail(picture.getData()));
+            // delete all 2 hours old and older pictures not assigned to any recipe
             pictureRepository.deleteOrphanedPictures(LocalDateTime.now().minusHours(2));
             
             return simplePictureMapper.mapPictureToPictureBasicSO(pictureRepository.saveAndFlush(picture));
@@ -84,12 +113,29 @@ public class PictureService {
     private byte[] generateThumbnail(byte[] picture) throws IOException {
         ByteArrayInputStream bis = new ByteArrayInputStream(picture);
         BufferedImage bImage = ImageIO.read(bis);
-        ImageIO.write(bImage, "jpg", new File("thumbnail.jpg"));
         
-        BufferedImage asBufferedImage = Thumbnails.of(bImage).size(350, 350).asBufferedImage();
+        int height = bImage.getHeight();
+        int width = bImage.getWidth();
+        
+        Float newHeight;
+        Float newWidth;
+        
+        if (height < width) {
+            newHeight = 300f;
+            newWidth = width / (height / 300f);        
+        } else {
+            newWidth = 300f;
+            newHeight = height / (width / 300f);       
+        }
+        
+        Image scaled = bImage.getScaledInstance(newWidth.intValue(), newHeight.intValue(), Image.SCALE_SMOOTH);
+        
+        BufferedImage result = new BufferedImage(scaled.getWidth(null), scaled.getHeight(null), BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = result.createGraphics();
+        g2.drawImage(scaled, null, null);
         
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ImageIO.write(asBufferedImage, "jpg", bos);
+        ImageIO.write(result, "jpg", bos);
         return bos.toByteArray();
     }
 }
