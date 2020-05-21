@@ -6,7 +6,7 @@
         <article th:object="${recipeViewSO}" th:fragment="recipeView">
             <div>
                 <a class="w3-button w3-text-green absolute" th:href="|javascript:load('content', '@{'/view/categoriesPreview'}');|"><i class="fas fa-arrow-circle-left w3-xxlarge"></i></a>
-                <h2 class="w3-center" th:text="*{title}">Recipe title</h2>
+                <h2 class="w3-center title" th:text="*{title}">Recipe title</h2>
             </div>
             <input type="hidden" th:field="*{id}"/>
 
@@ -90,7 +90,7 @@
         </article>
         
         <article th:fragment="recipesList">
-            <h2 class="w3-center" th:text="${title}">Title</h2>
+            <h2 class="w3-center title" th:text="${title}">Title</h2>
             <div class="w3-row-padding">
                 <div class="w3-col l3 m6 s12 w3-container padding-bottom-16" th:each="recipe, rowStat : ${recipes}">
                     <div class="w3-display-container">

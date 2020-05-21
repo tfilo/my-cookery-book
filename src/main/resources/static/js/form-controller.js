@@ -5,6 +5,7 @@ function submitForm(formId, target, url) {
         url: url, // the file to call
         success: function (response) { // on success..
             $('#' + target).html(response); // update the DIV
+            $('body').scrollTop(($('#' + target).offset().top - $("#header").height()) - $("#searchDiv").height());
         },
         error: function (err) {
             processError(err);
@@ -19,6 +20,7 @@ function asyncLoadFragment(target, url) {
         url: url,
         success: function (response) { // on success..
             $('#' + target).html(response); // update the DIV
+            $('body').scrollTop(($('#' + target).offset().top - $("#header").height()) - $("#searchDiv").height());
         },
         error: function (err) {
             processError(err);
@@ -40,6 +42,7 @@ function uploadPicture(formId, fileInputId, target, url) {
         processData: false,
         success: function (response) { // on success..
             $('#' + target).html(response); // update the DIV
+            $('body').scrollTop(($('#' + target).offset().top - $("#header").height()) - $("#searchDiv").height());
         },
         error: function (err) {
             processError(err);
@@ -55,6 +58,7 @@ function load(target, url, data) {
         url: url,
         success: function (response) { // on success..
             $('#' + target).html(response); // update the DIV
+            $('body').scrollTop(($('#' + target).offset().top - $("#header").height()) - $("#searchDiv").height());
         },
         error: function (err) {
             processError(err);
@@ -79,6 +83,7 @@ function processError(err) {
     } else {
         message = "General error!";
     }
+    $('body').scrollTop(($('#error').offset().top - $("#header").height()) - $("#searchDiv").height());
     $('#errorMessage').html(message);
     $('#error').show(1000);
     $('#error').focus();

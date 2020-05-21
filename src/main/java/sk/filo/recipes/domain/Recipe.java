@@ -36,7 +36,7 @@ public class Recipe {
     
     @Id
     @Column(name = "id", updatable = false, nullable = false)
-    @GeneratedValue(generator = "category_generator")
+    @GeneratedValue(generator = "recipe_generator")
     private Long id;
 
     @Column(name = "title", nullable = false, length = 80)

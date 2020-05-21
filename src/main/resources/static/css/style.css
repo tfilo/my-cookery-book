@@ -152,3 +152,7 @@ input.empty {
     font-weight: normal;
     text-decoration: inherit;
 }
+
+.title {
+    padding-left: 50px;
+}

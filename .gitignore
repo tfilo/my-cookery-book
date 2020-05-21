@@ -31,3 +31,7 @@ nb-configuration.xml
 
 ### VS Code ###
 .vscode/
+
+### NOHUP ###
+nohup.out
+

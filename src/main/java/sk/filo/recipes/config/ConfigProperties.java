@@ -8,7 +8,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  *
@@ -19,7 +18,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @ToString
 @ConfigurationProperties
 @Validated
-public class ConfigProperties implements WebMvcConfigurer {
+public class ConfigProperties {
 
     @Bean
     public MessageSource messageSource() {

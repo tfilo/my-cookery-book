@@ -10,7 +10,7 @@
     </parent>
     <groupId>sk.filo</groupId>
     <artifactId>recipes</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.8.0</version>
     <name>My Cookery book</name>
     <description>Personal cookery book for all my favorite recipes.</description>
 

@@ -99,7 +99,9 @@ public class PictureService {
             LOGGER.debug("save picture {}", so.toString());
             Picture picture = pictureMapper.mapPictureSOToPicture(so);
             picture.setUploaded(LocalDateTime.now());
-            picture.setThumbnail(generateThumbnail(picture.getData()));
+            picture.setThumbnail(resize(picture.getData(), 300f));
+            picture.setData(resize(picture.getData(), 1920f));
+            
             // delete all 2 hours old and older pictures not assigned to any recipe
             pictureRepository.deleteOrphanedPictures(LocalDateTime.now().minusHours(2));
             
@@ -110,7 +112,7 @@ public class PictureService {
         }
     }
     
-    private byte[] generateThumbnail(byte[] picture) throws IOException {
+    private byte[] resize(byte[] picture, float maxSizeLength) throws IOException {
         ByteArrayInputStream bis = new ByteArrayInputStream(picture);
         BufferedImage bImage = ImageIO.read(bis);
         
@@ -121,11 +123,11 @@ public class PictureService {
         Float newWidth;
         
         if (height < width) {
-            newHeight = 300f;
-            newWidth = width / (height / 300f);        
+            newHeight = maxSizeLength;
+            newWidth = width / (height / maxSizeLength);        
         } else {
-            newWidth = 300f;
-            newHeight = height / (width / 300f);       
+            newWidth = maxSizeLength;
+            newHeight = height / (width / maxSizeLength);       
         }
         
         Image scaled = bImage.getScaledInstance(newWidth.intValue(), newHeight.intValue(), Image.SCALE_SMOOTH);

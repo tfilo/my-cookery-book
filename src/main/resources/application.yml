@@ -1,54 +1,48 @@
 ## default connection pool
+server:
+  port: ${CB_SERVER_PORT:8080}
 spring:
     ## PostgreSQL
     datasource:
         hikari:
-            connectionTimeout: 20000
-            maximumPoolSize: 5
-        url: jdbc:postgresql://localhost:5432/recipes
-        username: user
-        password: User123
+            connectionTimeout: ${CB_DATASOURCE_CONNECTION_TIMEOUT:20000}
+            maximumPoolSize: ${CB_DATASOURCE_MAXIMUM_POOL_SIZE:5}
+        url: ${CB_DATASOURCE:jdbc:postgresql://localhost:5432/recipes}
+        username: ${CB_DATASOURCE_USER:user}
+        password: ${CB_DATASOURCE_PASS:User123}
     #jpa
     #drop n create table again, good for testing, comment this in production
     jpa:
-        show-sql: true
+        show-sql: ${CB_JPA_SHOW_SQL:true}
         properties:
             hibernate:
-                format_sql: true
-                enable_lazy_load_no_trans: true
+                format_sql: ${CB_JPA_FORMAT_SQL:true}
+                enable_lazy_load_no_trans: ${CB_JPA_ENABLE_LAZY_LOAD_NO_TRANS:true}
                 event:
                     merge:
-                        entity_copy_observer: allow
+                        entity_copy_observer: ${CB_JPA_ENTITY_COPY_OBSERVER:allow}
                 jdbc:
                     lob:
-                        non_contextual_creation: true
+                        non_contextual_creation: ${CB_JPA_NON_CONTEXTUAL_CREATION:true}
         hibernate:
             ddl-auto: validate
 
     #flyway                    
     flyway:
-    check-location: true              
+        check-location: ${CB_FLYWAY_CHECK_LOCATION:true}              
     #thymeleaf
     thymeleaf:
-        cache: false
+        cache: ${CB_THYMELEAF_CACHE:false}
     servlet:
         multipart:
-            max-file-size: 5MB
-            max-request-size: 10MB
+            max-file-size: ${CB_SERVLET_MULTIPART_MAX_FILE_SIZE:5MB}
+            max-request-size: ${CB_SERVLET_MULTIPART_MAX_REQUEST_SIZE:10MB}
 #log
 logging:
     level:
         sk:
             filo:
-                recipes: debug
-#        org:
-#            hibernate:
-#                SQL: debug
-#                type:
-#                    descriptor:
-#                        sql:
-#                            BasicBinder: trace
-                            
+                recipes: ${CB_LOG_SK_FILO_RECIPES:debug}
                         
                     
 
