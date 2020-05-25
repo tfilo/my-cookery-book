@@ -23,18 +23,18 @@ public class HomeController {
     private void setAllCategoriesWithRecipes(Model model) {
         model.addAttribute("allCategoriesWithRecipes", categoryService.getFist4RecipesForEveryCategory());
     }
-    
+
     // Login form
     @RequestMapping("/login.html")
     public String login() {
-        return "login.html";
+        return "login";
     }
 
     // Login form with error
     @RequestMapping("/login-error.html")
     public String loginError(Model model) {
         model.addAttribute("loginError", true);
-        return "login.html";
+        return "login";
     }
 
     @RequestMapping({"/", "/"})

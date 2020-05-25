@@ -43,6 +43,8 @@ logging:
         sk:
             filo:
                 recipes: ${CB_LOG_SK_FILO_RECIPES:debug}
-                        
+        org:
+            springframework:
+                security: DEBUG
                     
 

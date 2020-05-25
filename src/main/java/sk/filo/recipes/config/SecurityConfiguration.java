@@ -9,37 +9,44 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  *
  * @author tomas
  */
 @Configuration
-//@EnableGlobalMethodSecurity(prePostEnabled=true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     @Autowired
     private DataSource dataSource;
     
     @Override
-    public void configure(HttpSecurity http) throws Exception {
+    public void configure(final HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/recipe/view/**").permitAll()
-                .antMatchers("/recipe/**").hasRole("USER")
-                .anyRequest().permitAll()
+                    .antMatchers(
+                            "/css/*.css", 
+                            "/css/fontawesome/css/*.css", 
+                            "/css/fontawesome/webfonts/fa-solid-900.*", 
+                            "/js/*.js", 
+                            "/login.html", 
+                            "/login-error.html"
+                    ).permitAll()
+                    .antMatchers("/admin/**").hasRole("ADMIN")
+                    .antMatchers("/recipe/**").hasRole("USER")
+                    .antMatchers("/user/**").hasRole("USER")
+                    .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/login.html")
-                .failureUrl("/login-error.html")
+                    .formLogin()
+                    .loginPage("/login.html")
+                    .failureUrl("/login-error.html")
+                    .defaultSuccessUrl("/")
                 .and()
-                .logout()
+                    .logout()
                     .invalidateHttpSession(true)
                     .clearAuthentication(true)
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                    .logoutSuccessUrl("/");
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/login.html");
     }
 
     @Override
@@ -62,7 +69,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     @Bean
     public PasswordEncoder passwordEncoder() {
-        //return new org.springframework.security.crypto.password.MessageDigestPasswordEncoder("SHA-256");
         return new BCryptPasswordEncoder();
     }
 

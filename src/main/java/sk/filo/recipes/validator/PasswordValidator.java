@@ -7,6 +7,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import org.thymeleaf.util.StringUtils;
+import sk.filo.recipes.so.UserBasicSO;
 import sk.filo.recipes.so.UserSO;
 
 /**
@@ -26,33 +27,40 @@ public class PasswordValidator implements Validator {
     
     @Override
     public void validate(Object obj, Errors e) {
-        UserSO user = (UserSO) obj;
-        LOGGER.debug("validujem objekt user {}", user);
-        if (user.getId() == null) {
-            ValidationUtils.rejectIfEmptyOrWhitespace(e, "password", "required");
-            ValidationUtils.rejectIfEmptyOrWhitespace(e, "passwordConfirm", "required");
-            passwordLength(user, e, true);
-        } else {
-            passwordLength(user, e, false);
+        if (obj instanceof UserSO) {
+            UserSO user = (UserSO) obj;
+            LOGGER.debug("validujem objekt user {}", user);
+            if (user.getId() == null) {
+                ValidationUtils.rejectIfEmptyOrWhitespace(e, "password", "required");
+                ValidationUtils.rejectIfEmptyOrWhitespace(e, "passwordConfirm", "required");
+                passwordLength(user.getPassword(), user.getPasswordConfirm(), e, true);
+            } else {
+                passwordLength(user.getPassword(), user.getPasswordConfirm(), e, false);
+            }
+            passwordMatch(user.getPassword(), user.getPasswordConfirm(), e);
+        } else if (obj instanceof UserBasicSO) {
+            UserBasicSO user = (UserBasicSO) obj;
+            LOGGER.debug("validujem objekt user {}", user);
+            passwordLength(user.getPassword(), user.getPasswordConfirm(), e, false);
+            passwordMatch(user.getPassword(), user.getPasswordConfirm(), e);
         }
-        passwordMatch(user, e);
     }
     
-    private void passwordLength(UserSO user, Errors e, Boolean validateEmpty) {
-        if (validateEmpty || !StringUtils.isEmptyOrWhitespace(user.getPassword())) { 
-            if (user.getPassword().length() > 255 || user.getPassword().length() < 4) {
+    private void passwordLength(String password, String confirmPassword, Errors e, Boolean validateEmpty) {
+        if (validateEmpty || !StringUtils.isEmptyOrWhitespace(password)) { 
+            if (password.length() > 255 || password.length() < 4) {
                 e.rejectValue("password", "size", new Integer[]{4, 255}, null);
             }
         }
-        if (validateEmpty || !StringUtils.isEmptyOrWhitespace(user.getPasswordConfirm())) {
-            if (user.getPasswordConfirm().length() > 255 || user.getPasswordConfirm().length() < 4) {
+        if (validateEmpty || !StringUtils.isEmptyOrWhitespace(confirmPassword)) {
+            if (confirmPassword.length() > 255 || confirmPassword.length() < 4) {
                 e.rejectValue("passwordConfirm", "size", new Integer[]{4, 255}, null);
             }
         }
     }
     
-    private void passwordMatch(UserSO user, Errors e) {
-        if (!StringUtils.equals(user.getPassword(), user.getPasswordConfirm()) ) {
+    private void passwordMatch(String password, String confirmPassword, Errors e) {
+        if (!StringUtils.equals(password, confirmPassword) ) {
             e.rejectValue("password", "notMatch", null);
             e.rejectValue("passwordConfirm", "notMatch", null);
         }

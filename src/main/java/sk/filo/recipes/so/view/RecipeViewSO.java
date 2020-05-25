@@ -31,9 +31,9 @@ public class RecipeViewSO {
 
     private List<String> sources;
     
-    private String creator;
+    private UserViewSO creator;
     
-    private String modifier;
+    private UserViewSO modifier;
     
     private LocalDateTime created;
     

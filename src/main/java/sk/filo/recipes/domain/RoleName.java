@@ -7,4 +7,8 @@ package sk.filo.recipes.domain;
 public enum RoleName {
     ROLE_ADMIN,
     ROLE_USER;
+    
+    public String getSimpleName() {
+        return this.name().substring(5);
+    }
 }

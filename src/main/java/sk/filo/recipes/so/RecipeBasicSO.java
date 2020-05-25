@@ -23,4 +23,6 @@ public class RecipeBasicSO {
     
     @Size(max=255)
     private String description;
+    
+    private String creator;
 }

@@ -19,6 +19,7 @@ import sk.filo.recipes.domain.Category;
 import sk.filo.recipes.domain.Ingredient;
 import sk.filo.recipes.domain.Picture;
 import sk.filo.recipes.domain.Recipe;
+import sk.filo.recipes.domain.RoleName;
 import sk.filo.recipes.domain.Section;
 import sk.filo.recipes.domain.User;
 import sk.filo.recipes.mapper.IngredientMapper;
@@ -29,7 +30,6 @@ import sk.filo.recipes.repository.PictureRepository;
 import sk.filo.recipes.repository.RecipeRepository;
 import sk.filo.recipes.repository.UnitRepository;
 import sk.filo.recipes.repository.UserRepository;
-import sk.filo.recipes.so.CategoryWithRecipeBasicSO;
 import sk.filo.recipes.so.IngredientSO;
 import sk.filo.recipes.so.PictureBasicSO;
 import sk.filo.recipes.so.RecipeBasicSO;
@@ -109,7 +109,7 @@ public class RecipeService {
         LOGGER.debug("save recipeSO {}", recipeSO);        
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
-        User authenticatedUser = userRepository.findByUsername(username);
+        User authenticatedUser = userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found!"));
         
         Recipe recipe;
         if (Objects.isNull(recipeSO.getId())) {
@@ -118,6 +118,9 @@ public class RecipeService {
             recipe.setCreator(authenticatedUser);
         } else {
             recipe = recipeRepository.findById(recipeSO.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Recipe with id not found!"));
+            if (!recipe.getCreator().getUsername().equals(username) && !auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(RoleName.ROLE_ADMIN.name()))) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Users can edit only own recipes!");
+            }
             recipeMapper.mapRecipeSOToRecipe(recipeSO, recipe);
             recipe.setModified(LocalDateTime.now());
             recipe.setModifier(authenticatedUser);
@@ -133,6 +136,14 @@ public class RecipeService {
     }
     
     public void delete(Long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        
+        Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Recipe not found!"));
+        
+        if (!recipe.getCreator().getUsername().equals(username)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Users can delete only own recipes!");
+        }
         recipeRepository.deleteById(id);
     }
     

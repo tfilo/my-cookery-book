@@ -52,8 +52,8 @@
             </section>
             <hr>
             <div class="padding-8">
-                <div th:if="*{creator}">Created by <i th:text="*{creator}">username</i><span th:if="*{created}"> at <i th:text="*{#temporals.format(created, 'dd.MM.yyyy HH:mm')}" >date</i></span>.</div>
-                <div th:if="*{modifier}">Modified by <i th:text="*{modifier}">username</i><span th:if="*{modified}"> at <i th:text="*{#temporals.format(modified, 'dd.MM.yyyy HH:mm')}">date</i></span>.</div>
+                <div th:if="*{creator}">Created by <i th:text="*{creator.firstName} ? (*{creator.firstName} + ' ' + *{creator.lastName}) : *{creator.username}">username</i><span th:if="*{created}"> at <i th:text="*{#temporals.format(created, 'dd.MM.yyyy HH:mm')}" >date</i></span>.</div>
+                <div th:if="*{modifier}">Modified by <i th:text="*{modifier.firstName} ? (*{modifier.firstName} + ' ' + *{modifier.lastName}) : *{modifier.username}">username</i><span th:if="*{modified}"> at <i th:text="*{#temporals.format(modified, 'dd.MM.yyyy HH:mm')}">date</i></span>.</div>
             </div>
             <script>
                 $('#searchDiv').hide();
@@ -66,7 +66,7 @@
                 <div class="w3-row-padding" th:classappend="${rowStat.last} ? 'w3-margin-bottom'">
                     <div class="w3-col l3 m6 s12 w3-container padding-bottom-16" th:each="recipe, rowStat : ${category.recipes}">
                         <div class="w3-display-container">
-                            <a th:href="|javascript:load('content', '@{'/recipe/edit/__${recipe.id}__'}');|" style="display: inline;" class="w3-button w3-text-green w3-display-topright" sec:authorize="hasRole('USER')"><i class="fas fa-edit"></i></a>
+                            <a th:href="|javascript:load('content', '@{'/recipe/edit/__${recipe.id}__'}');|" style="display: inline;" class="w3-button w3-text-green w3-display-topright" sec:authorize="hasRole('USER')" th:if="${recipe.creator == #authentication.getPrincipal().getUsername() || #strings.contains(#authentication.principal.authorities,'ADMIN')}"><i class="fas fa-edit"></i></a>
                             <div class="w3-center">
                                 <img th:src="@{/view/picture/thumbnail/byrecipe/__${recipe.id}__}" class="uploaded-picture">
                             </div>

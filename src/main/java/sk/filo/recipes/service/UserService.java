@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,6 +22,7 @@ import sk.filo.recipes.domain.User;
 import sk.filo.recipes.mapper.UserMapper;
 import sk.filo.recipes.repository.RoleRepository;
 import sk.filo.recipes.repository.UserRepository;
+import sk.filo.recipes.so.UserBasicSO;
 import sk.filo.recipes.so.UserSO;
 
 /**
@@ -84,6 +87,22 @@ public class UserService {
         userRepository.save(user);
     }
     
+    
+    @Transactional
+    public void saveProfile(UserBasicSO userBasicSO) {
+        LOGGER.debug("save profile (userBasicSO) {}", userBasicSO);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found!"));
+        userMapper.mapUserBasicSOToUser(userBasicSO, user);
+        if (!StringUtils.isEmptyOrWhitespace(userBasicSO.getPassword())) {
+            user.setPassword(passwordEncoder.encode(userBasicSO.getPassword()));
+        }
+
+        LOGGER.debug("save user profile {}", user);
+        userRepository.save(user);
+    }
+    
     public void delete(Long id) {
         userRepository.deleteById(id);
     }
@@ -97,5 +116,12 @@ public class UserService {
     public UserSO get(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found!"));
         return userMapper.mapUserToUserSO(user);
+    }
+    
+    public UserBasicSO getOwnUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User authenticatedUser = userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found!"));
+        return userMapper.mapUserToUserBasicSO(authenticatedUser);
     }
 }

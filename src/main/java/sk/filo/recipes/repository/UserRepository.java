@@ -1,5 +1,6 @@
 package sk.filo.recipes.repository;
 
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import sk.filo.recipes.domain.User;
 
@@ -9,6 +10,6 @@ import sk.filo.recipes.domain.User;
  */
 public interface UserRepository extends JpaRepository<User, Long> {
     
-    public User findByUsername(String username);
+    public Optional<User> findByUsername(String username);
     
 }

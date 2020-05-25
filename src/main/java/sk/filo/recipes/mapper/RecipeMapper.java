@@ -52,14 +52,13 @@ public interface RecipeMapper {
     })
     RecipeSO mapRecipeToRecipeSO(Recipe recipe);
     
-    @Mappings({
-            @Mapping(target = "creator", source = "creator.username"),
-            @Mapping(target = "modifier", source = "modifier.username"),
-    })
     RecipeViewSO mapRecipeToRecipeViewSO(Recipe recipe);
     
     List<RecipeSO> mapRecipeListToRecipeSOList(List<Recipe> recipe);
     
+    @Mappings({
+            @Mapping(target = "creator", source = "creator.username")
+    })
     RecipeBasicSO mapRecipeToRecipeBasicSO(Recipe recipe);
     
     RecipeSimpleSO mapRecipeToRecipeSimpleSO(Recipe recipe);
