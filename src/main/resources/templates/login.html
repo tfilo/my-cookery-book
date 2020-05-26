@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" th:lang="sk">
     <head th:fragment="htmlHeader">
-        <title>Recipes - Login page</title>
+        <title th:text="#{html.head.title}">Recipes</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" th:href="@{'/css/fontawesome/css/fontawesome.min.css'}">
@@ -11,17 +11,17 @@
     </head>
     <body>
         <div class="w3-container w3-content" style="max-width: 400px">
-            <h1>Login page</h1>
+            <h1 th:text="#{login.title}">Login page</h1>
             <div class="w3-panel w3-red" th:if="${loginError}">
-                <p>Wrong user or password</p>
+                <p th:text="#{login.wrong}">Wrong user or password</p>
             </div>
             <form th:action="@{/login.html}" method="post">
-                <label for="username">Username</label>:
+                <label for="username" th:text="#{login.username}">Username</label>:
                 <input class="w3-input w3-border" type="text" id="username" name="username" autofocus="autofocus" /> <br />
-                <label for="password">Password</label>:
+                <label for="password" th:text="#{login.password}">Password</label>:
                 <input class="w3-input w3-border" type="password" id="password" name="password" /> <br />
                 <button type="submit" class="w3-button w3-green">
-                    <i class="fas fa-sign-in-alt"></i> Log in
+                    <i class="fas fa-sign-in-alt"></i> <span th:text="#{login.login.button}">Log in</span>
                 </button>
             </form>
         </div>

@@ -4,17 +4,17 @@
     </head>
     <body>
         <form method="post" th:if="${unitCategoryBasicSO!=null}" action="javascript:void(0);" id="unitCategoryForm" th:object="${unitCategoryBasicSO}" th:fragment="unitCategoryForm">
-            <h2 class="w3-center">Unit Category</h2>
+            <h2 class="w3-center" th:text="#{unit.category.title}">Unit Category</h2>
             <input type="hidden" th:field="*{id}"/>
             <div class="padding-8">
-                <label class="w3-center">Name <span class="w3-text-red">*</span></label>
+                <label class="w3-center" th:text="#{unit.category.name}">Name <span class="w3-text-red">*</span></label>
                 <input class="w3-input w3-border" type="text" th:field="*{name}" maxlength="80">
                 <label class="w3-text-red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect name</label>
             </div>
             <div class="padding-8">
-                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('unitCategoryForm', 'content', '@{'/admin/unitcategory/save'}');|"><i class="fas fa-save"></i>&nbsp;<span>Save</span></button>
-                <button type="button" class="w3-button w3-red" th:if="*{id}" th:onclick="|submitForm('unitCategoryForm', 'content', '@{'/admin/unitcategory/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span>Delete</span></button>
-                <button type="button" class="w3-button w3-red" th:onclick="|javascript:load('content', '@{'/admin/unitcategory/all'}');|"><i class="fas fa-ban"></i>&nbsp;<span>Cancel</span></button>
+                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('unitCategoryForm', 'content', '@{'/admin/unitcategory/save'}');|"><i class="fas fa-save"></i>&nbsp;<span th:text="#{common.save}">Save</span></button>
+                <button type="button" class="w3-button w3-red" th:if="*{id}" th:onclick="|submitForm('unitCategoryForm', 'content', '@{'/admin/unitcategory/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span th:text="#{common.delete}">Delete</span></button>
+                <button type="button" class="w3-button w3-red" th:onclick="|javascript:load('content', '@{'/admin/unitcategory/all'}');|"><i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span></button>
             </div>
             <script>
                 $('#searchDiv').hide();
@@ -23,13 +23,13 @@
         <div th:fragment="unitCategoriesList">
             <div>
                 <div class="w3-right"><a th:href="|javascript:load('content', '@{'/admin/unitcategory/add'}');|" class="w3-button w3-xlarge w3-text-green"><i class="fas fa-plus-circle"></i></a></div>
-                <div><h2 class="w3-center">Categories / Units</h2></div>
+                <div><h2 class="w3-center" th:text="#{unit.categories.title}">Categories / Units</h2></div>
             </div>
             <ul class="w3-ul w3-border margin-bottom-16" th:if="${categories}" th:each="category,rowStat : ${categories}">
                 <li class="w3-row w3-light-grey w3-strong w3-display-container">
                     <span class="w3-col l12 m12 s12"></span>
-                    <label class="w3-col l8 m8 s9"><b>Unit Name</b></label>
-                    <label class="w3-col l4 m4 s3"><b>Abbreviation</b></label>
+                    <label class="w3-col l8 m8 s9"><b th:text="#{unit.name}">Unit Name</b></label>
+                    <label class="w3-col l4 m4 s3"><b th:text="#{unit.abbreviation}">Abbreviation</b></label>
                     <a th:href="|javascript:load('content', '@{'/admin/unitcategory/get/__${category.id}__'}');|" th:text="${category.name}"></a></b><a th:href="|javascript:load('content', '@{'/admin/unit/add/__${category.id}__'}');|" class="w3-right w3-button w3-large w3-text-green w3-display-topright"><i class="fas fa-plus-circle"></i></a>
                 </li>
                 <li class="w3-row" th:each="unit,rowStat : ${category.units}">

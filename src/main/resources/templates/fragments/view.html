@@ -12,7 +12,7 @@
 
             <section class="padding-8" th:each="section,rowStat : *{sections}">
                 <h4 th:text="*{sections[__${rowStat.index}__].name}" class="bold">Sections name</h4>
-                <h5 th:if="*{not #lists.isEmpty(sections[__${rowStat.index}__].ingredients)}">Ingredients</h5>
+                <h5 th:if="*{not #lists.isEmpty(sections[__${rowStat.index}__].ingredients)}" th:text="#{recipe.ingredients}">Ingredients</h5>
                 <ul>
                     <li th:each="ingredient,rowStat2 : *{sections[__${rowStat.index}__].ingredients}">
                         <span th:text="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].value}">Ingredient value</span> 
@@ -20,7 +20,7 @@
                         <span th:text="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].name}">Ingredient name</span>
                     </li>
                 </ul>
-                <h5 th:if="*{not #lists.isEmpty(sections[__${rowStat.index}__].ingredients)}">Method</h5>
+                <h5 th:if="*{not #lists.isEmpty(sections[__${rowStat.index}__].ingredients)}" th:text="#{recipe.method}">Method</h5>
                 <div>
                     <input th:field="*{sections[__${rowStat.index}__].method}" th:id="|sections__${rowStat.index}__method|" type="hidden" required></input>
                     <div th:id="|method${rowStat.index}|" class="quill-viewer-div"></div>
@@ -32,7 +32,7 @@
                 </div>
             </section>
             <section class="padding-8" th:each="section,rowStat : *{sections}" th:if="*{not #lists.isEmpty(associatedRecipes)}">
-                <h5>Serve with recipes</h5>
+                <h5 th:text="#{recipe.serve.with}">Serve with recipes</h5>
                 <ul>
                     <li th:each="associatedRecipe,rowStat : *{associatedRecipes}" class="w3-display-container">
                         <a th:href="|javascript:load('content', '@{'/view/recipe/__${associatedRecipe.id}__'}');|" th:text="${associatedRecipe.title}">Recipe title</a>
@@ -47,13 +47,13 @@
             </div>
             <hr th:if="*{not #lists.isEmpty(sources)}">
             <section th:if="*{not #lists.isEmpty(sources)}">
-                <h5>Sources</h5>
+                <h5 th:text="#{recipe.sources}">Sources</h5>
                 <div th:each="source,rowStat : *{sources}"><i><a th:href="${source}" th:text="${source}" target="_blank">Source</a></i></div>
             </section>
             <hr>
             <div class="padding-8">
-                <div th:if="*{creator}">Created by <i th:text="*{creator.firstName} ? (*{creator.firstName} + ' ' + *{creator.lastName}) : *{creator.username}">username</i><span th:if="*{created}"> at <i th:text="*{#temporals.format(created, 'dd.MM.yyyy HH:mm')}" >date</i></span>.</div>
-                <div th:if="*{modifier}">Modified by <i th:text="*{modifier.firstName} ? (*{modifier.firstName} + ' ' + *{modifier.lastName}) : *{modifier.username}">username</i><span th:if="*{modified}"> at <i th:text="*{#temporals.format(modified, 'dd.MM.yyyy HH:mm')}">date</i></span>.</div>
+                <div th:if="*{creator}"><span th:text="#{recipe.created.by}">Created by</span> <i th:text="*{creator.firstName} ? (*{creator.firstName} + ' ' + *{creator.lastName}) : *{creator.username}">username</i><span th:if="*{created}"> <span th:text="#{recipe.created.at}">at</span> <i th:text="*{#temporals.format(created, 'dd.MM.yyyy HH:mm')}" >date</i></span>.</div>
+                <div th:if="*{modifier}"><span th:text="#{recipe.modified.by}">Modified by</span> <i th:text="*{modifier.firstName} ? (*{modifier.firstName} + ' ' + *{modifier.lastName}) : *{modifier.username}">username</i><span th:if="*{modified}"> <span th:text="#{recipe.modified.at}">at</span> <i th:text="*{#temporals.format(modified, 'dd.MM.yyyy HH:mm')}">date</i></span>.</div>
             </div>
             <script>
                 $('#searchDiv').hide();

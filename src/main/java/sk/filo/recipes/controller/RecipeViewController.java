@@ -1,9 +1,13 @@
 package sk.filo.recipes.controller;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpHeaders;
@@ -52,6 +56,9 @@ public class RecipeViewController {
     @Autowired
     PictureService pictureService;
     
+    @Autowired
+    MessageSource messageSource;
+    
     private void setAllCategoriesWithRecipes(Model model) {
         model.addAttribute(MODEL_CATEGORIES_WITH_RECIPES_SO, categoryService.getFist4RecipesForEveryCategory());
     }
@@ -85,7 +92,7 @@ public class RecipeViewController {
     }
     
     @RequestMapping(value={"/find/{categoryId}", "/find"})
-    public String viewRecipesInCategory(final Model model, @PathVariable(required = false) Long categoryId, String title) {
+    public String viewRecipesInCategory(final Model model, @PathVariable(required = false) Long categoryId, final String title) {
         LOGGER.debug("Getting recipes by criteria");
         Integer page = 0;
         Integer size = Integer.MAX_VALUE; // TODO paginacia
@@ -103,7 +110,9 @@ public class RecipeViewController {
             if (categoryId != null) {
                 titleString += ", ";
             }
-            titleString += "Filtered by title '" + title + "'";
+            MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
+            String message = accessor.getMessage("recipe.filtered.by");
+            titleString += message + " " + title + "'";
             model.addAttribute(SEARCHED_TITLE, title);
         }
         model.addAttribute(TITLE, titleString);

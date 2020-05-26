@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" th:lang="sk">
     <head th:fragment="htmlHeader">
-        <title>Recipes</title>
+        <title th:text="#{html.head.title}">Recipes</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" th:href="@{'/css/fontawesome/css/fontawesome.min.css'}">
@@ -20,12 +20,12 @@
     <body>
         <nav th:fragment="menu(content)" onmouseleave="closeSidebar()" class="w3-sidebar w3-bar-block w3-border-right w3-animate-left menu" id="mySidebar">
             <div class="w3-button w3-padding-16 w3-left" onclick="closeSidebar()"><i class="fas fa-angle-double-left"></i></div>
-            <a th:href="|javascript:load('content', '@{'/admin/user/all'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-user icon"></i> Users</a>
-            <a th:href="|javascript:load('content', '@{'/admin/category/all'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-list icon"></i> Categories</a>
-            <a th:href="|javascript:load('content', '@{'/admin/unitcategory/all'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-prescription-bottle icon"></i> Units</a>
-            <a th:href="|javascript:load('content', '@{'/recipe/add'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('USER')"><i class="fas fa-pizza-slice icon"></i> Add recipe</a>
+            <a th:href="|javascript:load('content', '@{'/admin/user/all'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-user icon"></i> <span th:text="#{common.users}">Users</span></a>
+            <a th:href="|javascript:load('content', '@{'/admin/category/all'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-list icon"></i> <span th:text="#{common.categories}">Categories</span></a>
+            <a th:href="|javascript:load('content', '@{'/admin/unitcategory/all'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-prescription-bottle icon"></i> <span th:text="#{common.units}">Units</span></a>
+            <a th:href="|javascript:load('content', '@{'/recipe/add'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" sec:authorize="hasRole('USER')"><i class="fas fa-pizza-slice icon"></i> <span th:text="#{common.add.recipe}">Add recipe</span></a>
             <hr sec:authorize="isAuthenticated()">
-            <a th:href="|javascript:load('content', '@{'/view/categoriesPreview'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button">Homepage</a>
+            <a th:href="|javascript:load('content', '@{'/view/categoriesPreview'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button"><span th:text="#{common.homepage}">Homepage</span></a>
             <hr>
             <div id="categoryLinks">
                 <th:block th:each="category, rowStat : ${allCategoriesWithRecipes}">
@@ -42,7 +42,7 @@
                 <a th:href="|javascript:load('content', '@{'/user/profile'}');|"><b sec:authentication="name"></b><span> </span></a>
                 <a th:href="@{'/logout'}"><i class="fas fa-sign-out-alt"></i></a>
             </div>
-            <div class="w3-center w3-wide w3-large page-title">My Cookery Book</div>
+            <div class="w3-center w3-wide w3-large page-title" th:text="#{html.head.title}">My Cookery Book</div>
         </header>
     </body>
 </html>
