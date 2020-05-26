@@ -150,7 +150,6 @@ public class RecipeController {
             SectionSO sectionSO = new SectionSO();
             sectionSO.setSortNumber(recipeSO.getSections().size() + 1);
             recipeSO.getSections().add(sectionSO);
-            recipeSO.getSections().add(sectionSO);
         }
         return "fragments/recipe::sections";
     }
