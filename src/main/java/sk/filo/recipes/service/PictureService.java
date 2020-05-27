@@ -29,6 +29,8 @@ import sk.filo.recipes.so.PictureSO;
 @Service
 @Transactional
 public class PictureService {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(PictureService.class);
 
     private PictureMapper pictureMapper;
     
@@ -50,8 +52,6 @@ public class PictureService {
     public void setPictureRepository(PictureRepository pictureRepository) {
         this.pictureRepository = pictureRepository;
     }
-    
-    private static final Logger LOGGER = LoggerFactory.getLogger(PictureService.class);
     
     @Transactional
     public PictureSO get(Long id) {

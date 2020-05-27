@@ -24,6 +24,8 @@ import sk.filo.recipes.so.UnitCategorySO;
 @Transactional
 public class UnitCategoryService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UnitCategoryService.class);
+
     private UnitCategoryMapper unitCategoryMapper;
     
     private UnitCategoryRepository unitCategoryRepository;
@@ -37,8 +39,6 @@ public class UnitCategoryService {
     public void setUnitCategoryRepository(UnitCategoryRepository unitCategoryRepository) {
         this.unitCategoryRepository = unitCategoryRepository;
     }
-    
-    private static final Logger LOGGER = LoggerFactory.getLogger(UnitCategoryService.class);
 
     public void save(UnitCategoryBasicSO unitCategoryBasicSO) {
         LOGGER.debug("save unitCategoryBasicSO {}", unitCategoryBasicSO);

@@ -32,6 +32,8 @@ import sk.filo.recipes.so.UserSO;
 @Service
 @Transactional
 public class UserService {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     private UserMapper userMapper;
     
@@ -60,8 +62,6 @@ public class UserService {
     public void setRoleRepository(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
     }
-    
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     @Transactional
     public void save(UserSO userSO) {

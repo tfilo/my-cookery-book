@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import sk.filo.recipes.domain.Category;
 import sk.filo.recipes.mapper.CategoryMapper;
-import sk.filo.recipes.mapper.RecipeMapper;
 import sk.filo.recipes.repository.CategoryRepository;
-import sk.filo.recipes.repository.RecipeRepository;
 import sk.filo.recipes.so.CategorySO;
 
 /**
@@ -23,14 +21,12 @@ import sk.filo.recipes.so.CategorySO;
 @Service
 @Transactional
 public class CategoryService {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(CategoryService.class);
 
     private CategoryMapper categoryMapper;
     
-    private RecipeMapper recipeMapper;
-    
     private CategoryRepository categoryRepository;
-    
-    private RecipeRepository recipeRepository;
     
     @Autowired
     public void setCategoryMapper(CategoryMapper categoryMapper) {
@@ -38,21 +34,9 @@ public class CategoryService {
     }
     
     @Autowired
-    public void setRecipeMapper(RecipeMapper recipeMapper) {
-        this.recipeMapper = recipeMapper;
-    }
-    
-    @Autowired
     public void setCategoryRepository(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
-    
-    @Autowired
-    public void setRecipeRepository(RecipeRepository recipeRepository) {
-        this.recipeRepository = recipeRepository;
-    }
-    
-    private static final Logger LOGGER = LoggerFactory.getLogger(CategoryService.class);
 
     @Transactional
     public void save(CategorySO categorySO) {

@@ -46,6 +46,8 @@ import sk.filo.recipes.so.view.RecipeViewSO;
 @Service
 @Transactional
 public class RecipeService {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(RecipeService.class);
 
     private RecipeMapper recipeMapper;
     
@@ -102,8 +104,6 @@ public class RecipeService {
     public void setUnitRepository(UnitRepository unitRepository) {
         this.unitRepository = unitRepository;
     }
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(RecipeService.class);
 
     @Transactional
     public void save(RecipeSO recipeSO) {
