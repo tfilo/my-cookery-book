@@ -48,13 +48,13 @@ public class PasswordValidator implements Validator {
     
     private void passwordLength(String password, String confirmPassword, Errors e, Boolean validateEmpty) {
         if (validateEmpty || !StringUtils.isEmptyOrWhitespace(password)) { 
-            if (password.length() > 255 || password.length() < 4) {
-                e.rejectValue("password", "size", new Integer[]{4, 255}, null);
+            if (password.length() > 255 || password.length() < 8) {
+                e.rejectValue("password", "size", new Integer[]{8, 255}, null);
             }
         }
         if (validateEmpty || !StringUtils.isEmptyOrWhitespace(confirmPassword)) {
-            if (confirmPassword.length() > 255 || confirmPassword.length() < 4) {
-                e.rejectValue("passwordConfirm", "size", new Integer[]{4, 255}, null);
+            if (confirmPassword.length() > 255 || confirmPassword.length() < 8) {
+                e.rejectValue("passwordConfirm", "size", new Integer[]{8, 255}, null);
             }
         }
     }
