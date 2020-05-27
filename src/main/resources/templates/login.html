@@ -14,7 +14,7 @@
         <link rel="stylesheet" th:href="@{'/css/style.css'}">
     </head>
     <body class="login-page">
-        <div class="w3-container w3-content" style="max-width: 400px">
+        <div class="w3-container w3-content w3-card w3-padding-16 w3-margin-top w3-white" style="max-width: 400px">
             <h1 th:text="#{login.title}">Login page</h1>
             <div class="w3-panel w3-red" th:if="${loginError}">
                 <p th:text="#{login.wrong}">Wrong user or password</p>
