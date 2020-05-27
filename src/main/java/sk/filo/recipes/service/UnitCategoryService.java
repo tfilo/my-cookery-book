@@ -3,6 +3,7 @@ package sk.filo.recipes.service;
 import java.util.List;
 import java.util.Objects;
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,12 +56,17 @@ public class UnitCategoryService {
     }
     
     public void delete(Long id) {
-        unitCategoryRepository.deleteById(id);
+        try {
+            unitCategoryRepository.deleteById(id);
+        } catch (Exception e) {
+            Throwable t = e.getCause();
+            LOGGER.debug("CHYTENA EXCEPTION: {} {} {}", t, e.getMessage(), t.getMessage());
+        }
     }
     
     public List<UnitCategorySO> getAll() {
         Sort sort = Sort.by(Sort.Order.asc("name"));
-        List<UnitCategory> allCategories = unitCategoryRepository.findAll();
+        List<UnitCategory> allCategories = unitCategoryRepository.findAll(sort);
         return unitCategoryMapper.mapUnitCategoryListToUnitCategorySOList(allCategories);
     }
     
