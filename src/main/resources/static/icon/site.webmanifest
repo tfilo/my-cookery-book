@@ -1,7 +1,7 @@
 {
     "name":"My cookery book",
     "short_name":"My cookery book",
-    "start_url":"../",
+    "start_url":"https://my-cookery-book.herokuapp.com/",
     "icons":[{
         "src":"android-chrome-192x192.png",
         "sizes":"192x192",
