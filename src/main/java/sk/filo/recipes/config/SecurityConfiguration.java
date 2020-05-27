@@ -30,7 +30,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                             "/css/fontawesome/webfonts/fa-solid-900.*", 
                             "/js/*.js", 
                             "/login.html", 
-                            "/login-error.html"
+                            "/login-error.html",
+                            "/icon/*.png",
+                            "/icon/*.ico",
+                            "/icon/site.webmanifest"
                     ).permitAll()
                     .antMatchers("/admin/**").hasRole("ADMIN")
                     .antMatchers("/recipe/**").hasRole("USER")
