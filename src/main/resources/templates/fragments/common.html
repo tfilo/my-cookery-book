@@ -42,7 +42,7 @@
                 <a th:href="@{'/login.html'}"><i class="fas fa-sign-in-alt"></i></a>
             </div>
             <div class="w3-right w3-padding-16 padding-right" sec:authorize="isAuthenticated()">
-                <a th:href="|javascript:load('content', '@{'/user/profile'}');|"><b sec:authentication="name"></b><span> </span></a>
+                <a th:href="|javascript:load('content', '@{'/user/profile'}');|"><b sec:authentication="name"></b></a><span>&nbsp;&nbsp;</span>
                 <a th:href="@{'/logout'}"><i class="fas fa-sign-out-alt"></i></a>
             </div>
             <div class="w3-center w3-wide w3-large page-title" th:text="#{html.head.title}">My Cookery Book</div>
