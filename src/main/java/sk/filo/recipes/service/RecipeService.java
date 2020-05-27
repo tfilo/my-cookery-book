@@ -8,13 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.thymeleaf.util.StringUtils;
 import sk.filo.recipes.domain.Category;
 import sk.filo.recipes.domain.Ingredient;
 import sk.filo.recipes.domain.Picture;
@@ -34,6 +34,7 @@ import sk.filo.recipes.so.IngredientSO;
 import sk.filo.recipes.so.PictureBasicSO;
 import sk.filo.recipes.so.RecipeBasicSO;
 import sk.filo.recipes.so.RecipeSO;
+import sk.filo.recipes.so.RecipeSearchCriteriaSO;
 import sk.filo.recipes.so.RecipeSimpleSO;
 import sk.filo.recipes.so.SectionSO;
 import sk.filo.recipes.so.view.RecipeViewSO;
@@ -165,32 +166,31 @@ public class RecipeService {
         return recipeMapper.mapRecipeToRecipeSimpleSO(recipe);
     }
 
-    public List<RecipeBasicSO> getAllBasic() {
-        List<Recipe> recipes = recipeRepository.findAll();
-        return recipeMapper.mapRecipeListToRecipeBasicSOList(recipes);
-    }
-    
-    public List<RecipeSimpleSO> findRecipeSimpleByTitle(String title) {
+    public List<RecipeSimpleSO> findTop4RecipeSimpleByTitle(String title) {
         Sort sort = Sort.by(Sort.Order.asc("title"));
         List<Recipe> recipes = recipeRepository.findTop4ByTitleIsContainingIgnoreCase(title, sort);
         return recipeMapper.mapRecipeListToRecipeSimpleSOList(recipes);
     }
     
-    public Page<RecipeBasicSO> getAllBasicByCategoryId(Pageable page, Long categoryId) {
-        Page<Recipe> recipes = recipeRepository.findAllByCategoriesId(page, categoryId);
-        return mapToRecipeBasicSO(recipes);
-    }
-    
-    public Page<RecipeBasicSO> getAllBasicByCategoryIdAndTitle(Pageable page, Long categoryId, String title) {
+    public Page<RecipeBasicSO> getAllBasicByCriteria(RecipeSearchCriteriaSO criteria) {
         Page<Recipe> recipes;
-        if (categoryId!=null) {
-            recipes = recipeRepository.findAllByCategoriesIdAndTitleIsContainingIgnoreCase(categoryId, title, page);
+        if (criteria.getCategoryId()!=null && !StringUtils.isEmptyOrWhitespace(criteria.getTitle())) {
+            LOGGER.debug("Search by CategoryId and Title {}", criteria);
+            recipes = recipeRepository.findAllByCategoriesIdAndTitleIsContainingIgnoreCase(criteria.getCategoryId(), criteria.getTitle(), criteria.getPage());
+        } else if (criteria.getCategoryId()!=null) {
+            LOGGER.debug("Search by CategoryId {}", criteria);
+            recipes = recipeRepository.findAllByCategoriesId(criteria.getCategoryId(), criteria.getPage());
+        } else if (!StringUtils.isEmptyOrWhitespace(criteria.getTitle())) {
+            LOGGER.debug("Search by Title {}", criteria);
+            recipes = recipeRepository.findAllByTitleIsContainingIgnoreCase(criteria.getTitle(),criteria.getPage());
         } else {
-            recipes = recipeRepository.findAllByTitleIsContainingIgnoreCase(title,page);
+            LOGGER.debug("Search all {}", criteria);
+            recipes = recipeRepository.findAll(criteria.getPage());
         }
+        LOGGER.debug("Found recipes {}", recipes.getContent());
         return mapToRecipeBasicSO(recipes);
     }
-    
+
     private Page<RecipeBasicSO> mapToRecipeBasicSO(Page<Recipe> recipes) {
         return recipes.map(
                 (recipe) -> {
@@ -199,7 +199,6 @@ public class RecipeService {
                 }
         );
     }
-    
     
     private void mapAssociatedRecipes(final List<RecipeSimpleSO> associatedRecipeSOs, final List<Recipe> associatedRecipes) {
         associatedRecipes.clear();

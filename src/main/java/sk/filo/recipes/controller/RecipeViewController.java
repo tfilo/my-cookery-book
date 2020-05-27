@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,10 +19,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.thymeleaf.util.StringUtils;
+import sk.filo.recipes.component.Preview;
 import sk.filo.recipes.service.CategoryService;
 import sk.filo.recipes.service.PictureService;
 import sk.filo.recipes.service.RecipeService;
 import sk.filo.recipes.so.PictureSO;
+import sk.filo.recipes.so.RecipeSearchCriteriaSO;
 import sk.filo.recipes.so.view.RecipeViewSO;
 
 /**
@@ -35,8 +38,6 @@ public class RecipeViewController {
     private static final Logger LOGGER = LoggerFactory.getLogger(RecipeViewController.class);
     
     private static final String MODEL_RECIPE_VIEW_SO = "recipeViewSO";
-    
-    private static final String MODEL_CATEGORIES_WITH_RECIPES_SO = "allCategoriesWithRecipes";
     
     private static final String MODEL_RECIPES = "recipes";
     
@@ -57,10 +58,9 @@ public class RecipeViewController {
     @Autowired
     MessageSource messageSource;
     
-    private void setAllCategoriesWithRecipes(Model model) {
-        model.addAttribute(MODEL_CATEGORIES_WITH_RECIPES_SO, categoryService.getFist4RecipesForEveryCategory());
-    }
-    
+    @Autowired
+    Preview preview;
+
     @RequestMapping(value="recipe/{recipeId}")
     public String viewRecipe(final Model model, final @PathVariable Long recipeId, final HttpServletRequest req) {
         LOGGER.debug("View recipe by id {}", recipeId);
@@ -73,8 +73,8 @@ public class RecipeViewController {
     @RequestMapping(value="/categoriesPreview")
     public String viewRecipeCategoriesPreview(final Model model) {
         LOGGER.debug("Getting categoriesPreview");
-        setAllCategoriesWithRecipes(model);
-        return "fragments/view::categoriesPreview";
+        preview.setAllCategoriesWithRecipes(model);
+        return "fragments/view::recipesList";
     }
 
     @RequestMapping(value="/recipesByCategory/{categoryId}")
@@ -83,7 +83,12 @@ public class RecipeViewController {
         Integer page = 0;
         Integer size = Integer.MAX_VALUE; // TODO paginacia
         PageRequest pr =  PageRequest.of(page, size, Direction.ASC, "title");
-        model.addAttribute(MODEL_RECIPES, recipeService.getAllBasicByCategoryId(pr, categoryId));
+                
+        RecipeSearchCriteriaSO criteria = new RecipeSearchCriteriaSO();
+        criteria.setPage(pr);
+        criteria.setCategoryId(categoryId);
+
+        model.addAttribute(MODEL_RECIPES, recipeService.getAllBasicByCriteria(criteria));
         model.addAttribute(TITLE, categoryService.get(categoryId).getName());
         model.addAttribute(CATEGORY_ID, categoryId);
         return "fragments/view::recipesList";
@@ -96,7 +101,12 @@ public class RecipeViewController {
         Integer size = Integer.MAX_VALUE; // TODO paginacia
         PageRequest pr =  PageRequest.of(page, size, Direction.ASC, "title");
         
-        model.addAttribute(MODEL_RECIPES, recipeService.getAllBasicByCategoryIdAndTitle(pr, categoryId, title));
+        RecipeSearchCriteriaSO criteria = new RecipeSearchCriteriaSO();
+        criteria.setPage(pr);
+        criteria.setCategoryId(categoryId);
+        criteria.setTitle(title);
+
+        model.addAttribute(MODEL_RECIPES, recipeService.getAllBasicByCriteria(criteria));
         String titleString = "";
         
         if (categoryId != null) {
@@ -106,7 +116,7 @@ public class RecipeViewController {
         
         if (title != null && !StringUtils.isEmptyOrWhitespace(title)) {
             if (categoryId != null) {
-                titleString += ", ";
+                titleString += ": ";
             }
             MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
             String message = accessor.getMessage("recipe.filtered.by");

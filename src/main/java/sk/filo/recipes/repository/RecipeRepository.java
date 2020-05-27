@@ -15,7 +15,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     
     public List<Recipe> findTop4ByCategoriesId(Long id, Sort sort);
     
-    public Page<Recipe> findAllByCategoriesId(Pageable page, Long id);
+    public Page<Recipe> findAllByCategoriesId(Long id, Pageable page);
     
     public Page<Recipe> findAllByTitleIsContainingIgnoreCase(String title, Pageable page);
     

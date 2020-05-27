@@ -10,13 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import sk.filo.recipes.domain.Category;
-import sk.filo.recipes.domain.Recipe;
 import sk.filo.recipes.mapper.CategoryMapper;
 import sk.filo.recipes.mapper.RecipeMapper;
 import sk.filo.recipes.repository.CategoryRepository;
 import sk.filo.recipes.repository.RecipeRepository;
 import sk.filo.recipes.so.CategorySO;
-import sk.filo.recipes.so.CategoryWithRecipeBasicSO;
 
 /**
  *
@@ -70,22 +68,6 @@ public class CategoryService {
         Sort sort = Sort.by(Sort.Order.asc("name"));
         List<Category> allUsers = categoryRepository.findAll(sort);
         return categoryMapper.mapCategoryListToCategorySOList(allUsers);
-    }
-    
-    public List<CategoryWithRecipeBasicSO> getFist4RecipesForEveryCategory() {
-        Sort sortCategories = Sort.by(Sort.Order.asc("name"));
-        List<Category> categories = categoryRepository.findAll(sortCategories);
-        List<CategoryWithRecipeBasicSO> list = categoryMapper.mapCategoryListToCategoryWithRecipeBasicSOList(categories);
-        Sort sortRecipes = Sort.by(Sort.Order.desc("created"));
-        
-        list.forEach((so) -> {
-            List<Recipe> recipes = recipeRepository.findTop4ByCategoriesId(so.getId(), sortRecipes);
-            recipes.forEach((r) -> {
-                so.getRecipes().add(recipeMapper.mapRecipeToRecipeBasicSO(r));
-            });
-        });
-        
-        return list;
     }
     
     public CategorySO get(Long id) {

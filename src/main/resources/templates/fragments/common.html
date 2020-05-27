@@ -28,7 +28,7 @@
             <a th:href="|javascript:load('content', '@{'/view/categoriesPreview'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button"><span th:text="#{common.homepage}">Homepage</span></a>
             <hr>
             <div id="categoryLinks">
-                <th:block th:each="category, rowStat : ${allCategoriesWithRecipes}">
+                <th:block th:each="category, rowStat : ${allCategories}">
                     <a th:href="|javascript:load('content', '@{'/view/recipesByCategory/__${category.id}__'}');|" onclick="closeSidebar()" class="w3-bar-item w3-button" th:text="${category.name}" th:classappend="${rowStat.last} ? 'margin-bottom-32'">Category name</a>
                 </th:block>
             </div>

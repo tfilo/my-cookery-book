@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
+import sk.filo.recipes.component.Preview;
 import sk.filo.recipes.service.CategoryService;
 import sk.filo.recipes.service.PictureService;
 import sk.filo.recipes.service.RecipeService;
@@ -50,8 +51,6 @@ public class RecipeController {
     private static final String MODEL_CATEGORIES = "allCategories";
     
     private static final String MODEL_UNIT_CATEGORIES_WITH_UNITS = "allUnitCategoriesWithUnits";
-    
-    private static final String SESSION_PICTURES = "pictures";
 
     private static final String MODEL_FILTERED_RECIPES = "filteredRecipes";
     
@@ -67,9 +66,8 @@ public class RecipeController {
     @Autowired
     PictureService pictureService;
     
-    private void setAllCategoriesWithRecipes(Model model) {
-        model.addAttribute("allCategoriesWithRecipes", categoryService.getFist4RecipesForEveryCategory());
-    }
+    @Autowired
+    Preview preview;
     
     @ModelAttribute(MODEL_CATEGORIES)
     public List<CategorySO> allCategories() {
@@ -202,8 +200,8 @@ public class RecipeController {
     public String deleteRecipe(final Model model, final RecipeSO recipe) {
         LOGGER.debug("Delete recipe action {}", recipe);
         recipeService.delete(recipe.getId());
-        setAllCategoriesWithRecipes(model);
-        return "fragments/view::categoriesPreview";
+        preview.setAllCategoriesWithRecipes(model);
+        return "fragments/view::recipesList";
     }
     
     @RequestMapping(value="/save")
@@ -214,8 +212,8 @@ public class RecipeController {
             return "fragments/recipe::recipeForm";
         }
         recipeService.save(recipe);
-        setAllCategoriesWithRecipes(model);
-        return "fragments/view::categoriesPreview";
+        preview.setAllCategoriesWithRecipes(model);
+        return "fragments/view::recipesList";
     }
     
     @RequestMapping(value="/filter")
@@ -225,7 +223,7 @@ public class RecipeController {
         if (StringUtils.isEmptyOrWhitespace(title)) {
             filtered = new ArrayList<>();
         } else {
-            filtered = recipeService.findRecipeSimpleByTitle(title);   
+            filtered = recipeService.findTop4RecipeSimpleByTitle(title);   
         }
         model.addAttribute(MODEL_FILTERED_RECIPES, filtered);
         return "fragments/recipe::filteredRecipes";
