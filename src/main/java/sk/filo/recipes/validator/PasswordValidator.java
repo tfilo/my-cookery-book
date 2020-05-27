@@ -33,28 +33,25 @@ public class PasswordValidator implements Validator {
             if (user.getId() == null) {
                 ValidationUtils.rejectIfEmptyOrWhitespace(e, "password", "required");
                 ValidationUtils.rejectIfEmptyOrWhitespace(e, "passwordConfirm", "required");
-                passwordLength(user.getPassword(), user.getPasswordConfirm(), e, true);
+                passwordLength(user.getPassword(), e, true);
             } else {
-                passwordLength(user.getPassword(), user.getPasswordConfirm(), e, false);
+                passwordLength(user.getPassword(), e, false);
             }
             passwordMatch(user.getPassword(), user.getPasswordConfirm(), e);
+            passwordStrength(user.getPassword(), e);
         } else if (obj instanceof UserBasicSO) {
             UserBasicSO user = (UserBasicSO) obj;
             LOGGER.debug("validujem objekt user {}", user);
-            passwordLength(user.getPassword(), user.getPasswordConfirm(), e, false);
+            passwordLength(user.getPassword(), e, false);
             passwordMatch(user.getPassword(), user.getPasswordConfirm(), e);
+            passwordStrength(user.getPassword(), e);
         }
     }
     
-    private void passwordLength(String password, String confirmPassword, Errors e, Boolean validateEmpty) {
+    private void passwordLength(String password, Errors e, Boolean validateEmpty) {
         if (validateEmpty || !StringUtils.isEmptyOrWhitespace(password)) { 
             if (password.length() > 255 || password.length() < 8) {
                 e.rejectValue("password", "size", new Integer[]{8, 255}, null);
-            }
-        }
-        if (validateEmpty || !StringUtils.isEmptyOrWhitespace(confirmPassword)) {
-            if (confirmPassword.length() > 255 || confirmPassword.length() < 8) {
-                e.rejectValue("passwordConfirm", "size", new Integer[]{8, 255}, null);
             }
         }
     }
@@ -63,6 +60,14 @@ public class PasswordValidator implements Validator {
         if (!StringUtils.equals(password, confirmPassword) ) {
             e.rejectValue("password", "notMatch", null);
             e.rejectValue("passwordConfirm", "notMatch", null);
+        }
+    }
+    
+    private void passwordStrength(String password, Errors e) {
+        if (!StringUtils.isEmptyOrWhitespace(password)) {
+            if (!password.matches(".*[a-z].*") || !password.matches(".*[A-Z].*") || !password.matches(".*[0-9].*")) {
+                e.rejectValue("password", "weak", null);
+            }
         }
     }
 }
