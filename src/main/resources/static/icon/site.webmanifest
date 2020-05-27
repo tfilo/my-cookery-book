@@ -1,6 +1,7 @@
 {
     "name":"My cookery book",
     "short_name":"My cookery book",
+    "start_url":"../",
     "icons":[{
         "src":"android-chrome-192x192.png",
         "sizes":"192x192",
