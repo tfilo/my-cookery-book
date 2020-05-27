@@ -3,7 +3,6 @@ package sk.filo.recipes.service;
 import java.util.List;
 import java.util.Objects;
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,8 +58,7 @@ public class UnitCategoryService {
         try {
             unitCategoryRepository.deleteById(id);
         } catch (Exception e) {
-            Throwable t = e.getCause();
-            LOGGER.debug("CHYTENA EXCEPTION: {} {} {}", t, e.getMessage(), t.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
         }
     }
     

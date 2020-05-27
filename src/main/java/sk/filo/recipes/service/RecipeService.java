@@ -145,7 +145,11 @@ public class RecipeService {
         if (!recipe.getCreator().getUsername().equals(username)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Users can delete only own recipes!");
         }
-        recipeRepository.deleteById(id);
+        try {
+            recipeRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
+        }
     }
     
     public RecipeSO get(Long id) {
