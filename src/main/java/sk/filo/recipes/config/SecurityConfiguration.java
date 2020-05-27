@@ -33,7 +33,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                             "/login-error.html",
                             "/icon/*.png",
                             "/icon/*.ico",
-                            "/icon/site.webmanifest"
+                            "/icon/site.webmanifest",
+                            "/image/*.jpg"
                     ).permitAll()
                     .antMatchers("/admin/**").hasRole("ADMIN")
                     .antMatchers("/recipe/**").hasRole("USER")

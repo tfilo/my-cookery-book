@@ -3,6 +3,20 @@ body,html{
     width:100%;
 }
 
+.login-page {
+    /* The image used */
+    background-image: url("../image/background3.jpg");
+
+    /* Full height */
+    height: 100%; 
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
 .w3-content{
     max-width: 1280px;
 }
