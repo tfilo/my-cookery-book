@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -120,7 +119,7 @@ public class RecipeViewController {
             }
             MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
             String message = accessor.getMessage("recipe.filtered.by");
-            titleString += message + " " + title + "'";
+            titleString += message + " '" + title + "'";
             model.addAttribute(SEARCHED_TITLE, title);
         }
         model.addAttribute(TITLE, titleString);
