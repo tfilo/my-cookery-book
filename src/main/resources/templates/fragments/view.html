@@ -16,7 +16,7 @@
                 <ul>
                     <li th:each="ingredient,rowStat2 : *{sections[__${rowStat.index}__].ingredients}">
                         <span th:text="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].value}">Ingredient value</span> 
-                        <span th:text="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].unit.abbreviation}">Ingredient unit</span>
+                        <div class="tooltip"><span th:text="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].unit.abbreviation}">Ingredient unit</span><span class="tooltiptext" th:text="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].unit.name}">Ingredient unit value</span></div>
                         <span th:text="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].name}">Ingredient name</span>
                     </li>
                 </ul>
