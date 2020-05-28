@@ -45,7 +45,11 @@ public class CategoryService {
     }
     
     public void delete(Long id) {
-        categoryRepository.deleteById(id);
+        try {
+            categoryRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
+        }
     }
     
     public List<CategorySO> getAll() {

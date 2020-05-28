@@ -55,12 +55,16 @@ public class UnitCategoryService {
     }
     
     public void delete(Long id) {
-        unitCategoryRepository.deleteById(id);
+        try {
+            unitCategoryRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
+        }
     }
     
     public List<UnitCategorySO> getAll() {
         Sort sort = Sort.by(Sort.Order.asc("name"));
-        List<UnitCategory> allCategories = unitCategoryRepository.findAll();
+        List<UnitCategory> allCategories = unitCategoryRepository.findAll(sort);
         return unitCategoryMapper.mapUnitCategoryListToUnitCategorySOList(allCategories);
     }
     
