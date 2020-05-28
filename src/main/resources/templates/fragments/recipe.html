@@ -12,7 +12,7 @@
             <input type="hidden" th:field="*{modifier}"/>
             <input type="hidden" th:field="*{modified}"/>
             <div class="padding-8">
-                <label th:text="#{recipe.title}">Title<span class="w3-text-red"> *</span></label>
+                <label><span th:text="#{recipe.title}">Title</span> <span class="w3-text-red">*</span></label>
                 <input class="w3-input w3-border" type="text" th:field="*{title}" maxlength="80">
                 <label class="w3-text-red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Incorrect title</label>
             </div>
@@ -24,7 +24,7 @@
             <div id="sections">
             <div class="padding-8" th:fragment="sections" th:object="${recipeSO}">
                 <div>
-                    <label th:text="#{recipe.sections}">Sections<span class="w3-text-red"> *</span></label>
+                    <label><span th:text="#{recipe.sections}">Sections</span> <span class="w3-text-red">*</span></label>
                     <a th:href="|javascript:submitForm('recipeForm', 'sections', '@{'/recipe/sectionAdd'}');|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
                 </div>
                 <div class="w3-border">
@@ -47,18 +47,18 @@
                                         <input type="hidden" th:field="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].id}"/>
                                         <input type="hidden" th:field="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].sortNumber}"/>
                                         <div class="w3-col l6 m5 s5 padding-8">
-                                            <label class="source-label" th:text="#{recipe.ingredient.name}">Name<span class="w3-text-red"> *</span></label>
+                                            <label class="source-label"><span th:text="#{recipe.ingredient.name}">Name</span> <span class="w3-text-red">*</span></label>
                                             <input class="w3-input w3-border" type="text" th:errorclass="w3-pale-red" th:field="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].name}" maxlength="80" required>
                                             <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].name')}" th:errors="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].name}">Incorrect name</label>
                                         </div>
                                         <div class="w3-col l2 m3 s3 padding-8">
-                                            <label class="source-label" th:text="#{recipe.ingredient.value}">Value<span class="w3-text-red"> *</span></label>
+                                            <label class="source-label"><span th:text="#{recipe.ingredient.value}">Value</span></label>
                                             <input class="w3-input w3-border" type="number" step="0.05" th:errorclass="w3-pale-red" th:field="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].value}" required>
                                             <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].value')}" th:errors="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].value}">Incorrect value</label>
                                         </div>
                                         <div class="w3-col l4 m4 s4 padding-8">
-                                            <label class="w3-center" th:text="#{recipe.ingredient.unit}">Unit<span class="w3-text-red"> *</span></label>
-                                            <select class="w3-select w3-border" th:errorclass="w3-pale-red" th:field="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].unitId}" >
+                                            <label class="w3-center"><span th:text="#{recipe.ingredient.unit}">Unit</span> <span class="w3-text-red">*</span></label>
+                                            <select class="w3-select w3-border" th:errorclass="w3-pale-red" th:field="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].unitId}">
                                                 <option th:value="null"
                                                         class="w3-block" th:text="#{recipe.ingredient.select.value}">Select value</option>
                                                 <optgroup th:each="unitCategory : ${allUnitCategoriesWithUnits}"
@@ -78,7 +78,7 @@
                             </div> 
                         </div>
                         <div class="padding-8">
-                            <label th:text="#{recipe.method}">Method<span class="w3-text-red"> *</span></label>
+                            <label><span th:text="#{recipe.method}">Method</span> <span class="w3-text-red">*</span></label>
                             <input th:field="*{sections[__${rowStat.index}__].method}" th:id="|sections__${rowStat.index}__method|" type="hidden" required></input>
                             <div th:id="|method${rowStat.index}|" class="quill-editor-div"></div>
                             <div th:id="|method${rowStat.index}length|"></div>
@@ -128,7 +128,7 @@
                 </div>
             </div>
             <div class="padding-8">
-                <label th:text="#{recipe.categories}">Categories<span class="w3-text-red"> *</span></label>
+                <label><span th:text="#{recipe.categories}">Categories</span> <span class="w3-text-red">*</span></label>
                 <select class="w3-select w3-border no-padding" th:errorclass="w3-pale-red" multiple th:field="*{categories}" th:size="${#lists.size(allCategories)}">
                     <option th:each="category : ${allCategories}"
                             th:value="${category.id}" 
@@ -160,7 +160,7 @@
                 <div class="w3-border" th:if="*{#lists.size(sources)} > 0">
                     <div th:each="source,rowStat : *{sources}" class="w3-padding w3-display-container" th:classappend="${rowStat.even} ? 'w3-light-grey'">
                         <div class="padding-8">
-                            <label class="source-label" th:text="#{recipe.source.url}">URL<span class="w3-text-red"> *</span></label>
+                            <label class="source-label"><span th:text="#{recipe.source.url}">URL</span> <span class="w3-text-red">*</span></label>
                             <input class="w3-input w3-border" type="text" th:errorclass="w3-pale-red" th:field="*{sources[__${rowStat.index}__].url}" maxlength="1000" required>
                             <label class="w3-text-red" th:if="${#fields.hasErrors('sources[__${rowStat.index}__].url')}" th:errors="*{sources[__${rowStat.index}__].url}">Incorrect url</label>
                         </div>

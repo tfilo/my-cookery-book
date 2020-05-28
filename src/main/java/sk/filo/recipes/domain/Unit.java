@@ -39,6 +39,9 @@ public class Unit {
     @Column(name = "abbreviation", nullable = false, length = 20)
     private String abbreviation;
     
+    @Column(name = "value_required", nullable = false)
+    private Boolean valueRequired;
+    
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "unit_category_id", nullable = false)
     private UnitCategory category;

@@ -37,7 +37,7 @@ public class Ingredient {
     @Column(name = "name", nullable = false, length = 80)
     private String name;
 
-    @Column(name = "value", nullable = false)
+    @Column(name = "value", nullable = true)
     private Float value;
     
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)

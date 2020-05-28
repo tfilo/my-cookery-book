@@ -25,16 +25,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                     .antMatchers(
-                            "/css/*.css", 
-                            "/css/fontawesome/css/*.css", 
-                            "/css/fontawesome/webfonts/fa-solid-900.*", 
-                            "/js/*.js", 
                             "/login.html", 
                             "/login-error.html",
-                            "/icon/*.png",
-                            "/icon/*.ico",
-                            "/icon/site.webmanifest",
-                            "/image/*.jpg"
+                            "/css/**", 
+                            "/js/**", 
+                            "/icon/**",
+                            "/image/**"
                     ).permitAll()
                     .antMatchers("/admin/**").hasRole("ADMIN")
                     .antMatchers("/recipe/**").hasRole("USER")

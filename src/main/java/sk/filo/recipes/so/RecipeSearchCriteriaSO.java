@@ -18,4 +18,11 @@ public class RecipeSearchCriteriaSO {
     private String title;
     
     private Pageable page;
+    
+    public String getTitle() {
+        if (title!=null) {
+            return title.toLowerCase();
+        }
+        return null;
+    }
 }

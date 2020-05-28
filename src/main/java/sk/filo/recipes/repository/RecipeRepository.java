@@ -17,10 +17,10 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     
     public Page<Recipe> findAllByCategoriesId(Long id, Pageable page);
     
-    public Page<Recipe> findAllByTitleIsContainingIgnoreCase(String title, Pageable page);
+    public Page<Recipe> findAllByTitleSearchIsContaining(String titleSearch, Pageable page);
     
-    public Page<Recipe> findAllByCategoriesIdAndTitleIsContainingIgnoreCase(Long categoryId, String title, Pageable page);
+    public Page<Recipe> findAllByCategoriesIdAndTitleSearchIsContaining(Long categoryId, String titleSearch, Pageable page);
     
-    public List<Recipe> findTop4ByTitleIsContainingIgnoreCase(String title, Sort sort);
+    public List<Recipe> findTop4ByTitleSearchIsContaining(String titleSearch, Sort sort);
 
 }

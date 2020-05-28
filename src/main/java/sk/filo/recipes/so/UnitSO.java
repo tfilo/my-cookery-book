@@ -25,6 +25,9 @@ public class UnitSO {
     @NotBlank
     @Size(max=20)
     private String abbreviation;
+    
+    @NotNull
+    private Boolean valueRequired = true;
 
     @NotNull
     private Long unitCategoryId;
