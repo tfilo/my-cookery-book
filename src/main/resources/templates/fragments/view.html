@@ -31,7 +31,7 @@
                     </script>
                 </div>
             </section>
-            <section class="padding-8" th:each="section,rowStat : *{sections}" th:if="*{not #lists.isEmpty(associatedRecipes)}">
+            <section class="padding-8" th:if="*{not #lists.isEmpty(associatedRecipes)}">
                 <h5 th:text="#{recipe.serve.with}">Serve with recipes</h5>
                 <ul>
                     <li th:each="associatedRecipe,rowStat : *{associatedRecipes}" class="w3-display-container">
