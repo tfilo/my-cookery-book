@@ -1,4 +1,28 @@
+var loaderSemaphore = 0;
+var showLoaderTimer = null;
+
+function showLoader() {
+    loaderSemaphore++;
+    if (showLoaderTimer) {
+        clearInterval(showLoaderTimer);
+    }
+    showLoaderTimer = setTimeout(_showLoader, 250);
+}
+
+function _showLoader() {
+    $('#loaderOverlay').show();
+}
+
+function hideLoader() {
+    loaderSemaphore--;
+    if (loaderSemaphore === 0) {
+        clearInterval(showLoaderTimer);
+        $('#loaderOverlay').hide();
+    }   
+}
+
 function submitForm(formId, target, url) {
+    showLoader();
     $.ajax({// create an AJAX call...
         data: $('#' + formId).serialize(), // get the form data
         type: $('#' + formId).attr('method'), // GET or POST
@@ -6,8 +30,10 @@ function submitForm(formId, target, url) {
         success: function (response) { // on success..
             $('#' + target).html(response); // update the DIV
             $(window).scrollTop(($('#' + target).offset().top - $("#header").outerHeight()) - $("#searchDiv").outerHeight());
+            hideLoader();
         },
         error: function (err) {
+            hideLoader();
             processError(err);
         }
     });
@@ -15,14 +41,17 @@ function submitForm(formId, target, url) {
 }
 
 function asyncLoadFragment(target, url) {
+    showLoader();
     $.ajax({
         type: "POST",
         url: url,
         success: function (response) { // on success..
             $('#' + target).html(response); // update the DIV
             $(window).scrollTop(($('#' + target).offset().top - $("#header").outerHeight()) - $("#searchDiv").outerHeight());
+            hideLoader();
         },
         error: function (err) {
+            hideLoader();
             processError(err);
         }
     });
@@ -30,6 +59,7 @@ function asyncLoadFragment(target, url) {
 }
 
 function uploadPicture(formId, fileInputId, target, url) {
+    showLoader();
     var form = $('#' + formId)[0];
     var formData = new FormData(form);
     formData.append('picture', $('#' + fileInputId)[0].files[0]);
@@ -43,8 +73,10 @@ function uploadPicture(formId, fileInputId, target, url) {
         success: function (response) { // on success..
             $('#' + target).html(response); // update the DIV
             $(window).scrollTop(($('#' + target).offset().top - $("#header").outerHeight()) - $("#searchDiv").outerHeight());
+            hideLoader();
         },
         error: function (err) {
+            hideLoader();
             processError(err);
         }
     });
@@ -52,6 +84,7 @@ function uploadPicture(formId, fileInputId, target, url) {
 }
 
 function load(target, url, data) {
+    showLoader();
     $.ajax({
         type: "GET",
         data: data ? data : null,
@@ -59,8 +92,10 @@ function load(target, url, data) {
         success: function (response) { // on success..
             $('#' + target).html(response); // update the DIV
             $(window).scrollTop(($('#' + target).offset().top - $("#header").outerHeight()) - $("#searchDiv").outerHeight());
+            hideLoader();
         },
         error: function (err) {
+            hideLoader();
             processError(err);
         }
     });
