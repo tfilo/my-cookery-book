@@ -35,6 +35,7 @@ import sk.filo.recipes.so.RecipeSO;
 import sk.filo.recipes.so.SectionSO;
 import sk.filo.recipes.so.SourceSO;
 import sk.filo.recipes.so.UnitCategorySO;
+import sk.filo.recipes.validator.IngredientValidator;
 
 /**
  *
@@ -53,6 +54,9 @@ public class RecipeController {
     private static final String MODEL_UNIT_CATEGORIES_WITH_UNITS = "allUnitCategoriesWithUnits";
 
     private static final String MODEL_FILTERED_RECIPES = "filteredRecipes";
+    
+    @Autowired
+    IngredientValidator ingredientValidator;
     
     @Autowired
     RecipeService recipeService;
@@ -207,6 +211,7 @@ public class RecipeController {
     @RequestMapping(value="/save")
     public String saveRecipe(final Model model, final @Valid RecipeSO recipe, final BindingResult bindingResult) {
         LOGGER.debug("Save recipe action {}", recipe);
+        ingredientValidator.validate(recipe, bindingResult);
         if (bindingResult.hasErrors()) {
             LOGGER.debug(bindingResult.toString());
             return "fragments/recipe::recipeForm";

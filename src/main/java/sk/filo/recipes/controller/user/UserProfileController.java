@@ -35,7 +35,8 @@ public class UserProfileController {
     
     private static final String TITLE = "title";
     
-    private final Validator validator = new PasswordValidator();
+    @Autowired
+    PasswordValidator passwordValidator;
     
     @Autowired
     RecipeService recipeService;
@@ -71,7 +72,7 @@ public class UserProfileController {
     @RequestMapping(value="/save")
     public String saveUser(final Model model, final @Valid UserBasicSO userBasicSO, final BindingResult bindingResult) {
         LOGGER.debug("Save user profile action {}", userBasicSO);
-        validator.validate(userBasicSO, bindingResult);
+        passwordValidator.validate(userBasicSO, bindingResult);
         if (bindingResult.hasErrors()) {
             return "fragments/user::profilForm";
         }

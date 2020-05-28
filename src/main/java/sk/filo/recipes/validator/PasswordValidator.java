@@ -29,7 +29,7 @@ public class PasswordValidator implements Validator {
     public void validate(Object obj, Errors e) {
         if (obj instanceof UserSO) {
             UserSO user = (UserSO) obj;
-            LOGGER.debug("validujem objekt user {}", user);
+            LOGGER.debug("Validating passwords in UserSO {}", user);
             if (user.getId() == null) {
                 ValidationUtils.rejectIfEmptyOrWhitespace(e, "password", "required");
                 ValidationUtils.rejectIfEmptyOrWhitespace(e, "passwordConfirm", "required");
@@ -41,7 +41,7 @@ public class PasswordValidator implements Validator {
             passwordStrength(user.getPassword(), e);
         } else if (obj instanceof UserBasicSO) {
             UserBasicSO user = (UserBasicSO) obj;
-            LOGGER.debug("validujem objekt user {}", user);
+            LOGGER.debug("Validating passwords in UserBasicSO {}", user);
             passwordLength(user.getPassword(), e, false);
             passwordMatch(user.getPassword(), user.getPasswordConfirm(), e);
             passwordStrength(user.getPassword(), e);
