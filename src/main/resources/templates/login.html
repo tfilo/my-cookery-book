@@ -24,6 +24,8 @@
                 <input class="w3-input w3-border" type="text" id="username" name="username" autofocus="autofocus" /> <br />
                 <label for="password" th:text="#{login.password}">Password</label>:
                 <input class="w3-input w3-border" type="password" id="password" name="password" /> <br />
+                <input class="w3-check" type="checkbox" id="remember-me" name="remember-me" checked>
+                <label th:text="#{login.remember.me}">Remember Me</label> <br /><br />
                 <button type="submit" class="w3-button w3-green">
                     <i class="fas fa-sign-in-alt"></i> <span th:text="#{login.login.button}">Log in</span>
                 </button>
