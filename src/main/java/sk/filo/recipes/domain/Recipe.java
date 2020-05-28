@@ -24,12 +24,6 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.server.ResponseStatusException;
-import sk.filo.recipes.repository.UserRepository;
 
 /**
  *
@@ -42,13 +36,6 @@ import sk.filo.recipes.repository.UserRepository;
 @Table(name = "cb_recipe")
 @SequenceGenerator(name = "recipe_generator", allocationSize = 1, sequenceName = "cb_recipe_seq")
 public class Recipe {
-
-    private UserRepository userRepository;
-    
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
     
     @Id
     @Column(name = "id", updatable = false, nullable = false)
@@ -160,14 +147,6 @@ public class Recipe {
         titleSearch = Normalizer.normalize(title, Normalizer.Form.NFD);
         titleSearch = titleSearch.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
         titleSearch = titleSearch.toLowerCase();
-
-        // set creator
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        User authenticatedUser = userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found!"));
-
-        created = LocalDateTime.now();
-        creator = authenticatedUser;
     }
  
     @PreUpdate
@@ -176,13 +155,5 @@ public class Recipe {
         titleSearch = Normalizer.normalize(title, Normalizer.Form.NFD);
         titleSearch = titleSearch.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
         titleSearch = titleSearch.toLowerCase();
-
-        // set modifier
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        User authenticatedUser = userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found!"));
-
-        modified = LocalDateTime.now();
-        modifier = authenticatedUser;
     }
 }

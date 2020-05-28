@@ -1,5 +1,6 @@
 package sk.filo.recipes.so;
 
+import java.text.Normalizer;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,7 +22,9 @@ public class RecipeSearchCriteriaSO {
     
     public String getTitle() {
         if (title!=null) {
-            return title.toLowerCase();
+            String titleSearch = Normalizer.normalize(title, Normalizer.Form.NFD);
+            titleSearch = titleSearch.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+            return titleSearch.toLowerCase();
         }
         return null;
     }

@@ -1,5 +1,6 @@
 package sk.filo.recipes.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import javax.transaction.Transactional;
@@ -20,6 +21,7 @@ import sk.filo.recipes.domain.Picture;
 import sk.filo.recipes.domain.Recipe;
 import sk.filo.recipes.domain.RoleName;
 import sk.filo.recipes.domain.Section;
+import sk.filo.recipes.domain.User;
 import sk.filo.recipes.mapper.IngredientMapper;
 import sk.filo.recipes.mapper.RecipeMapper;
 import sk.filo.recipes.mapper.SectionMapper;
@@ -108,16 +110,21 @@ public class RecipeService {
         LOGGER.debug("save recipeSO {}", recipeSO);        
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
+        User authenticatedUser = userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found!"));
         
         Recipe recipe;
         if (Objects.isNull(recipeSO.getId())) {
             recipe = recipeMapper.mapRecipeSOToRecipe(recipeSO);
+            recipe.setCreated(LocalDateTime.now());
+            recipe.setCreator(authenticatedUser);
         } else {
             recipe = recipeRepository.findById(recipeSO.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Recipe with id not found!"));
             if (!recipe.getCreator().getUsername().equals(username) && !auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(RoleName.ROLE_ADMIN.name()))) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Users can edit only own recipes!");
             }
             recipeMapper.mapRecipeSOToRecipe(recipeSO, recipe);
+            recipe.setModified(LocalDateTime.now());
+            recipe.setModifier(authenticatedUser);
         }
         
         mapAssociatedRecipes(recipeSO.getAssociatedRecipes(), recipe.getAssociatedRecipes());

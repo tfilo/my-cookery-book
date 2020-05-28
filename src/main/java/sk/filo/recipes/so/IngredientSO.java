@@ -26,7 +26,6 @@ public class IngredientSO {
     @Size(max=80)
     private String name;
     
-    @NotNull
     private Float value;
     
     @NotNull
