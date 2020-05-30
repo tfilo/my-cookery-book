@@ -47,7 +47,7 @@ public class UnitCategoryController {
     }
     
     @RequestMapping(value="/get/{id}")
-    public String getUnitCategoryById(@PathVariable Long id, final Model model) {
+    public String getUnitCategoryById(final @PathVariable Long id, final Model model) {
         LOGGER.debug("Get unitCategory by id {}", id);
         UnitCategoryBasicSO unitCategory = unitCategoryService.get(id);
         model.addAttribute(MODEL_UNIT_CATEGORY_SO, unitCategory);
@@ -55,7 +55,7 @@ public class UnitCategoryController {
     }
     
     @RequestMapping(value="/save")
-    public String saveUnitCategory(final Model model, @Valid UnitCategoryBasicSO unitCategoryBasicSO, final BindingResult bindingResult) {
+    public String saveUnitCategory(final Model model, final @Valid UnitCategoryBasicSO unitCategoryBasicSO, final BindingResult bindingResult) {
         LOGGER.debug("Save unitCategory action {}", unitCategoryBasicSO);
         if (bindingResult.hasErrors()) {
             return "fragments/unitCategory::unitCategoryForm";
@@ -66,7 +66,7 @@ public class UnitCategoryController {
     }
     
     @RequestMapping(value="/delete/{unitCategoryId}")
-    public String deleteUnitCategory(final Model model, final @PathVariable Long unitCategoryId, final BindingResult bindingResult) {
+    public String deleteUnitCategory(final Model model, final @PathVariable Long unitCategoryId) {
         LOGGER.debug("Delete unitCategory action {}", unitCategoryId);
         unitCategoryService.delete(unitCategoryId);
         setAllCategories(model);

@@ -55,7 +55,7 @@ public class UserController {
     }
     
     @RequestMapping(value="/get/{id}")
-    public String getUserById(@PathVariable Long id, final Model model) {
+    public String getUserById(final @PathVariable Long id, final Model model) {
         LOGGER.debug("Get user by id {}", id);
         UserSO user = userService.get(id);
         model.addAttribute(MODEL_USER_SO, user);
@@ -63,7 +63,7 @@ public class UserController {
     }
     
     @RequestMapping(value="/save")
-    public String saveUser(final Model model, @Valid UserSO userSO, final BindingResult bindingResult) {
+    public String saveUser(final Model model, final @Valid UserSO userSO, final BindingResult bindingResult) {
         LOGGER.debug("Save user action {}", userSO);
         validator.validate(userSO, bindingResult);
         if (bindingResult.hasErrors()) {
@@ -76,7 +76,7 @@ public class UserController {
     }
     
     @RequestMapping(value="/delete/{userId}")
-    public String deleteUser(final Model model, final @PathVariable Long userId, final BindingResult bindingResult) {
+    public String deleteUser(final Model model, final @PathVariable Long userId) {
         LOGGER.debug("Delete user action {}", userId);
         userService.delete(userId);
         setAllUsers(model);

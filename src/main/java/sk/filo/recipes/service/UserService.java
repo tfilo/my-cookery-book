@@ -107,7 +107,7 @@ public class UserService {
         try {
             userRepository.deleteById(id);
         } catch (Exception e) {
-            throw new RuntimeException("User can't be removed. Make sure it has no recipes on itself");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
         }
     }
     

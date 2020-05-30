@@ -98,7 +98,7 @@ public class RecipeController {
     }
     
     @RequestMapping(value="/edit/{recipeId}")
-    public String editRecipe(final Model model, @PathVariable Long recipeId, final HttpServletRequest req) {
+    public String editRecipe(final Model model, final @PathVariable Long recipeId, final HttpServletRequest req) {
         LOGGER.debug("Edit recipe by id {}", recipeId);
         RecipeSO recipeSO = recipeService.get(recipeId);
         LOGGER.debug("Loaded recipe {}", recipeSO);
@@ -116,7 +116,7 @@ public class RecipeController {
     }
 
     @RequestMapping(value = "/sourceRemove/{rowId}")
-    public String removeSource(final RecipeSO recipeSO, @PathVariable Integer rowId , HttpServletRequest req) {
+    public String removeSource(final RecipeSO recipeSO, final @PathVariable Integer rowId , HttpServletRequest req) {
         LOGGER.debug("removeRow source {}, {}", recipeSO, rowId);
         if (recipeSO != null) {
             recipeSO.getSources().remove(rowId.intValue());
@@ -125,7 +125,7 @@ public class RecipeController {
     }
     
     @RequestMapping(value = "/associatedRecipe/add/{recipeId}")
-    public String addAssociatedRecipe(final RecipeSO recipeSO, @PathVariable Long recipeId) {
+    public String addAssociatedRecipe(final RecipeSO recipeSO, final @PathVariable Long recipeId) {
         LOGGER.debug("addAssociatedRecipe {}, {}", recipeSO, recipeId);
         if (recipeId!=null && recipeSO!=null) {
             RecipeSimpleSO so = recipeService.getBasic(recipeId);
@@ -137,7 +137,7 @@ public class RecipeController {
     }
 
     @RequestMapping(value = "/associatedRecipe/remove/{rowId}")
-    public String removeAssociatedRecipe(final RecipeSO recipeSO, @PathVariable Integer rowId) {
+    public String removeAssociatedRecipe(final RecipeSO recipeSO, final @PathVariable Integer rowId) {
         LOGGER.debug("removeAssociatedRecipe {}, {}", recipeSO, rowId);
         if (recipeSO != null) {
             recipeSO.getAssociatedRecipes().remove(rowId.intValue());
@@ -157,7 +157,7 @@ public class RecipeController {
     }
 
     @RequestMapping(value = "/sectionRemove/{rowId}")
-    public String removeSection(final RecipeSO recipeSO, @PathVariable Integer rowId) {
+    public String removeSection(final RecipeSO recipeSO, final @PathVariable Integer rowId) {
         LOGGER.debug("removeRow section {}, {}", recipeSO, rowId);
         if (recipeSO != null) {
             if (recipeSO.getSections().size() > 1) {
@@ -174,7 +174,7 @@ public class RecipeController {
     }
 
     @RequestMapping(value = "/ingredientAdd/{sectionRowId}")
-    public String addIngredient(final RecipeSO recipeSO, @PathVariable Integer sectionRowId) {
+    public String addIngredient(final RecipeSO recipeSO, final @PathVariable Integer sectionRowId) {
         LOGGER.debug("addRow ingredient {}, {}", recipeSO, sectionRowId);
         if (recipeSO!=null) {
             IngredientSO ingredientSO = new IngredientSO();
@@ -186,7 +186,7 @@ public class RecipeController {
     }
 
     @RequestMapping(value = "/ingredientRemove/{sectionRowId}/{rowId}")
-    public String removeIngredient(final RecipeSO recipeSO, @PathVariable Integer sectionRowId, @PathVariable Integer rowId , HttpServletRequest req) {
+    public String removeIngredient(final RecipeSO recipeSO, final @PathVariable Integer sectionRowId, final @PathVariable Integer rowId , final HttpServletRequest req) {
         LOGGER.debug("removeRow ingredient {}, {}, {}", recipeSO, sectionRowId, rowId);
         if (recipeSO != null) {
             recipeSO.getSections().get(sectionRowId).getIngredients().remove(rowId.intValue());
@@ -201,7 +201,7 @@ public class RecipeController {
     }
     
     @RequestMapping(value="/delete/{recipeId}")
-    public String deleteRecipe(final Model model, @PathVariable Long recipeId) {
+    public String deleteRecipe(final Model model, final @PathVariable Long recipeId) {
         LOGGER.debug("Delete recipe action {}", recipeId);
         recipeService.delete(recipeId);
         preview.setAllCategoriesWithRecipes(model);

@@ -37,7 +37,7 @@ public class UnitController {
     @Autowired
     UnitCategoryService unitCategoryService;
     
-    private void setAvailableUnitCategories(Model model) {
+    private void setAvailableUnitCategories(final Model model) {
         model.addAttribute(MODEL_AVAILABLE_UNIT_CATEGORIES, unitCategoryService.getAllBasic());
     }
     
@@ -47,7 +47,7 @@ public class UnitController {
     }
     
     @RequestMapping(value="/add/{category_id}")
-    public String addUnit(@PathVariable Long category_id, final Model model) {
+    public String addUnit(final @PathVariable Long category_id, final Model model) {
         LOGGER.debug("Create unit action");
         UnitSO unitSO = new UnitSO();
         unitSO.setUnitCategoryId(category_id);
@@ -57,7 +57,7 @@ public class UnitController {
     }
     
     @RequestMapping(value="/get/{id}")
-    public String getUnitById(@PathVariable Long id, final Model model) {
+    public String getUnitById(final @PathVariable Long id, final Model model) {
         LOGGER.debug("Get unit by id {}", id);
         UnitSO unit = unitService.get(id);
         model.addAttribute(MODEL_UNIT_SO, unit);
@@ -77,7 +77,7 @@ public class UnitController {
     }
 
     @RequestMapping(value="/delete/{unitId}")
-    public String deleteUnit(final Model model, final @PathVariable Long unitId, final BindingResult bindingResult) {
+    public String deleteUnit(final Model model, final @PathVariable Long unitId) {
         LOGGER.debug("Delete unit action {}", unitId);
         unitService.delete(unitId);
         setAllCategories(model);

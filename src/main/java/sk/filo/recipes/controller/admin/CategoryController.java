@@ -48,7 +48,7 @@ public class CategoryController {
     }
     
     @RequestMapping(value="/get/{id}")
-    public String getCategoryById(@PathVariable Long id, final Model model) {
+    public String getCategoryById(final @PathVariable Long id, final Model model) {
         LOGGER.debug("Get category by id {}", id);
         CategorySO category = categoryService.get(id);
         model.addAttribute(MODEL_CATEGORY_SO, category);
@@ -56,7 +56,7 @@ public class CategoryController {
     }
     
     @RequestMapping(value="/save")
-    public String saveCategory(final Model model, @Valid CategorySO category, final BindingResult bindingResult) {
+    public String saveCategory(final Model model, final @Valid CategorySO category, final BindingResult bindingResult) {
         LOGGER.debug("Save category action {}", category);
         if (bindingResult.hasErrors()) {
             return "fragments/category::categoryForm";
@@ -67,7 +67,7 @@ public class CategoryController {
     }
     
     @RequestMapping(value="/delete/{categoryId}")
-    public String deleteCategory(final Model model, final @PathVariable Long categoryId, final BindingResult bindingResult) {
+    public String deleteCategory(final Model model, final @PathVariable Long categoryId) {
         LOGGER.debug("Delete category action {}", categoryId);
         categoryService.delete(categoryId);
         setAllCategories(model);
