@@ -25,7 +25,7 @@
             <div class="padding-8" th:fragment="sections" th:object="${recipeSO}">
                 <div>
                     <label><span th:text="#{recipe.sections}">Sections</span> <span class="w3-text-red">*</span></label>
-                    <a th:href="|javascript:submitForm('recipeForm', 'sections', '@{'/recipe/sectionAdd'}');|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
+                    <a th:href="|javascript:submitForm('recipeForm', 'sections', '@{'/recipe/sectionAdd'}', false);|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
                 </div>
                 <div class="w3-border">
                     <div th:each="section,rowStat : *{sections}" class="w3-padding w3-display-container" th:classappend="${rowStat.even} ? 'w3-light-grey'">
@@ -39,7 +39,7 @@
                         <div class="padding-8">
                             <div>
                                 <label th:text="#{recipe.ingredients}">Ingredients</label>
-                                <a th:href="|javascript:submitForm('recipeForm', 'sections', '@{'/recipe/ingredientAdd/__${rowStat.index}__'}');|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
+                                <a th:href="|javascript:submitForm('recipeForm', 'sections', '@{'/recipe/ingredientAdd/__${rowStat.index}__'}', false);|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
                             </div>
                             <div class="w3-border" th:if="*{#lists.size(sections[__${rowStat.index}__].ingredients)} > 0">
                                 <div th:each="ingredient,rowStat2 : *{sections[__${rowStat.index}__].ingredients}" class="w3-display-container" th:classappend="${rowStat2.even} ? 'w3-light-grey'">
@@ -73,7 +73,7 @@
                                             <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].unitId')}" th:errors="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].unitId}">Incorrect unit</label>
                                         </div>
                                     </div>
-                                    <a th:href="|javascript:submitForm('recipeForm', 'sections', '@{'/recipe/ingredientRemove/__${rowStat.index}__/__${rowStat2.index}__'}');|" style="display: inline;" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
+                                    <a th:href="|javascript:submitForm('recipeForm', 'sections', '@{'/recipe/ingredientRemove/__${rowStat.index}__/__${rowStat2.index}__'}', false);|" style="display: inline;" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
                                 </div>
                             </div> 
                         </div>
@@ -94,7 +94,7 @@
                             <label class="w3-text-red" th:if="${#fields.hasErrors('sections[__${rowStat.index}__].method')}" th:errors="*{sections[__${rowStat.index}__].method}">Incorrect method</label>
                         </div>
 
-                        <a th:if="${!rowStat.first}"  th:href="|javascript:submitForm('recipeForm', 'sections', '@{'/recipe/sectionRemove/__${rowStat.index}__'}');|" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
+                        <a th:if="${!rowStat.first}"  th:href="|javascript:submitForm('recipeForm', 'sections', '@{'/recipe/sectionRemove/__${rowStat.index}__'}', false);|" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
 
                     </div>
                 </div>
@@ -104,13 +104,13 @@
             <div id="associatedRecipes">
                 <div class="padding-8" th:fragment="associatedRecipes">
                     <label th:text="#{recipe.associated.recipes}">Associated Recipes</label>
-                    <input class="w3-input w3-border w3-padding" type="text" th:placeholder="#{recipe.associated.placeholder}" id="filteringSelect" th:onkeyup="|javascript:var fn = debounce(function() { load('filteredRecipes', '@{'/recipe/filter'}', { 'title': $('#filteringSelect').val() }); }, 500); fn();|" onkeypress="return event.key != 'Enter';">
+                    <input class="w3-input w3-border w3-padding" type="text" th:placeholder="#{recipe.associated.placeholder}" id="filteringSelect" th:onkeyup="|javascript:var fn = debounce(function() { load('filteredRecipes', '@{'/recipe/filter'}', { 'title': $('#filteringSelect').val() }, true); }, 500); fn();|" onkeypress="return event.key != 'Enter';">
                     <div th:object="${recipeSO}">
                         <div id="filteredRecipes">
                             <table class="w3-table-all" th:if="${filteredRecipes}" th:fragment="filteredRecipes">
                                 <tr th:each="recipe : ${filteredRecipes}">
                                     <td>
-                                        <a th:href="|javascript:submitForm('recipeForm', 'associatedRecipes', '@{'/recipe/associatedRecipe/add/__${recipe.id}__'}');|" class="w3-text-green w3-button"><i class="fas fa-plus-circle"></i></a> <span th:text="${recipe.title}"></span>
+                                        <a th:href="|javascript:submitForm('recipeForm', 'associatedRecipes', '@{'/recipe/associatedRecipe/add/__${recipe.id}__'}', false);|" class="w3-text-green w3-button"><i class="fas fa-plus-circle"></i></a> <span th:text="${recipe.title}"></span>
                                     </td>
                                 </tr>
                             </table>
@@ -120,7 +120,7 @@
                                 <td>
                                     <input type="hidden" th:field="*{associatedRecipes[__${rowStat.index}__].title}"></input>
                                     <input type="hidden" th:field="*{associatedRecipes[__${rowStat.index}__].id}"></input>
-                                    <a th:href="|javascript:submitForm('recipeForm', 'associatedRecipes', '@{'/recipe/associatedRecipe/remove/__${rowStat.index}__'}');|" class="w3-button w3-text-red"><i class="fas fa-minus-circle"></i></a> <span th:text="*{associatedRecipes[__${rowStat.index}__].title}"></span>
+                                    <a th:href="|javascript:submitForm('recipeForm', 'associatedRecipes', '@{'/recipe/associatedRecipe/remove/__${rowStat.index}__'}', false);|" class="w3-button w3-text-red"><i class="fas fa-minus-circle"></i></a> <span th:text="*{associatedRecipes[__${rowStat.index}__].title}"></span>
                                 </td>
                             </tr>
                         </table>
@@ -147,7 +147,7 @@
                         <input type="hidden" th:field="*{pictures[__${rowStat.index}__].id}"></input>
                         <img th:src="@{/recipe/picture/thumbnail/__${picture.id}__}" class="uploaded-picture" th:alt="*{pictures[__${rowStat.index}__].title}" />
                         <input class="w3-input w3-border" th:field="*{pictures[__${rowStat.index}__].title}" placeholder="Insert image title"></input>
-                        <a th:href="|javascript:submitForm('recipeForm', 'pictures', '@{'/recipe/picture/remove/__${rowStat.index}__'}');|" style="display: inline;" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
+                        <a th:href="|javascript:submitForm('recipeForm', 'pictures', '@{'/recipe/picture/remove/__${rowStat.index}__'}', false);|" style="display: inline;" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
                     </div>
                 </div>
             </div>
@@ -155,7 +155,7 @@
             <div class="padding-8">
                 <div>
                     <label th:text="#{recipe.sources}">Sources</label>
-                    <a th:href="|javascript:submitForm('recipeForm', 'content', '@{'/recipe/sourceAdd'}');|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
+                    <a th:href="|javascript:submitForm('recipeForm', 'content', '@{'/recipe/sourceAdd'}', false);|" class="w3-button w3-text-green"><i class="fas fa-plus-circle"></i></a>
                 </div>
                 <div class="w3-border" th:if="*{#lists.size(sources)} > 0">
                     <div th:each="source,rowStat : *{sources}" class="w3-padding w3-display-container" th:classappend="${rowStat.even} ? 'w3-light-grey'">
@@ -164,7 +164,7 @@
                             <input class="w3-input w3-border" type="text" th:errorclass="w3-pale-red" th:field="*{sources[__${rowStat.index}__].url}" maxlength="1000" required>
                             <label class="w3-text-red" th:if="${#fields.hasErrors('sources[__${rowStat.index}__].url')}" th:errors="*{sources[__${rowStat.index}__].url}">Incorrect url</label>
                         </div>
-                        <a th:href="|javascript:submitForm('recipeForm', 'content', '@{'/recipe/sourceRemove/__${rowStat.index}__'}');|" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
+                        <a th:href="|javascript:submitForm('recipeForm', 'content', '@{'/recipe/sourceRemove/__${rowStat.index}__'}', false);|" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
                     </div>
                 </div> 
             </div>
@@ -174,9 +174,9 @@
                 <div th:if="*{modifier}"><span th:text="#{recipe.modified.by}">Modified by</span> <i th:text="*{modifier}">username</i> <span th:text="#{recipe.modified.at}">at</span> <i th:text="*{#temporals.format(modified, 'dd.MM.yyyy HH:mm')}">date</i>.</div>
             </div>
             <div class="padding-8">
-                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/save'}');|"><i class="fas fa-save"></i>&nbsp;<span th:text="#{common.save}">Save</span></button>
-                <button type="button" class="w3-button w3-red" th:if="*{id}" th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span th:text="#{common.delete}">Delete</span></button>
-                <button type="button" class="w3-button w3-red" th:onclick="|javascript:load('content', '@{'/view/categoriesPreview'}');|"><i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span></button>
+                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/save'}', true);|"><i class="fas fa-save"></i>&nbsp;<span th:text="#{common.save}">Save</span></button>
+                <button type="button" class="w3-button w3-red" th:if="*{id}" th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/delete'}', true);|"><i class="fas fa-trash-alt"></i>&nbsp;<span th:text="#{common.delete}">Delete</span></button>
+                <button type="button" class="w3-button w3-red" th:onclick="|javascript:load('content', '@{'/view/categoriesPreview'}', null, true);|"><i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span></button>
             </div>
             <script>
                 $('#searchDiv').hide();

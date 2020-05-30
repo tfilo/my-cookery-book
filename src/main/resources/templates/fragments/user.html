@@ -47,9 +47,9 @@
                 <label th:text="#{user.enabled}">Enable user</label>
             </div>
             <div class="padding-8">
-                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('userForm', 'content', '@{'/admin/user/save'}');|"><i class="fas fa-save"></i>&nbsp;<span th:text="#{common.save}">Save</span></button>
-                <button type="button" class="w3-button w3-red" th:if="*{id}" th:onclick="|submitForm('userForm', 'content', '@{'/admin/user/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span th:text="#{common.delete}">Delete</span></button>
-                <button type="button" class="w3-button w3-red" th:onclick="|javascript:load('content', '@{'/admin/user/all'}');|"><i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span></button>
+                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('userForm', 'content', '@{'/admin/user/save'}', true);|"><i class="fas fa-save"></i>&nbsp;<span th:text="#{common.save}">Save</span></button>
+                <button type="button" class="w3-button w3-red" th:if="*{id}" th:onclick="|submitForm('userForm', 'content', '@{'/admin/user/delete'}', true);|"><i class="fas fa-trash-alt"></i>&nbsp;<span th:text="#{common.delete}">Delete</span></button>
+                <button type="button" class="w3-button w3-red" th:onclick="|javascript:load('content', '@{'/admin/user/all'}', null, true);|"><i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span></button>
             </div>
             <script>
                 $('#searchDiv').hide();
@@ -78,8 +78,8 @@
                 <label class="w3-text-red" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}">Incorrect password</label>
             </div>
             <div class="padding-8">
-                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('profilForm', 'content', '@{'/user/save'}');|"><i class="fas fa-save"></i>&nbsp;<span th:text="#{common.save}">Save</span></button>
-                <button type="button" class="w3-button w3-red" th:onclick="|javascript:load('content', '@{'/view/categoriesPreview'}');|"><i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span></button>
+                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('profilForm', 'content', '@{'/user/save'}', true);|"><i class="fas fa-save"></i>&nbsp;<span th:text="#{common.save}">Save</span></button>
+                <button type="button" class="w3-button w3-red" th:onclick="|javascript:load('content', '@{'/view/categoriesPreview'}', null, true);|"><i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span></button>
             </div>
             <script>
                 $('#searchDiv').hide();
@@ -87,7 +87,7 @@
         </form>
         <div th:fragment="usersList">
             <div>
-                <div class="w3-right"><a th:href="|javascript:load('content', '@{'/admin/user/add'}');|" class="w3-button w3-xlarge w3-text-green"><i class="fas fa-plus-circle"></i></a></div>
+                <div class="w3-right"><a th:href="|javascript:load('content', '@{'/admin/user/add'}', null, true);|" class="w3-button w3-xlarge w3-text-green"><i class="fas fa-plus-circle"></i></a></div>
                 <div><h2 class="w3-center" th:text="#{users.title}">Users</h2></div>
             </div>
             <ul class="w3-ul w3-border" th:if="${users}">
@@ -97,7 +97,7 @@
                     <label class="w3-col l5 m5 s12"><b th:text="#{user.roles}">Roles</b></label>
                 </li>
                 <li class="w3-row" th:each="user,rowStat : ${users}" th:classappend="${!user.enabled} ? 'w3-text-gray'">
-                    <a class="w3-col l2 m2 s12" th:href="|javascript:load('content', '@{'/admin/user/get/__${user.id}__'}');|" th:text="${user.username}"></a>
+                    <a class="w3-col l2 m2 s12" th:href="|javascript:load('content', '@{'/admin/user/get/__${user.id}__'}', null, true);|" th:text="${user.username}"></a>
                     <span class="w3-col l5 m5 s12" th:text="|${user.firstName ?: ''} ${user.lastName ?: ''}&nbsp;|"></span>
                     <span class="w3-col l5 m5 s12">
                         <span th:each="role : ${user.roles}" th:text="${role}" class="w3-tag w3-margin-right" th:classappend="${user.enabled} ? 'w3-green' : 'w3-gray'"></span>

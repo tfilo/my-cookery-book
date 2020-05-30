@@ -12,9 +12,9 @@
                 <label class="w3-text-red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect  name</label>
             </div>
             <div class="padding-8">
-                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('categoryForm', 'content', '@{'/admin/category/save'}');|"><i class="fas fa-save"></i>&nbsp;<span th:text="#{common.save}">Save</span></button>
-                <button type="button" class="w3-button w3-red" th:if="*{id}" th:onclick="|submitForm('categoryForm', 'content', '@{'/admin/category/delete'}');|"><i class="fas fa-trash-alt"></i>&nbsp;<span th:text="#{common.delete}">Delete</span></button>
-                <button type="button" class="w3-button w3-red" th:onclick="|javascript:load('content', '@{'/admin/category/all'}');|"><i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span></button>
+                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('categoryForm', 'content', '@{'/admin/category/save'}', true);|"><i class="fas fa-save"></i>&nbsp;<span th:text="#{common.save}">Save</span></button>
+                <button type="button" class="w3-button w3-red" th:if="*{id}" th:onclick="|submitForm('categoryForm', 'content', '@{'/admin/category/delete'}', true);|"><i class="fas fa-trash-alt"></i>&nbsp;<span th:text="#{common.delete}">Delete</span></button>
+                <button type="button" class="w3-button w3-red" th:onclick="|javascript:load('content', '@{'/admin/category/all'}', null, true);|"><i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span></button>
             </div>
             <script>
                 $('#searchDiv').hide();
@@ -22,7 +22,7 @@
         </form>
         <div th:fragment="categoriesList">
             <div>
-                <div class="w3-right"><a th:href="|javascript:load('content', '@{'/admin/category/add'}');|" class="w3-button w3-xlarge w3-text-green"><i class="fas fa-plus-circle"></i></a></div>
+                <div class="w3-right"><a th:href="|javascript:load('content', '@{'/admin/category/add'}', null, true);|" class="w3-button w3-xlarge w3-text-green"><i class="fas fa-plus-circle"></i></a></div>
                 <div><h2 class="w3-center" th:text="#{categories.title}">Categories</h2></div>
             </div>
             <ul class="w3-ul w3-border" th:if="${categories}">
@@ -30,7 +30,7 @@
                     <label class="w3-col l12 m12 s12"><b th:text="#{category.name}">Category Name</b></label>
                 </li>
                 <li class="w3-row" th:each="category,rowStat : ${categories}">
-                    <a class="w3-col l12 m12 s12" th:href="|javascript:load('content', '@{'/admin/category/get/__${category.id}__'}');|" th:text="${category.name}"></a>
+                    <a class="w3-col l12 m12 s12" th:href="|javascript:load('content', '@{'/admin/category/get/__${category.id}__'}', null, true);|" th:text="${category.name}"></a>
                 </li>
             </ul>
             <script>

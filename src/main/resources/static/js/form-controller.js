@@ -21,7 +21,7 @@ function hideLoader() {
     }   
 }
 
-function submitForm(formId, target, url) {
+function submitForm(formId, target, url, scroll) {
     showLoader();
     $.ajax({// create an AJAX call...
         data: $('#' + formId).serialize(), // get the form data
@@ -29,25 +29,9 @@ function submitForm(formId, target, url) {
         url: url, // the file to call
         success: function (response) { // on success..
             $('#' + target).html(response); // update the DIV
-            $(window).scrollTop(($('#' + target).offset().top - $("#header").outerHeight()) - $("#searchDiv").outerHeight());
-            hideLoader();
-        },
-        error: function (err) {
-            hideLoader();
-            processError(err);
-        }
-    });
-    return false; // cancel original event to prevent form submitting
-}
-
-function asyncLoadFragment(target, url) {
-    showLoader();
-    $.ajax({
-        type: "POST",
-        url: url,
-        success: function (response) { // on success..
-            $('#' + target).html(response); // update the DIV
-            $(window).scrollTop(($('#' + target).offset().top - $("#header").outerHeight()) - $("#searchDiv").outerHeight());
+            if (scroll===true) {
+                $(window).scrollTop(($('#' + target).offset().top - $("#header").outerHeight()) - $("#searchDiv").outerHeight());
+            }
             hideLoader();
         },
         error: function (err) {
@@ -72,7 +56,6 @@ function uploadPicture(formId, fileInputId, target, url) {
         processData: false,
         success: function (response) { // on success..
             $('#' + target).html(response); // update the DIV
-            $(window).scrollTop(($('#' + target).offset().top - $("#header").outerHeight()) - $("#searchDiv").outerHeight());
             hideLoader();
         },
         error: function (err) {
@@ -83,7 +66,7 @@ function uploadPicture(formId, fileInputId, target, url) {
     return false; // cancel original event to prevent form submitting
 }
 
-function load(target, url, data) {
+function load(target, url, data, scroll) {
     showLoader();
     $.ajax({
         type: "GET",
@@ -91,7 +74,9 @@ function load(target, url, data) {
         url: url,
         success: function (response) { // on success..
             $('#' + target).html(response); // update the DIV
-            $(window).scrollTop(($('#' + target).offset().top - $("#header").outerHeight()) - $("#searchDiv").outerHeight());
+            if (scroll===true) {
+                $(window).scrollTop(($('#' + target).offset().top - $("#header").outerHeight()) - $("#searchDiv").outerHeight());
+            }
             hideLoader();
         },
         error: function (err) {
