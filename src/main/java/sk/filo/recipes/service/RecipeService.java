@@ -171,7 +171,7 @@ public class RecipeService {
         return recipeMapper.mapRecipeToRecipeSimpleSO(recipe);
     }
 
-    public List<RecipeSimpleSO> findTop4RecipeSimpleByTitle(String title) {
+    public List<RecipeSimpleSO> findTop4RecipeSimpleByTitle(String title, Long id) {
         Sort sort = Sort.by(Sort.Order.asc("title"));
         
         if (title!=null) {
@@ -180,7 +180,12 @@ public class RecipeService {
             title = titleSearch.toLowerCase();
         }
         
-        List<Recipe> recipes = recipeRepository.findTop4ByTitleSearchIsContaining(title, sort);
+        List<Recipe> recipes;
+        if (id != null) {
+            recipes = recipeRepository.findTop4ByTitleSearchIsContainingAndIdNot(title, id, sort);
+        } else {
+            recipes = recipeRepository.findTop4ByTitleSearchIsContaining(title, sort);
+        }
         return recipeMapper.mapRecipeListToRecipeSimpleSOList(recipes);
     }
     

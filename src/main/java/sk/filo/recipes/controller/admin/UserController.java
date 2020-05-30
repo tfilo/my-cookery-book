@@ -5,6 +5,8 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +37,9 @@ public class UserController {
     
     @Autowired
     UserService userService;
+    
+    @Autowired
+    MessageSource messageSource;
     
     private void setAllUsers(final Model model) {
         List<UserSO> all = userService.getAll();
@@ -83,7 +88,9 @@ public class UserController {
         try {
             userService.delete(userId);
         } catch (org.springframework.dao.DataIntegrityViolationException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Can't delete user because there are recipes created by him!", e);
+            MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
+            String message = accessor.getMessage("user.delete.constraint");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, message);
         }
         setAllUsers(model);
         return "fragments/user::usersList";

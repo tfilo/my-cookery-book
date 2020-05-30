@@ -8,6 +8,8 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.thymeleaf.util.StringUtils;
 import sk.filo.recipes.component.Preview;
 import sk.filo.recipes.service.CategoryService;
@@ -72,6 +75,9 @@ public class RecipeController {
     
     @Autowired
     Preview preview;
+    
+    @Autowired
+    MessageSource messageSource;
     
     @ModelAttribute(MODEL_CATEGORIES)
     public List<CategorySO> allCategories() {
@@ -203,7 +209,13 @@ public class RecipeController {
     @RequestMapping(value="/delete/{recipeId}")
     public String deleteRecipe(final Model model, final @PathVariable Long recipeId) {
         LOGGER.debug("Delete recipe action {}", recipeId);
-        recipeService.delete(recipeId);
+        try {
+            recipeService.delete(recipeId);
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
+            String message = accessor.getMessage("recipe.delete.constraint");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, message);
+        }
         preview.setAllCategoriesWithRecipes(model);
         return "fragments/view::recipesList";
     }
@@ -222,13 +234,13 @@ public class RecipeController {
     }
     
     @RequestMapping(value="/filter")
-    public String filterRecipes(final Model model, final RecipeSO recipeSO, final String title) {
-        LOGGER.debug("filterRecipes {}, {}", title, recipeSO);
+    public String filterRecipes(final Model model, final String title, Long id) {
+        LOGGER.debug("filterRecipes {}, {}", title);
         List<RecipeSimpleSO> filtered;
         if (StringUtils.isEmptyOrWhitespace(title)) {
             filtered = new ArrayList<>();
         } else {
-            filtered = recipeService.findTop4RecipeSimpleByTitle(title);   
+            filtered = recipeService.findTop4RecipeSimpleByTitle(title, id);   
         }
         model.addAttribute(MODEL_FILTERED_RECIPES, filtered);
         return "fragments/recipe::filteredRecipes";

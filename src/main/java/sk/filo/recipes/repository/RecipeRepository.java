@@ -21,6 +21,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     
     public Page<Recipe> findAllByCategoriesIdAndTitleSearchIsContaining(Long categoryId, String titleSearch, Pageable page);
     
+    public List<Recipe> findTop4ByTitleSearchIsContainingAndIdNot(String titleSearch, Long id, Sort sort);
+
     public List<Recipe> findTop4ByTitleSearchIsContaining(String titleSearch, Sort sort);
 
 }
