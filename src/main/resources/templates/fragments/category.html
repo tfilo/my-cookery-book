@@ -22,7 +22,7 @@
         </form>
         <div th:fragment="categoriesList">
             <div>
-                <div class="w3-right"><a th:href="|javascript:load('content', '@{'/admin/category/add'}', null, true);|" class="w3-button w3-xlarge w3-text-green"><i class="fas fa-plus-circle"></i></a></div>
+                <div class="w3-right"><a href="javascript:void(0);" th:onclick="|load('content', '@{'/admin/category/add'}', null, true);|" class="w3-button w3-xlarge w3-text-green"><i class="fas fa-plus-circle"></i></a></div>
                 <div><h2 class="w3-center" th:text="#{categories.title}">Categories</h2></div>
             </div>
             <ul class="w3-ul w3-border" th:if="${categories}">
@@ -30,7 +30,7 @@
                     <label class="w3-col l12 m12 s12"><b th:text="#{category.name}">Category Name</b></label>
                 </li>
                 <li class="w3-row" th:each="category,rowStat : ${categories}">
-                    <a class="w3-col l12 m12 s12" th:href="|javascript:load('content', '@{'/admin/category/get/__${category.id}__'}', null, true);|" th:text="${category.name}"></a>
+                    <a class="w3-col l12 m12 s12" href="javascript:void(0);" th:onclick="|load('content', '@{'/admin/category/get/__${category.id}__'}', null, true);|" th:text="${category.name}"></a>
                 </li>
             </ul>
             <script>

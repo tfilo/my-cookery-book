@@ -87,7 +87,7 @@
         </form>
         <div th:fragment="usersList">
             <div>
-                <div class="w3-right"><a th:href="|javascript:load('content', '@{'/admin/user/add'}', null, true);|" class="w3-button w3-xlarge w3-text-green"><i class="fas fa-plus-circle"></i></a></div>
+                <div class="w3-right"><a href="javascript:void(0);" th:onclick="|load('content', '@{'/admin/user/add'}', null, true);|" class="w3-button w3-xlarge w3-text-green"><i class="fas fa-plus-circle"></i></a></div>
                 <div><h2 class="w3-center" th:text="#{users.title}">Users</h2></div>
             </div>
             <ul class="w3-ul w3-border" th:if="${users}">
@@ -97,7 +97,7 @@
                     <label class="w3-col l5 m5 s12"><b th:text="#{user.roles}">Roles</b></label>
                 </li>
                 <li class="w3-row" th:each="user,rowStat : ${users}" th:classappend="${!user.enabled} ? 'w3-text-gray'">
-                    <a class="w3-col l2 m2 s12" th:href="|javascript:load('content', '@{'/admin/user/get/__${user.id}__'}', null, true);|" th:text="${user.username}"></a>
+                    <a class="w3-col l2 m2 s12" href="javascript:void(0);" th:onclick="|load('content', '@{'/admin/user/get/__${user.id}__'}', null, true);|" th:text="${user.username}"></a>
                     <span class="w3-col l5 m5 s12" th:text="|${user.firstName ?: ''} ${user.lastName ?: ''}&nbsp;|"></span>
                     <span class="w3-col l5 m5 s12">
                         <span th:each="role : ${user.roles}" th:text="${role}" class="w3-tag w3-margin-right" th:classappend="${user.enabled} ? 'w3-green' : 'w3-gray'"></span>
