@@ -104,13 +104,7 @@ public class UserService {
     }
     
     public void delete(Long id) {
-        try {
-            LOGGER.debug("PUSTAM DELETE NAD DB ###################################");
-            userRepository.deleteById(id);
-        } catch (Exception e) {
-            LOGGER.debug("CHYTIL SOM VYNIMKU A THROWUJEM RUNTIME ###################################");
-            throw new RuntimeException("User can't be removed. Make sure it has no recipes on itself");
-        }
+        userRepository.deleteById(id);
     }
     
     public List<UserSO> getAll() {
