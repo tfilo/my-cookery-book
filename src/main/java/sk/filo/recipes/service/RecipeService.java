@@ -143,7 +143,7 @@ public class RecipeService {
         
         Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Recipe not found!"));
         
-        if (!recipe.getCreator().getUsername().equals(username)) {
+        if (!recipe.getCreator().getUsername().equals(username) && !auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(RoleName.ROLE_ADMIN.name()))) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Users can delete only own recipes!");
         }
         try {
