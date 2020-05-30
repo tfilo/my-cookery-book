@@ -97,16 +97,9 @@ const debounce = (func, delay) => {
 };
 
 function processError(err) {
-    var message;
-    if (err && err.responseJSON && err.responseJSON.message) {
-        message = err.responseJSON.message;
-    } else {
-        message = "General error!";
-    }
-    $('body').scrollTop(($('#error').offset().top - $("#header").outerHeight()) - $("#searchDiv").outerHeight());
-    $('#errorMessage').html(message);
-    $('#error').show(1000);
+    $('#error').html(err.responseText);
     $(window).scrollTop(0);
+    $('#error').show(1000);
     
     setTimeout(function() {
         $('#error').hide(1000);

@@ -9,12 +9,7 @@
         
         <main class="content">
             <div class="spacer">&nbsp;</div>
-            <div class="w3-panel w3-red w3-display-container margin-none" style="display: none;" id="error">
-                <span onclick="this.parentElement.style.display='none'"
-                      class="w3-button w3-large w3-display-topright">&times;</span>
-                <h3 th:text="#{home.error}">Error!</h3>
-                <p id="errorMessage"></p>
-            </div>
+            <div style="display: none;" id="error">&nbsp;</div>
             <div class="w3-row w3-content w3-padding" id="searchDiv">
                 <div class="w3-col w3-button" style="width:50px;" th:onclick="|load('content', ($('#searchCategoryId').val() ? '@{'/view/find/'}' + $('#searchCategoryId').val() : '@{'/view/find'}') , { 'title': $('#search').val() }, true);|"><i class="fas fa-search"></i></div>
                 <div class="w3-rest">

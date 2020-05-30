@@ -43,7 +43,7 @@ public class HomeController {
 
     // Login form with error
     @RequestMapping("/login-error.html")
-    public String loginError(Model model) {
+    public String loginError(final Model model) {
         model.addAttribute("loginError", true);
         return "login";
     }

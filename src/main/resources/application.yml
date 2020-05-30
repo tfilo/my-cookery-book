@@ -1,6 +1,9 @@
 ## default connection pool
 server:
   port: ${CB_SERVER_PORT:8080}
+  error:
+    whitelabel:
+        enabled: false
 spring:
     ## PostgreSQL
     datasource:

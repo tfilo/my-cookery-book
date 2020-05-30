@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="sk">
+    <head th:replace="fragments/common :: htmlHeader">
+    </head>
+    <body>
+        <div class="w3-panel w3-red w3-display-container margin-none" th:fragment="error">
+            <span onclick="this.parentElement.style.display = 'none'"
+                  class="w3-button w3-large w3-display-topright">&times;</span>
+            <h3 th:text="#{home.error}">Error!</h3>
+            <p th:text="${message}"></p>
+        </div>
+    </body>
+</html>
