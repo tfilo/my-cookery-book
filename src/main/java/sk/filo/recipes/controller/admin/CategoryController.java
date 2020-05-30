@@ -66,10 +66,10 @@ public class CategoryController {
         return "fragments/category::categoriesList";
     }
     
-    @RequestMapping(value="/delete")
-    public String deleteCategory(final Model model, CategorySO category, final BindingResult bindingResult) {
-        LOGGER.debug("Delete category action {}", category);
-        categoryService.delete(category.getId());
+    @RequestMapping(value="/delete/{categoryId}")
+    public String deleteCategory(final Model model, final @PathVariable Long categoryId, final BindingResult bindingResult) {
+        LOGGER.debug("Delete category action {}", categoryId);
+        categoryService.delete(categoryId);
         setAllCategories(model);
         return "fragments/category::categoriesList";
     }

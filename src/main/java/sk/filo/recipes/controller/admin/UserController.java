@@ -75,10 +75,10 @@ public class UserController {
         return "fragments/user::usersList";
     }
     
-    @RequestMapping(value="/delete")
-    public String deleteUser(final Model model, UserSO userSO, final BindingResult bindingResult) {
-        LOGGER.debug("Delete user action {}", userSO);
-        userService.delete(userSO.getId());
+    @RequestMapping(value="/delete/{userId}")
+    public String deleteUser(final Model model, final @PathVariable Long userId, final BindingResult bindingResult) {
+        LOGGER.debug("Delete user action {}", userId);
+        userService.delete(userId);
         setAllUsers(model);
         return "fragments/user::usersList";
     }

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import sk.filo.recipes.service.UnitCategoryService;
 import sk.filo.recipes.so.UnitCategoryBasicSO;
-import sk.filo.recipes.so.UnitCategorySO;
 
 /**
  *
@@ -66,10 +65,10 @@ public class UnitCategoryController {
         return "fragments/unitCategory::unitCategoriesList";
     }
     
-    @RequestMapping(value="/delete")
-    public String deleteUnitCategory(final Model model, UnitCategorySO unitCategory, final BindingResult bindingResult) {
-        LOGGER.debug("Delete unitCategory action {}", unitCategory);
-        unitCategoryService.delete(unitCategory.getId());
+    @RequestMapping(value="/delete/{unitCategoryId}")
+    public String deleteUnitCategory(final Model model, final @PathVariable Long unitCategoryId, final BindingResult bindingResult) {
+        LOGGER.debug("Delete unitCategory action {}", unitCategoryId);
+        unitCategoryService.delete(unitCategoryId);
         setAllCategories(model);
         return "fragments/unitCategory::unitCategoriesList";
     }

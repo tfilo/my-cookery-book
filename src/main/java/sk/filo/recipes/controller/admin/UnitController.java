@@ -76,10 +76,10 @@ public class UnitController {
         return "fragments/unitCategory::unitCategoriesList";
     }
 
-    @RequestMapping(value="/delete")
-    public String deleteUnit(final Model model, UnitSO unit, final BindingResult bindingResult) {
-        LOGGER.debug("Delete unit action {}", unit);
-        unitService.delete(unit.getId());
+    @RequestMapping(value="/delete/{unitId}")
+    public String deleteUnit(final Model model, final @PathVariable Long unitId, final BindingResult bindingResult) {
+        LOGGER.debug("Delete unit action {}", unitId);
+        unitService.delete(unitId);
         setAllCategories(model);
         return "fragments/unitCategory::unitCategoriesList";
     }

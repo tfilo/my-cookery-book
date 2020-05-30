@@ -200,10 +200,10 @@ public class RecipeController {
         return "fragments/recipe::sections";
     }
     
-    @RequestMapping(value="/delete")
-    public String deleteRecipe(final Model model, final RecipeSO recipe) {
-        LOGGER.debug("Delete recipe action {}", recipe);
-        recipeService.delete(recipe.getId());
+    @RequestMapping(value="/delete/{recipeId}")
+    public String deleteRecipe(final Model model, @PathVariable Long recipeId) {
+        LOGGER.debug("Delete recipe action {}", recipeId);
+        recipeService.delete(recipeId);
         preview.setAllCategoriesWithRecipes(model);
         return "fragments/view::recipesList";
     }

@@ -104,7 +104,7 @@
             <div id="associatedRecipes">
                 <div class="padding-8" th:fragment="associatedRecipes">
                     <label th:text="#{recipe.associated.recipes}">Associated Recipes</label>
-                    <input class="w3-input w3-border w3-padding" type="text" th:placeholder="#{recipe.associated.placeholder}" id="filteringSelect" th:onkeyup="|javascript:var fn = debounce(function() { load('filteredRecipes', '@{'/recipe/filter'}', { 'title': $('#filteringSelect').val() }, false); }, 500); fn();|" onkeypress="return event.key != 'Enter';">
+                    <input class="w3-input w3-border w3-padding" type="text" th:placeholder="#{recipe.associated.placeholder}" id="filteringSelect" th:onkeyup="|var fn = debounce(function() { load('filteredRecipes', '@{'/recipe/filter'}', { 'title': $('#filteringSelect').val() }, false); }, 500); fn();|" onkeypress="return event.key != 'Enter';">
                     <div th:object="${recipeSO}">
                         <div id="filteredRecipes">
                             <table class="w3-table-all" th:if="${filteredRecipes}" th:fragment="filteredRecipes">
@@ -142,7 +142,7 @@
             <div id="pictures">
                 <div class="padding-8  w3-row" th:fragment="pictures" th:object="${recipeSO}">
                     <label th:text="#{recipe.pictures}">Pictures</label>
-                    <input type="file" class="w3-input w3-border" id="pictureInput" value="Upload picture" th:onchange="|javascript:uploadPicture('recipeForm', 'pictureInput', 'pictures', '@{'/recipe/picture/save'}');|" />
+                    <input type="file" class="w3-input w3-border" id="pictureInput" value="Upload picture" th:onchange="|uploadPicture('recipeForm', 'pictureInput', 'pictures', '@{'/recipe/picture/save'}');|" />
                     <div class="w3-col l3 m6 s12 w3-display-container" th:each="picture,rowStat : *{pictures}">
                         <input type="hidden" th:field="*{pictures[__${rowStat.index}__].id}"></input>
                         <img th:src="@{/recipe/picture/thumbnail/__${picture.id}__}" class="uploaded-picture" th:alt="*{pictures[__${rowStat.index}__].title}" />
@@ -175,8 +175,8 @@
             </div>
             <div class="padding-8">
                 <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/save'}', true);|"><i class="fas fa-save"></i>&nbsp;<span th:text="#{common.save}">Save</span></button>
-                <button type="button" class="w3-button w3-red" th:if="*{id}" th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/delete'}', true);|"><i class="fas fa-trash-alt"></i>&nbsp;<span th:text="#{common.delete}">Delete</span></button>
-                <button type="button" class="w3-button w3-red" th:onclick="|javascript:load('content', '@{'/view/categoriesPreview'}', null, true);|"><i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span></button>
+                <button type="button" class="w3-button w3-red" th:if="*{id}" th:onclick="|load('content', '@{'/recipe/delete/__*{id}__'}', null, true);|"><i class="fas fa-trash-alt"></i>&nbsp;<span th:text="#{common.delete}">Delete</span></button>
+                <button type="button" class="w3-button w3-red" th:onclick="|load('content', '@{'/view/categoriesPreview'}', null, true);|"><i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span></button>
             </div>
             <script>
                 $('#searchDiv').hide();

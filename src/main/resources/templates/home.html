@@ -16,10 +16,10 @@
                 <p id="errorMessage"></p>
             </div>
             <div class="w3-row w3-content w3-padding" id="searchDiv">
-                <div class="w3-col w3-button" style="width:50px;" th:onclick="|javascript:load('content', ($('#searchCategoryId').val() ? '@{'/view/find/'}' + $('#searchCategoryId').val() : '@{'/view/find'}') , { 'title': $('#search').val() }, true);|"><i class="fas fa-search"></i></div>
+                <div class="w3-col w3-button" style="width:50px;" th:onclick="|load('content', ($('#searchCategoryId').val() ? '@{'/view/find/'}' + $('#searchCategoryId').val() : '@{'/view/find'}') , { 'title': $('#search').val() }, true);|"><i class="fas fa-search"></i></div>
                 <div class="w3-rest">
                     <input type="hidden" id="searchCategoryId" />
-                    <input class="w3-input" type="text" id="search" th:placeholder="#{home.search.placeholder}" th:onkeypress="|javascript: if (event.key === 'Enter') load('content', ($('#searchCategoryId').val() ? '@{'/view/find/'}' + $('#searchCategoryId').val() : '@{'/view/find'}') , { 'title': $('#search').val() }, true); return event.key != 'Enter';|"/>
+                    <input class="w3-input" type="text" id="search" th:placeholder="#{home.search.placeholder}" th:onkeypress="|if (event.key === 'Enter') load('content', ($('#searchCategoryId').val() ? '@{'/view/find/'}' + $('#searchCategoryId').val() : '@{'/view/find'}') , { 'title': $('#search').val() }, true); return event.key != 'Enter';|"/>
                 </div>
             </div>
             <div class="w3-main w3-content w3-padding" id="content" th:insert="fragments/view :: recipesList">&nbsp;</div>
