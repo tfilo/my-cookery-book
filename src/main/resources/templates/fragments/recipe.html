@@ -104,7 +104,7 @@
             <div id="associatedRecipes">
                 <div class="padding-8" th:fragment="associatedRecipes">
                     <label th:text="#{recipe.associated.recipes}">Associated Recipes</label>
-                    <input class="w3-input w3-border w3-padding" type="text" th:placeholder="#{recipe.associated.placeholder}" id="filteringSelect" th:onkeyup="|javascript:var fn = debounce(function() { load('filteredRecipes', '@{'/recipe/filter'}', { 'title': $('#filteringSelect').val() }, true); }, 500); fn();|" onkeypress="return event.key != 'Enter';">
+                    <input class="w3-input w3-border w3-padding" type="text" th:placeholder="#{recipe.associated.placeholder}" id="filteringSelect" th:onkeyup="|javascript:var fn = debounce(function() { load('filteredRecipes', '@{'/recipe/filter'}', { 'title': $('#filteringSelect').val() }, false); }, 500); fn();|" onkeypress="return event.key != 'Enter';">
                     <div th:object="${recipeSO}">
                         <div id="filteredRecipes">
                             <table class="w3-table-all" th:if="${filteredRecipes}" th:fragment="filteredRecipes">
