@@ -1,5 +1,6 @@
 package sk.filo.recipes.service;
 
+import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -172,7 +173,14 @@ public class RecipeService {
 
     public List<RecipeSimpleSO> findTop4RecipeSimpleByTitle(String title) {
         Sort sort = Sort.by(Sort.Order.asc("title"));
-        List<Recipe> recipes = recipeRepository.findTop4ByTitleSearchIsContaining(title!=null ? title.toLowerCase() : null, sort);
+        
+        if (title!=null) {
+            String titleSearch = Normalizer.normalize(title, Normalizer.Form.NFD);
+            titleSearch = titleSearch.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+            title = titleSearch.toLowerCase();
+        }
+        
+        List<Recipe> recipes = recipeRepository.findTop4ByTitleSearchIsContaining(title, sort);
         return recipeMapper.mapRecipeListToRecipeSimpleSOList(recipes);
     }
     
