@@ -3,8 +3,10 @@ package sk.filo.recipes.controller.user;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -207,7 +209,51 @@ public class RecipeController {
         preview.setAllCategoriesWithRecipes(model);
         return "fragments/view::recipesList";
     }
-    
+
+    @RequestMapping(value="/saveAsRecipe/{sectionRowId}")
+    public String saveSectionAsRecipe(final Model model, final @PathVariable Integer sectionRowId, final RecipeSO recipeSO, final BindingResult bindingResult) {
+        LOGGER.debug("Save ingredient as recipe action {}", recipeSO);
+        
+        ingredientValidator.validate(recipeSO, bindingResult);
+        
+        if (Strings.isBlank(recipeSO.getSections().get(sectionRowId).getName())) {
+            bindingResult.rejectValue("sections[" + sectionRowId + "].name", "NotBlank", null);
+        }
+        
+        if (bindingResult.hasErrors()) {
+            LOGGER.debug(bindingResult.toString());
+            return "fragments/recipe::recipeForm";
+        }
+        
+        RecipeSO newRecipe = new RecipeSO();
+        SectionSO section = recipeSO.getSections().get(sectionRowId);
+        section.setId(null);
+        section.setSortNumber(1);
+        for (IngredientSO so : section.getIngredients()) {
+            so.setId(null);
+        }
+        newRecipe.setTitle(section.getName());
+        newRecipe.getSections().add(section);
+        
+        Long newRecipeId = recipeService.save(newRecipe);
+        recipeSO.getAssociatedRecipes().add(recipeService.getBasic(newRecipeId));        
+        recipeSO.getSections().remove(sectionRowId.intValue());
+
+        // fix sort numbers
+        int sortNo = 1;
+        for (SectionSO sectionSO : recipeSO.getSections()) {
+            sectionSO.setSortNumber(sortNo++);
+        }
+        
+        if (recipeSO.getSections().isEmpty()) {
+            SectionSO sectionSO = new SectionSO();
+            sectionSO.setSortNumber(recipeSO.getSections().size() + 1);
+            recipeSO.getSections().add(sectionSO);
+        }
+        
+        return "fragments/recipe::recipeForm";
+    }
+       
     @RequestMapping(value="/save")
     public String saveRecipe(final Model model, final @Valid RecipeSO recipe, final BindingResult bindingResult) {
         LOGGER.debug("Save recipe action {}", recipe);
