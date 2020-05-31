@@ -5,11 +5,14 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import sk.filo.recipes.domain.Unit;
 import sk.filo.recipes.mapper.UnitMapper;
+import sk.filo.recipes.repository.IngredientRepository;
 import sk.filo.recipes.repository.UnitCategoryRepository;
 import sk.filo.recipes.repository.UnitRepository;
 import sk.filo.recipes.so.UnitSO;
@@ -30,6 +33,11 @@ public class UnitService {
     
     private UnitCategoryRepository unitCategoryRepository;
     
+    private IngredientRepository ingredientRepository;
+    
+    @Autowired
+    MessageSource messageSource; 
+    
     @Autowired
     public void setUnitMapper(UnitMapper unitMapper) {
         this.unitMapper = unitMapper;
@@ -44,6 +52,11 @@ public class UnitService {
     public void setUnitCategoryRepository(UnitCategoryRepository unitCategoryRepository) {
         this.unitCategoryRepository = unitCategoryRepository;
     }
+    
+    @Autowired
+    public void setIngredientRepository(IngredientRepository ingredientRepository) {
+        this.ingredientRepository = ingredientRepository;
+    }
  
     public void save(UnitSO unitSO) {
         LOGGER.debug("save unitSO {}", unitSO);
@@ -54,7 +67,13 @@ public class UnitService {
     }
     
     public void delete(Long id) {
-        unitRepository.deleteById(id);
+        if (ingredientRepository.countByUnitId(id) == 0) {
+            unitRepository.deleteById(id);
+        } else {
+            MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
+            String message = accessor.getMessage("unit.delete.constraint");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, message);
+        }
     }
     
     public List<UnitSO> getAll() {

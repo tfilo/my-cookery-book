@@ -8,6 +8,8 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -66,6 +68,9 @@ public class RecipeService {
     
     private UnitRepository unitRepository;
     
+    @Autowired
+    MessageSource messageSource;
+
     @Autowired
     public void setRecipeMapper(RecipeMapper recipeMapper) {
         this.recipeMapper = recipeMapper;
@@ -146,10 +151,13 @@ public class RecipeService {
         if (!recipe.getCreator().getUsername().equals(username) && !auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(RoleName.ROLE_ADMIN.name()))) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Users can delete only own recipes!");
         }
-        try {
+        
+        if (recipeRepository.countByAssociatedRecipesId(id) == 0) {
             recipeRepository.deleteById(id);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
+        } else {
+            MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
+            String message = accessor.getMessage("recipe.delete.constraint");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, message);
         }
     }
     

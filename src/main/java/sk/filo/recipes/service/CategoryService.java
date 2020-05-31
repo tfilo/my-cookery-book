@@ -5,6 +5,8 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import sk.filo.recipes.domain.Category;
 import sk.filo.recipes.mapper.CategoryMapper;
 import sk.filo.recipes.repository.CategoryRepository;
+import sk.filo.recipes.repository.RecipeRepository;
 import sk.filo.recipes.so.CategorySO;
 
 /**
@@ -28,6 +31,11 @@ public class CategoryService {
     
     private CategoryRepository categoryRepository;
     
+    private RecipeRepository recipeRepository;
+    
+    @Autowired
+    MessageSource messageSource;
+    
     @Autowired
     public void setCategoryMapper(CategoryMapper categoryMapper) {
         this.categoryMapper = categoryMapper;
@@ -37,6 +45,11 @@ public class CategoryService {
     public void setCategoryRepository(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
+    
+    @Autowired
+    public void setRecipeRepository(RecipeRepository recipeRepository) {
+        this.recipeRepository = recipeRepository;
+    }
 
     @Transactional
     public void save(CategorySO categorySO) {
@@ -45,7 +58,13 @@ public class CategoryService {
     }
     
     public void delete(Long id) {
-        categoryRepository.deleteById(id);
+        if (recipeRepository.countByCategoriesId(id) == 0) {
+            categoryRepository.deleteById(id);
+        } else {
+            MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
+            String message = accessor.getMessage("category.delete.constraint");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, message);
+        }
     }
     
     public List<CategorySO> getAll() {

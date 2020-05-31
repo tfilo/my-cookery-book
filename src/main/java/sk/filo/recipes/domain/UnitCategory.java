@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
-import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import lombok.EqualsAndHashCode;
@@ -50,12 +49,4 @@ public class UnitCategory {
         }
         return units;
     }
-    
-    @PreRemove
-    public void checkUnitsBeforeRemoval() {
-        if (!this.units.isEmpty()) {
-            throw new RuntimeException("Can't remove a unit category that has units.");
-        }
-    }
-
 }

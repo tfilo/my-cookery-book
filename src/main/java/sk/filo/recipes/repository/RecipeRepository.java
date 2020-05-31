@@ -24,5 +24,10 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     public List<Recipe> findTop4ByTitleSearchIsContainingAndIdNot(String titleSearch, Long id, Sort sort);
 
     public List<Recipe> findTop4ByTitleSearchIsContaining(String titleSearch, Sort sort);
+    
+    public Long countByAssociatedRecipesId(Long id);
 
+    public Long countByCategoriesId(Long id);
+    
+    public Long countByCreatorIdOrModifierId(Long creatorId, Long modifierId);
 }

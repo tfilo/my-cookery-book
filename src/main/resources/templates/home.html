@@ -4,6 +4,28 @@
     </head>
     <body>
         <div id="loaderOverlay"><div id="loader"></div></div>
+        <div id="modal" class="w3-modal">
+            <div class="w3-modal-content">
+                <header class="w3-container w3-red"> 
+                    <h2 th:text="#{common.question}">Question</h2>
+                </header>
+                <div class="w3-container">
+                    <p th:text="#{common.delete.question}">Realy delete?</p>
+                </div>
+                <footer class="w3-container w3-red w3-padding">
+                    <button type="button"
+                            id="modalDeleteBtn"
+                            class="w3-button">
+                        <i class="fas fa-trash-alt"></i>&nbsp;<span th:text="#{common.delete}">Delete</span>
+                    </button>
+                    <button type="button"
+                            onclick="$('#modal').hide();"
+                            class="w3-button">
+                        <i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span>
+                    </button>
+                </footer>
+            </div>
+        </div>
         <nav th:replace="fragments/common :: menu('all') ">&nbsp;</nav>
         <header th:replace="fragments/common :: header ">&nbsp;</header>
         

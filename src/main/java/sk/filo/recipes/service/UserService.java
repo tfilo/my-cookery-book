@@ -8,6 +8,8 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -20,6 +22,7 @@ import sk.filo.recipes.domain.Role;
 import sk.filo.recipes.domain.RoleName;
 import sk.filo.recipes.domain.User;
 import sk.filo.recipes.mapper.UserMapper;
+import sk.filo.recipes.repository.RecipeRepository;
 import sk.filo.recipes.repository.RoleRepository;
 import sk.filo.recipes.repository.UserRepository;
 import sk.filo.recipes.so.UserBasicSO;
@@ -39,9 +42,14 @@ public class UserService {
     
     private UserRepository userRepository;
     
+    private RecipeRepository recipeRepository;
+    
     private RoleRepository roleRepository;
     
     private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    MessageSource messageSource;
     
     @Autowired
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
@@ -63,6 +71,11 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
+    @Autowired
+    public void setRecipeRepository(RecipeRepository recipeRepository) {
+        this.recipeRepository = recipeRepository;
+    }
+    
     @Transactional
     public void save(UserSO userSO) {
         LOGGER.debug("save userSO {}", userSO);
@@ -104,7 +117,13 @@ public class UserService {
     }
     
     public void delete(Long id) {
-        userRepository.deleteById(id);
+        if (recipeRepository.countByCreatorIdOrModifierId(id, id) == 0) {
+            userRepository.deleteById(id);
+        } else {
+            MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
+            String message = accessor.getMessage("user.delete.constraint");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, message);
+        }
     }
     
     public List<UserSO> getAll() {

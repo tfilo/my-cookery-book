@@ -7,7 +7,6 @@ import org.mapstruct.Mappings;
 import org.mapstruct.NullValueCheckStrategy;
 import sk.filo.recipes.domain.Unit;
 import sk.filo.recipes.so.UnitSO;
-import sk.filo.recipes.so.view.UnitViewSO;
 
 /**
  *

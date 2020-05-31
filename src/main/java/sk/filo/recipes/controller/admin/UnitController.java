@@ -5,15 +5,11 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.server.ResponseStatusException;
 import sk.filo.recipes.service.UnitCategoryService;
 import sk.filo.recipes.service.UnitService;
 import sk.filo.recipes.so.UnitCategorySO;
@@ -40,9 +36,6 @@ public class UnitController {
     
     @Autowired
     UnitCategoryService unitCategoryService;
-    
-    @Autowired
-    MessageSource messageSource;  
     
     private void setAvailableUnitCategories(final Model model) {
         model.addAttribute(MODEL_AVAILABLE_UNIT_CATEGORIES, unitCategoryService.getAllBasic());
@@ -86,13 +79,7 @@ public class UnitController {
     @RequestMapping(value="/delete/{unitId}")
     public String deleteUnit(final Model model, final @PathVariable Long unitId) {
         LOGGER.debug("Delete unit action {}", unitId);
-        try {
-            unitService.delete(unitId);
-        } catch (org.springframework.dao.DataIntegrityViolationException e) {
-            MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
-            String message = accessor.getMessage("unit.delete.constraint");
-            throw new ResponseStatusException(HttpStatus.CONFLICT, message);
-        }
+        unitService.delete(unitId);
         setAllCategories(model);
         return "fragments/unitCategory::unitCategoriesList";
     }

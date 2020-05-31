@@ -9,4 +9,6 @@ import sk.filo.recipes.domain.Unit;
  */
 public interface UnitRepository extends JpaRepository<Unit, Long> {
     
+    Long countByCategoryId(Long id);
+
 }

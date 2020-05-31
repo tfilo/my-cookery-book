@@ -4,15 +4,11 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.server.ResponseStatusException;
 import sk.filo.recipes.service.CategoryService;
 import sk.filo.recipes.so.CategorySO;
 
@@ -32,9 +28,6 @@ public class CategoryController {
     
     @Autowired
     CategoryService categoryService;
-    
-    @Autowired
-    MessageSource messageSource;
         
     private void setAllCategories(final Model model) {
         model.addAttribute(MODEL_CATEGORIES, categoryService.getAll());
@@ -76,13 +69,7 @@ public class CategoryController {
     @RequestMapping(value="/delete/{categoryId}")
     public String deleteCategory(final Model model, final @PathVariable Long categoryId) {
         LOGGER.debug("Delete category action {}", categoryId);
-        try {
-            categoryService.delete(categoryId);
-        } catch (org.springframework.dao.DataIntegrityViolationException e) {
-            MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
-            String message = accessor.getMessage("category.delete.constraint");
-            throw new ResponseStatusException(HttpStatus.CONFLICT, message);
-        }
+        categoryService.delete(categoryId);
         setAllCategories(model);
         return "fragments/category::categoriesList";
     }

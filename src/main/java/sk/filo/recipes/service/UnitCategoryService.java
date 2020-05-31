@@ -6,6 +6,8 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import sk.filo.recipes.domain.UnitCategory;
 import sk.filo.recipes.mapper.UnitCategoryMapper;
 import sk.filo.recipes.repository.UnitCategoryRepository;
+import sk.filo.recipes.repository.UnitRepository;
 import sk.filo.recipes.so.UnitCategoryBasicSO;
 import sk.filo.recipes.so.UnitCategorySO;
 
@@ -30,6 +33,11 @@ public class UnitCategoryService {
     
     private UnitCategoryRepository unitCategoryRepository;
     
+    private UnitRepository unitRepository;
+    
+    @Autowired
+    MessageSource messageSource;
+    
     @Autowired
     public void setUnitCategoryMapper(UnitCategoryMapper unitCategoryMapper) {
         this.unitCategoryMapper = unitCategoryMapper;
@@ -38,6 +46,11 @@ public class UnitCategoryService {
     @Autowired
     public void setUnitCategoryRepository(UnitCategoryRepository unitCategoryRepository) {
         this.unitCategoryRepository = unitCategoryRepository;
+    }
+    
+    @Autowired
+    public void setUnitRepository(UnitRepository unitRepository) {
+        this.unitRepository = unitRepository;
     }
 
     public void save(UnitCategoryBasicSO unitCategoryBasicSO) {
@@ -55,7 +68,13 @@ public class UnitCategoryService {
     }
     
     public void delete(Long id) {
-        unitCategoryRepository.deleteById(id);
+        if (unitRepository.countByCategoryId(id) == 0) {
+            unitCategoryRepository.deleteById(id);
+        } else {
+            MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
+            String message = accessor.getMessage("unit.category.delete.constraint");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, message);
+        }
     }
     
     public List<UnitCategorySO> getAll() {

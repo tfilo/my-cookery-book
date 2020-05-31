@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValueCheckStrategy;
-import sk.filo.recipes.domain.Category;
 import sk.filo.recipes.domain.Source;
 
 /**

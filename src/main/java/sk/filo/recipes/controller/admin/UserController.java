@@ -5,16 +5,12 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.server.ResponseStatusException;
 import sk.filo.recipes.service.UserService;
 import sk.filo.recipes.so.UserSO;
 import sk.filo.recipes.validator.PasswordValidator;
@@ -37,9 +33,6 @@ public class UserController {
     
     @Autowired
     UserService userService;
-    
-    @Autowired
-    MessageSource messageSource;
     
     private void setAllUsers(final Model model) {
         List<UserSO> all = userService.getAll();
@@ -85,13 +78,7 @@ public class UserController {
     @RequestMapping(value="/delete/{userId}")
     public String deleteUser(final Model model, final @PathVariable Long userId) {
         LOGGER.debug("Delete user action {}", userId);
-        try {
-            userService.delete(userId);
-        } catch (org.springframework.dao.DataIntegrityViolationException e) {
-            MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
-            String message = accessor.getMessage("user.delete.constraint");
-            throw new ResponseStatusException(HttpStatus.CONFLICT, message);
-        }
+        userService.delete(userId);
         setAllUsers(model);
         return "fragments/user::usersList";
     }
