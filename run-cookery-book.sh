@@ -17,4 +17,4 @@ export CB_SERVLET_MULTIPART_MAX_FILE_SIZE=10MB
 export CB_SERVLET_MULTIPART_MAX_REQUEST_SIZE=10MB
 export CB_LOG_SK_FILO_RECIPES=debug
 
-java -jar target/recipes-0.8.0.jar
+java -jar target/recipes-1.0.0.jar
