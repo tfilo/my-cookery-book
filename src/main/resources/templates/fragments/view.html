@@ -9,18 +9,18 @@
                 <h2 class="w3-center title" th:text="*{title}">Recipe title</h2>
             </div>
             <section class="padding-8" th:each="section,rowStat : *{sections}">
-                <h4 th:text="*{sections[__${rowStat.index}__].name}" class="bold">Sections name</h4>
-                <h5 th:if="*{not #lists.isEmpty(sections[__${rowStat.index}__].ingredients)}" th:text="#{recipe.ingredients}">Ingredients</h5>
+                <h4 th:text="${section.name}" class="bold">Sections name</h4>
+                <h5 th:if="${not #lists.isEmpty(section.ingredients)}" th:text="#{recipe.ingredients}">Ingredients</h5>
                 <ul>
-                    <li th:each="ingredient,rowStat2 : *{sections[__${rowStat.index}__].ingredients}">
-                        <span th:text="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].value}">Ingredient value</span> 
-                        <div class="tooltip"><span th:text="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].unit.abbreviation}">Ingredient unit</span><span class="tooltiptext" th:text="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].unit.name}">Ingredient unit value</span></div>
-                        <span th:text="*{sections[__${rowStat.index}__].ingredients[__${rowStat2.index}__].name}">Ingredient name</span>
+                    <li th:each="ingredient,rowStat2 : ${section.ingredients}">
+                        <span th:text="${ingredient.value}">Ingredient value</span> 
+                        <div class="tooltip"><span th:text="${ingredient.unit.abbreviation}">Ingredient unit</span><span class="tooltiptext" th:text="${ingredient.unit.name}">Ingredient unit value</span></div>
+                        <span th:text="${ingredient.name}">Ingredient name</span>
                     </li>
                 </ul>
-                <h5 th:if="*{not #lists.isEmpty(sections[__${rowStat.index}__].ingredients)}" th:text="#{recipe.method}">Method</h5>
+                <h5 th:if="${not #lists.isEmpty(section.ingredients)}" th:text="#{recipe.method}">Method</h5>
                 <div>
-                    <input th:value="*{sections[__${rowStat.index}__].method}" th:id="|sections__${rowStat.index}__method|" type="hidden"></input>
+                    <input th:value="${section.method}" th:id="|sections__${rowStat.index}__method|" type="hidden"></input>
                     <div th:id="|method${rowStat.index}|" class="quill-viewer-div"></div>
                     <script th:inline="javascript">
                         var id = [[${rowStat.index}]];
@@ -76,8 +76,8 @@
             </section>
             <div class="padding-8  w3-row">
                 <div class="w3-col l3 m6 s12 w3-display-container" th:each="picture,rowStat : *{pictures}">
-                    <img th:src="@{/view/picture/thumbnail/__${picture.id}__}" class="uploaded-picture" th:alt="*{pictures[__${rowStat.index}__].title}" />
-                    <span style="display: inline;" class="w3-block w3-text-white w3-display-bottomleft picture-title" th:text="*{pictures[__${rowStat.index}__].title}"></span>
+                    <img th:src="@{/view/picture/thumbnail/__${picture.id}__}" class="uploaded-picture" th:alt="${picture.title}" />
+                    <span style="display: inline;" class="w3-block w3-text-white w3-display-bottomleft picture-title" th:text="${picture.title}"></span>
                 </div>
             </div>
             <hr th:if="*{not #lists.isEmpty(sources)}">
@@ -113,6 +113,13 @@
                             <p class="w3-small" th:text="${recipe.description}">Recipe description</p>
                         </div>
                     </div>
+                </div>
+            </div>    
+            <div class="w3-container w3-center">
+                <div th:if="${recipes.totalPages > 0}" 
+                     class="w3-bar w3-tiny w3-border w3-border-light-grey"
+                     th:each="pageNumber, rowStat : ${pageNumbers}">
+                    <a href="javascript:void(0);" th:onclick="|load('content', '@{'/view/find'}', { 'categoryId': $('#searchCategoryId').val(), 'title': $('#search').val(), 'page': ${pageNumber - 1}, 'pageSize': 16, 'sortField': 'title', 'direction': 'ASC' }, true);|" class="w3-button" th:classappend="${pageNumber==recipes.number + 1} ? w3-green : (${rowStat.first} or ${rowStat.last} ? 'w3-light-grey')" th:text=${pageNumber}>PageNumber</a>
                 </div>
             </div>
             <script th:inline="javascript">

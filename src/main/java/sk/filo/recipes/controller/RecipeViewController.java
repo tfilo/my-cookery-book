@@ -1,13 +1,15 @@
 package sk.filo.recipes.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +25,7 @@ import sk.filo.recipes.service.CategoryService;
 import sk.filo.recipes.service.PictureService;
 import sk.filo.recipes.service.RecipeService;
 import sk.filo.recipes.so.PictureSO;
+import sk.filo.recipes.so.RecipeBasicSO;
 import sk.filo.recipes.so.RecipeSearchCriteriaSO;
 import sk.filo.recipes.so.view.RecipeViewSO;
 
@@ -41,6 +44,7 @@ public class RecipeViewController {
     private static final String MODEL_RECIPES = "recipes";
     
     private static final String TITLE = "title";
+    private static final String PAGE_NUMBERS = "pageNumbers";
     
     private static final String CATEGORY_ID = "categoryId";
     private static final String SEARCHED_TITLE = "searchedTitle";
@@ -75,53 +79,60 @@ public class RecipeViewController {
         preview.setAllCategoriesWithRecipes(model);
         return "fragments/view::recipesList";
     }
-
-    @RequestMapping(value="/recipesByCategory/{categoryId}")
-    public String viewRecipesInCategory(final Model model, final @PathVariable Long categoryId) {
-        LOGGER.debug("Getting recipes by category");
-        Integer page = 0;
-        Integer size = Integer.MAX_VALUE; // TODO paginacia
-        PageRequest pr =  PageRequest.of(page, size, Direction.ASC, "title");
-                
-        RecipeSearchCriteriaSO criteria = new RecipeSearchCriteriaSO();
-        criteria.setPage(pr);
-        criteria.setCategoryId(categoryId);
-
-        model.addAttribute(MODEL_RECIPES, recipeService.getAllBasicByCriteria(criteria));
-        model.addAttribute(TITLE, categoryService.get(categoryId).getName());
-        model.addAttribute(CATEGORY_ID, categoryId);
-        return "fragments/view::recipesList";
-    }
     
-    @RequestMapping(value={"/find/{categoryId}", "/find"})
-    public String viewRecipesInCategory(final Model model, @PathVariable(required = false) Long categoryId, final String title) {
+    @RequestMapping(value={"/find"})
+    public String viewRecipesInCategory(final Model model, final RecipeSearchCriteriaSO criteria) {
         LOGGER.debug("Getting recipes by criteria");
-        Integer page = 0;
-        Integer size = Integer.MAX_VALUE; // TODO paginacia
-        PageRequest pr =  PageRequest.of(page, size, Direction.ASC, "title");
-        
-        RecipeSearchCriteriaSO criteria = new RecipeSearchCriteriaSO();
-        criteria.setPage(pr);
-        criteria.setCategoryId(categoryId);
-        criteria.setTitle(title);
 
-        model.addAttribute(MODEL_RECIPES, recipeService.getAllBasicByCriteria(criteria));
+        Page<RecipeBasicSO> results = recipeService.getAllBasicByCriteria(criteria);
+        
+        model.addAttribute(MODEL_RECIPES, results);
         String titleString = "";
         
-        if (categoryId != null) {
-            titleString += categoryService.get(categoryId).getName();
-            model.addAttribute(CATEGORY_ID, categoryId);
+        if (criteria.getCategoryId() != null) {
+            titleString += categoryService.get(criteria.getCategoryId()).getName();
+            model.addAttribute(CATEGORY_ID, criteria.getCategoryId());
         }
         
-        if (title != null && !StringUtils.isEmptyOrWhitespace(title)) {
-            if (categoryId != null) {
+        if (criteria.getTitle() != null && !StringUtils.isEmptyOrWhitespace(criteria.getTitle())) {
+            if (criteria.getCategoryId() != null) {
                 titleString += ": ";
             }
             MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
             String message = accessor.getMessage("recipe.filtered.by");
-            titleString += message + " '" + title + "'";
-            model.addAttribute(SEARCHED_TITLE, title);
+            titleString += message + " '" + criteria.getTitle() + "'";
+            model.addAttribute(SEARCHED_TITLE, criteria.getTitle());
         }
+        
+        int totalPages = results.getTotalPages();
+        int currentPage = results.getNumber();
+        if (totalPages > 0 && totalPages < 6) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                .boxed()
+                .collect(Collectors.toList());
+            model.addAttribute(PAGE_NUMBERS, pageNumbers);
+        } else if (totalPages > 0) {
+            List<Integer> pageNumbers;
+            if ((currentPage - 2) > 1 && (currentPage + 2) < totalPages) {
+                pageNumbers = IntStream.rangeClosed(currentPage - 2, currentPage + 2)
+                .boxed()
+                .collect(Collectors.toList());
+                pageNumbers.add(0, 1);
+                pageNumbers.add(totalPages);
+            } else if ((currentPage - 2) <= 1) {
+                pageNumbers = IntStream.rangeClosed(1,6)
+                .boxed()
+                .collect(Collectors.toList());
+                pageNumbers.add(totalPages);
+            } else {
+                pageNumbers = IntStream.rangeClosed(totalPages - 5,totalPages)
+                .boxed()
+                .collect(Collectors.toList());
+                pageNumbers.add(0, 1);
+            }
+            model.addAttribute(PAGE_NUMBERS, pageNumbers);
+        }
+
         model.addAttribute(TITLE, titleString);
         return "fragments/view::recipesList";
     }

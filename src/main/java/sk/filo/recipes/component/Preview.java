@@ -29,12 +29,10 @@ public class Preview {
     
     public void setAllCategoriesWithRecipes(Model model) {
         RecipeSearchCriteriaSO criteria = new RecipeSearchCriteriaSO();
-
-        Integer page = 0;
-        Integer size = 20;
-        PageRequest pr =  PageRequest.of(page, size, Sort.Direction.DESC, "created");
-        criteria.setPage(pr);
-
+        criteria.setPage(0);
+        criteria.setPageSize(16);
+        criteria.setDirection(RecipeSearchCriteriaSO.Direction.DESC);
+        criteria.setSortField(RecipeSearchCriteriaSO.SortField.created);
         MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
         String message = accessor.getMessage("recipe.preview");
         model.addAttribute(TITLE, message);

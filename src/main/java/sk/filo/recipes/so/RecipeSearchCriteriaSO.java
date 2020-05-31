@@ -4,7 +4,8 @@ import java.text.Normalizer;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 /**
  *
  * @author tomas
@@ -14,11 +15,25 @@ import org.springframework.data.domain.Pageable;
 @ToString
 public class RecipeSearchCriteriaSO {
     
+    public enum Direction {
+        ASC, DESC;
+    }
+    
+    public enum SortField {
+        created, title;
+    }
+    
     private Long categoryId;
     
     private String title;
     
-    private Pageable page;
+    private Integer page;
+    
+    private Integer pageSize;
+    
+    private SortField sortField;
+    
+    private Direction direction;
     
     public String getTitle() {
         if (title!=null) {
@@ -28,4 +43,54 @@ public class RecipeSearchCriteriaSO {
         }
         return null;
     }
+    
+    public PageRequest getPageRequest() {
+        int _page, _pageSize;
+        Sort.Direction _direction;
+        String _sortField;
+        
+        if (page == null) {
+            _page = 0;
+        } else if (page < 0) {
+            _page = 0;
+        } else {
+            _page = page;
+        }
+
+        if (pageSize == null) {
+            _pageSize = 16;
+        } else if (pageSize > 128) {
+            _pageSize = 128;
+        } else if (pageSize < 16) {
+            _pageSize = 16;
+        } else {
+            _pageSize = pageSize;
+        }
+        
+        switch (direction != null ? direction : Direction.ASC) {
+            case ASC:
+                _direction = Sort.Direction.ASC;
+                break;
+            case DESC:
+                _direction = Sort.Direction.DESC;
+                break;
+            default:
+                _direction = Sort.Direction.ASC;
+                break;
+        }
+        
+        switch (sortField != null ? sortField : SortField.title) {
+            case created:
+                _sortField = SortField.created.name();
+                break;
+            case title:
+                _sortField = SortField.title.name();
+                break;
+            default:
+                _sortField = SortField.title.name();
+        }
+        
+        return PageRequest.of(_page, _pageSize, _direction, _sortField);
+    }
+           
 }

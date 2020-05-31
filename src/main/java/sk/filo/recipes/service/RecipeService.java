@@ -208,16 +208,16 @@ public class RecipeService {
         Page<Recipe> recipes;
         if (criteria.getCategoryId()!=null && !StringUtils.isEmptyOrWhitespace(criteria.getTitle())) {
             LOGGER.debug("Search by CategoryId and Title {}", criteria);
-            recipes = recipeRepository.findAllByCategoriesIdAndTitleSearchIsContaining(criteria.getCategoryId(), criteria.getTitle(), criteria.getPage());
+            recipes = recipeRepository.findAllByCategoriesIdAndTitleSearchIsContaining(criteria.getCategoryId(), criteria.getTitle(), criteria.getPageRequest());
         } else if (criteria.getCategoryId()!=null) {
             LOGGER.debug("Search by CategoryId {}", criteria);
-            recipes = recipeRepository.findAllByCategoriesId(criteria.getCategoryId(), criteria.getPage());
+            recipes = recipeRepository.findAllByCategoriesId(criteria.getCategoryId(), criteria.getPageRequest());
         } else if (!StringUtils.isEmptyOrWhitespace(criteria.getTitle())) {
             LOGGER.debug("Search by Title {}", criteria);
-            recipes = recipeRepository.findAllByTitleSearchIsContaining(criteria.getTitle(),criteria.getPage());
+            recipes = recipeRepository.findAllByTitleSearchIsContaining(criteria.getTitle(),criteria.getPageRequest());
         } else {
             LOGGER.debug("Search all {}", criteria);
-            recipes = recipeRepository.findAll(criteria.getPage());
+            recipes = recipeRepository.findAll(criteria.getPageRequest());
         }
         LOGGER.debug("Found recipes {}", recipes.getContent());
         return mapToRecipeBasicSO(recipes);

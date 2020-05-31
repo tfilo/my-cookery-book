@@ -5,16 +5,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import sk.filo.recipes.component.Preview;
 import sk.filo.recipes.service.RecipeService;
 import sk.filo.recipes.service.UserService;
-import sk.filo.recipes.so.RecipeSearchCriteriaSO;
 import sk.filo.recipes.so.UserBasicSO;
 import sk.filo.recipes.validator.PasswordValidator;
 
@@ -29,11 +26,7 @@ public class UserProfileController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserProfileController.class);
        
     private static final String MODEL_USER_BASIC_SO = "userBasicSO";
-    
-    private static final String MODEL_CATEGORIES_WITH_RECIPES = "allCategoriesWithRecipes";
-    
-    private static final String TITLE = "title";
-    
+ 
     @Autowired
     PasswordValidator passwordValidator;
     
@@ -46,20 +39,9 @@ public class UserProfileController {
     @Autowired
     MessageSource messageSource;
     
-    private void setAllCategoriesWithRecipes(Model model) {        
-        RecipeSearchCriteriaSO criteria = new RecipeSearchCriteriaSO();
+    @Autowired
+    Preview preview;
 
-        Integer page = 0;
-        Integer size = 20;
-        PageRequest pr =  PageRequest.of(page, size, Sort.Direction.DESC, "created");
-        criteria.setPage(pr);
-
-        MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
-        String message = accessor.getMessage("recipe.preview");
-        model.addAttribute(TITLE, message);
-        model.addAttribute(MODEL_CATEGORIES_WITH_RECIPES, recipeService.getAllBasicByCriteria(criteria));
-    }
-    
     @RequestMapping(value="/profile")
     public String getUsers(final Model model) {
         LOGGER.debug("Get own profile");
@@ -77,7 +59,7 @@ public class UserProfileController {
         }
         userService.saveProfile(userBasicSO);
 
-        setAllCategoriesWithRecipes(model);
+        preview.setAllCategoriesWithRecipes(model);
         return "fragments/view::recipesList";
     }
 
