@@ -26,8 +26,10 @@
                 </footer>
             </div>
         </div>
-        <nav th:replace="fragments/common :: menu('all') ">&nbsp;</nav>
-        <header th:replace="fragments/common :: header ">&nbsp;</header>
+        <div id="menu">
+            <nav th:replace="fragments/common :: menu">&nbsp;</nav>
+        </div>
+        <header th:replace="fragments/common :: header">&nbsp;</header>
 
         <main class="content">
             <div class="spacer">&nbsp;</div>

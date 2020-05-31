@@ -23,7 +23,7 @@
         <script th:src="@{'/js/sidebar.js'}"></script>
     </head>
     <body>
-        <nav th:fragment="menu(content)" onmouseleave="closeSidebar()" class="w3-sidebar w3-bar-block w3-border-right w3-animate-left menu" id="mySidebar">
+        <nav th:fragment="menu" onmouseleave="closeSidebar()" class="w3-sidebar w3-bar-block w3-border-right w3-animate-left menu" id="mySidebar">
             <div class="w3-button w3-padding-16 w3-left" onclick="closeSidebar()"><i class="fas fa-angle-double-left"></i></div>
             <a href="javascript:void(0);" th:onclick="|load('content', '@{'/admin/user/all'}', null, true); closeSidebar();|" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-user icon"></i> <span th:text="#{common.users}">Users</span></a>
             <a href="javascript:void(0);" th:onclick="|load('content', '@{'/admin/category/all'}', null, true); closeSidebar();|" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-list icon"></i> <span th:text="#{common.categories}">Categories</span></a>

@@ -63,6 +63,10 @@
             <script>
                 $('#searchDiv').hide();
             </script>
+            
+            <script th:inline="javascript" th:if="${reloadMenu != null && reloadMenu == true}">
+                load('menu', '[(@{'/admin/category/reloadMenu'})]', null, false);
+            </script>
         </div>
     </body>
 </html>

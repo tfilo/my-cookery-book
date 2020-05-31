@@ -24,7 +24,11 @@ public class CategoryController {
     
     private static final String MODEL_CATEGORIES = "categories";
     
+    private static final String RELOAD_MENU = "reloadMenu";
+    
     private static final String MODEL_CATEGORY_SO = "categorySO";
+    
+    private static final String MODEL_ALL_CATEGORIES = "allCategories";
     
     @Autowired
     CategoryService categoryService;
@@ -63,6 +67,7 @@ public class CategoryController {
         }
         categoryService.save(category);
         setAllCategories(model);
+        model.addAttribute(RELOAD_MENU, true);
         return "fragments/category::categoriesList";
     }
     
@@ -71,6 +76,14 @@ public class CategoryController {
         LOGGER.debug("Delete category action {}", categoryId);
         categoryService.delete(categoryId);
         setAllCategories(model);
+        model.addAttribute(RELOAD_MENU, true);
         return "fragments/category::categoriesList";
+    }
+    
+    @RequestMapping(value = "/reloadMenu")
+    public String reloadMenu(final Model model) {
+        LOGGER.debug("Reloading menu");
+        model.addAttribute(MODEL_ALL_CATEGORIES, categoryService.getAll());
+        return "fragments/common :: menu";
     }
 }
