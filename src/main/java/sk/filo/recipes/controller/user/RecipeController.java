@@ -3,8 +3,11 @@ package sk.filo.recipes.controller.user;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +57,10 @@ public class RecipeController {
     private static final String MODEL_UNIT_CATEGORIES_WITH_UNITS = "allUnitCategoriesWithUnits";
 
     private static final String MODEL_FILTERED_RECIPES = "filteredRecipes";
+    
+    private static final String SECTION_AS_RECIPE = "sectionAsRecipe";
+    
+    private static final String SECTION_AS_RECIPE_IDX = "sectionAsRecipeIdx";
     
     @Autowired
     IngredientValidator ingredientValidator;
@@ -207,7 +214,79 @@ public class RecipeController {
         preview.setAllCategoriesWithRecipes(model);
         return "fragments/view::recipesList";
     }
+
+    @RequestMapping(value="/editAsRecipe/{sectionRowId}")
+    public String editSectionAsRecipe(final Model model, final @PathVariable Integer sectionRowId, final RecipeSO recipeSO, final BindingResult bindingResult, final HttpServletRequest req) {
+        LOGGER.debug("Edit section as new recipe {}", recipeSO);
+        
+        RecipeSO newRecipe = new RecipeSO();
+        newRecipe.setCreator(req.getUserPrincipal().getName());
+        SectionSO section = recipeSO.getSections().get(sectionRowId);
+        section.setId(null);
+        section.setSortNumber(1);
+        for (IngredientSO so : section.getIngredients()) {
+            so.setId(null);
+        }
+        newRecipe.setTitle(section.getName());
+        newRecipe.getSections().add(section);
+        
+        HttpSession session = req.getSession();
+        session.setAttribute(MODEL_RECIPE_SO, recipeSO);
+        session.setAttribute(SECTION_AS_RECIPE_IDX, sectionRowId);
+        model.addAttribute(MODEL_RECIPE_SO, newRecipe);
+        model.addAttribute(SECTION_AS_RECIPE, true);
+        return "fragments/recipe::recipeForm";
+    }
     
+    @RequestMapping(value="/backToEdited")
+    public String backToEdited(final Model model, final HttpServletRequest req) {
+        LOGGER.debug("Back to edited");
+        HttpSession session = req.getSession();
+        Object attribute = session.getAttribute(MODEL_RECIPE_SO);
+        session.removeAttribute(MODEL_RECIPE_SO);
+        model.addAttribute(MODEL_RECIPE_SO, attribute);
+        return "fragments/recipe::recipeForm";
+    }
+    
+    @RequestMapping(value="/saveAsRecipe")
+    public String saveSectionAsRecipeAndBackToEdited(final Model model, final @Valid RecipeSO recipe, final BindingResult bindingResult, final HttpServletRequest req) {
+        LOGGER.debug("Save recipe action {}", recipe);
+        ingredientValidator.validate(recipe, bindingResult);
+        if (bindingResult.hasErrors()) {
+            LOGGER.debug(bindingResult.toString());
+            model.addAttribute(SECTION_AS_RECIPE, true);
+            return "fragments/recipe::recipeForm";
+        }
+        RecipeSimpleSO saved = recipeService.save(recipe);
+        
+        HttpSession session = req.getSession();
+        RecipeSO editedRecipe = (RecipeSO)session.getAttribute(MODEL_RECIPE_SO);
+        Integer sectionIdx = (Integer)session.getAttribute(SECTION_AS_RECIPE_IDX);
+        
+        session.removeAttribute(MODEL_RECIPE_SO);
+        session.removeAttribute(SECTION_AS_RECIPE_IDX);
+        
+        editedRecipe.getAssociatedRecipes().add(saved);
+        
+        editedRecipe.getSections().remove(sectionIdx.intValue());
+
+        // fix sort numbers
+        int sortNo = 1;
+        for (SectionSO sectionSO : editedRecipe.getSections()) {
+            sectionSO.setSortNumber(sortNo++);
+        }
+        
+        if (editedRecipe.getSections().isEmpty()) {
+            SectionSO sectionSO = new SectionSO();
+            sectionSO.setSortNumber(editedRecipe.getSections().size() + 1);
+            editedRecipe.getSections().add(sectionSO);
+        }
+        
+        model.addAttribute(MODEL_RECIPE_SO, editedRecipe);
+        
+        return "fragments/recipe::recipeForm";
+    }
+       
     @RequestMapping(value="/save")
     public String saveRecipe(final Model model, final @Valid RecipeSO recipe, final BindingResult bindingResult) {
         LOGGER.debug("Save recipe action {}", recipe);

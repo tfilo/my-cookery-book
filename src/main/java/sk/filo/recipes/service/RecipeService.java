@@ -112,7 +112,7 @@ public class RecipeService {
     }
 
     @Transactional
-    public void save(RecipeSO recipeSO) {
+    public RecipeSimpleSO save(RecipeSO recipeSO) {
         LOGGER.debug("save recipeSO {}", recipeSO);        
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
@@ -139,7 +139,7 @@ public class RecipeService {
         mapPictures(recipeSO.getPictures(), recipe.getPictures());
         
         LOGGER.debug("save recipe {}", recipe);
-        recipeRepository.save(recipe);
+        return recipeMapper.mapRecipeToRecipeSimpleSO(recipeRepository.save(recipe));
     }
     
     public void delete(Long id) {
