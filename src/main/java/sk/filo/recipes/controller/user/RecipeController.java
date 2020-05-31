@@ -249,7 +249,7 @@ public class RecipeController {
     public String uploadPicture(final @RequestParam("picture") MultipartFile picture, final HttpServletRequest request, final RecipeSO recipeSO) throws IOException {
         LOGGER.debug("Upload file {} {}", picture.getName(), recipeSO);
         PictureSO so = new PictureSO();
-        so.setTitle(picture.getName());
+        so.setTitle(picture.getOriginalFilename());
         so.setData(picture.getBytes());
         recipeSO.getPictures().add(pictureService.save(so));
 
