@@ -25,6 +25,10 @@ body,html{
     max-width: 960px;
 }
 
+.w3-modal {
+    padding-top: 32px;
+}
+
 .content{
     position:absolute;
     top:0px;

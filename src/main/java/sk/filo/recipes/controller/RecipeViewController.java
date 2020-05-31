@@ -138,9 +138,19 @@ public class RecipeViewController {
     }
         
     @RequestMapping(value = "/picture/thumbnail/{id}", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> getPictureThumbnailById(final @PathVariable Long id) {
+        LOGGER.debug("Getting picture thumbnail by id");
+        PictureSO pictureSO= pictureService.getThumbnail(id);
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+            
+        return new ResponseEntity<>(pictureSO.getData(), headers, HttpStatus.CREATED);
+    }
+    
+    @RequestMapping(value = "/picture/{id}", method = RequestMethod.GET)
     public ResponseEntity<byte[]> getPictureById(final @PathVariable Long id) {
         LOGGER.debug("Getting picture by id");
-        PictureSO pictureSO= pictureService.getThumbnail(id);
+        PictureSO pictureSO= pictureService.get(id);
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
             

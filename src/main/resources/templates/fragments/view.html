@@ -76,8 +76,16 @@
             </section>
             <div class="padding-8  w3-row">
                 <div class="w3-col l3 m6 s12 w3-display-container" th:each="picture,rowStat : *{pictures}">
-                    <img th:src="@{/view/picture/thumbnail/__${picture.id}__}" class="uploaded-picture" th:alt="${picture.title}" />
+                    <img th:src="@{/view/picture/thumbnail/__${picture.id}__}" th:onclick="|$('#imageView__${picture.id}__').show();|" class="uploaded-picture" th:alt="${picture.title}" />
                     <span style="display: inline;" class="w3-block w3-text-white w3-display-bottomleft picture-title" th:text="${picture.title}"></span>
+                    
+                    <div th:id="|imageView__${picture.id}__|" class="w3-modal" th:onclick="|$('#imageView__${picture.id}__').hide();|">
+                        <div class="w3-modal-content w3-animate-zoom">
+                            <span class="w3-button w3-hover-red w3-display-topright">&times;</span>
+                            <img th:src="@{/view/picture/__${picture.id}__}" style="width:100%">
+                            <span style="display: inline;" class="w3-block w3-text-white w3-display-bottomleft picture-title" th:text="${picture.title}"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <hr th:if="*{not #lists.isEmpty(sources)}">
