@@ -27,6 +27,7 @@ body,html{
 
 .w3-modal {
     padding-top: 32px;
+    padding-bottom: 32px;
 }
 
 .content{
