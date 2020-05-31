@@ -25,7 +25,7 @@ public class RecipeViewSO {
     
     private List<SectionViewSO> sections;
 
-    private List<RecipeBasicViewSO> associatedRecipes;
+    private List<RecipeViewSO> associatedRecipes;
     
     private List<PictureViewSO> pictures;
 
@@ -46,7 +46,7 @@ public class RecipeViewSO {
         return sections;
     }
 
-    public List<RecipeBasicViewSO> getAssociatedRecipes() {
+    public List<RecipeViewSO> getAssociatedRecipes() {
         if (Objects.isNull(associatedRecipes)) {
             associatedRecipes = new ArrayList<>();
         }

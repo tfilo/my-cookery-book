@@ -8,8 +8,6 @@
                 <a class="w3-button w3-text-green absolute" href="javascript:void(0);" th:onclick="|load('content', '@{'/view/categoriesPreview'}', null, true);|"><i class="fas fa-arrow-circle-left w3-xxlarge"></i></a>
                 <h2 class="w3-center title" th:text="*{title}">Recipe title</h2>
             </div>
-            <input type="hidden" th:field="*{id}"/>
-
             <section class="padding-8" th:each="section,rowStat : *{sections}">
                 <h4 th:text="*{sections[__${rowStat.index}__].name}" class="bold">Sections name</h4>
                 <h5 th:if="*{not #lists.isEmpty(sections[__${rowStat.index}__].ingredients)}" th:text="#{recipe.ingredients}">Ingredients</h5>
@@ -22,7 +20,7 @@
                 </ul>
                 <h5 th:if="*{not #lists.isEmpty(sections[__${rowStat.index}__].ingredients)}" th:text="#{recipe.method}">Method</h5>
                 <div>
-                    <input th:field="*{sections[__${rowStat.index}__].method}" th:id="|sections__${rowStat.index}__method|" type="hidden" required></input>
+                    <input th:value="*{sections[__${rowStat.index}__].method}" th:id="|sections__${rowStat.index}__method|" type="hidden"></input>
                     <div th:id="|method${rowStat.index}|" class="quill-viewer-div"></div>
                     <script th:inline="javascript">
                         var id = [[${rowStat.index}]];
@@ -33,11 +31,48 @@
             </section>
             <section class="padding-8" th:if="*{not #lists.isEmpty(associatedRecipes)}">
                 <h5 th:text="#{recipe.serve.with}">Serve with recipes</h5>
-                <ul>
-                    <li th:each="associatedRecipe,rowStat : *{associatedRecipes}" class="w3-display-container">
-                        <a href="javascript:void(0);" th:onclick="|load('content', '@{'/view/recipe/__${associatedRecipe.id}__'}', null, true);|" th:text="${associatedRecipe.title}">Recipe title</a>
-                    </li>
-                </ul>
+                <div th:each="ar,rowStat : *{associatedRecipes}">
+                    <button th:onclick="|$('#recipe${ar.id}').toggleClass('w3-show')|" class="w3-button w3-block w3-left-align w3-border w3-border-black"><b><span th:text="${ar.title}">Recipe title</span></b> <i class="fas fa-caret-down"></i></button>
+                    <div th:id="|recipe${ar.id}|" class="w3-hide w3-border w3-border-black w3-padding">
+                        <section class="padding-8" th:each="section,rowStat : ${ar.sections}">
+                            <h4 th:text="${section.name}" class="bold">Sections name</h4>
+                            <h5 th:if="${not #lists.isEmpty(section.ingredients)}" th:text="#{recipe.ingredients}">Ingredients</h5>
+                            <ul>
+                                <li th:each="ingredient,rowStat2 : ${section.ingredients}">
+                                    <span th:text="${ingredient.value}">Ingredient value</span> 
+                                    <div class="tooltip"><span th:text="${ingredient.unit.abbreviation}">Ingredient unit</span><span class="tooltiptext" th:text="${ingredient.unit.name}">Ingredient unit value</span></div>
+                                    <span th:text="${ingredient.name}">Ingredient name</span>
+                                </li>
+                            </ul>
+                            <h5 th:if="${not #lists.isEmpty(section.ingredients)}" th:text="#{recipe.method}">Method</h5>
+                            <div>
+                                <input th:value="${section.method}" th:id="|associatedRecipeSections__${rowStat.index}__method|" type="hidden"></input>
+                                <div th:id="|associatedRecipeMethod${rowStat.index}|" class="quill-viewer-div"></div>
+                                <script th:inline="javascript">
+                                    var id = [[${rowStat.index}]];
+                                    var editor = new Quill('#associatedRecipeMethod' + id, quillReadOnlyConfiguration);
+                                    editor.setContents(JSON.parse($("#associatedRecipeSections" + id + "method").val()));
+                                </script>
+                            </div>
+                            <div class="padding-8  w3-row">
+                                <div class="w3-col l3 m6 s12 w3-display-container" th:each="picture,rowStat : ${ar.pictures}">
+                                    <img th:src="@{/view/picture/thumbnail/__${picture.id}__}" class="uploaded-picture" th:alt="${picture.title}" />
+                                    <span style="display: inline;" class="w3-block w3-text-white w3-display-bottomleft picture-title" th:text="${picture.title}"></span>
+                                </div>
+                            </div>
+                            <hr th:if="${not #lists.isEmpty(ar.sources)}">
+                            <section th:if="${not #lists.isEmpty(ar.sources)}">
+                                <h5 th:text="#{recipe.sources}">Sources</h5>
+                                <div th:each="source,rowStat : ${ar.sources}"><i><a th:href="${source}" th:text="${source}" target="_blank">Source</a></i></div>
+                            </section>
+                            <hr>
+                            <div class="padding-8">
+                                <div th:if="${ar.creator}"><span th:text="#{recipe.created.by}">Created by</span> <i th:text="${ar.creator.firstName} ? (${ar.creator.firstName} + ' ' + ${ar.creator.lastName}) : ${ar.creator.username}">username</i><span th:if="${ar.created}"> <span th:text="#{recipe.created.at}">at</span> <i th:text="${#temporals.format(ar.created, 'dd.MM.yyyy HH:mm')}" >date</i></span>.</div>
+                                <div th:if="${ar.modifier}"><span th:text="#{recipe.modified.by}">Modified by</span> <i th:text="${ar.modifier.firstName} ? (${ar.modifier.firstName} + ' ' + ${ar.modifier.lastName}) : ${ar.modifier.username}">username</i><span th:if="${ar.modified}"> <span th:text="#{recipe.modified.at}">at</span> <i th:text="${#temporals.format(ar.modified, 'dd.MM.yyyy HH:mm')}">date</i></span>.</div>
+                            </div>
+                        </section> 
+                    </div>
+                </div>
             </section>
             <div class="padding-8  w3-row">
                 <div class="w3-col l3 m6 s12 w3-display-container" th:each="picture,rowStat : *{pictures}">

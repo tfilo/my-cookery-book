@@ -170,7 +170,14 @@ public class RecipeService {
     public RecipeViewSO getView(Long id) {
         Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Recipe not found!"));
         LOGGER.debug("get view recipe {}", recipe);
-        return recipeMapper.mapRecipeToRecipeViewSO(recipe);
+        
+        RecipeViewSO recipeViewSO = recipeMapper.mapRecipeToRecipeViewSO(recipe);
+        
+        for (Recipe r : recipe.getAssociatedRecipes()) { // map only first level of asociated recipes
+            recipeViewSO.getAssociatedRecipes().add(recipeMapper.mapRecipeToRecipeViewSO(r));
+        }
+        
+        return recipeViewSO;
     }
     
     public RecipeSimpleSO getBasic(Long id) {

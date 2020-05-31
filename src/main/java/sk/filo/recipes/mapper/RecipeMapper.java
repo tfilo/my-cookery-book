@@ -52,6 +52,9 @@ public interface RecipeMapper {
     })
     RecipeSO mapRecipeToRecipeSO(Recipe recipe);
     
+    @Mappings({
+            @Mapping(target = "associatedRecipes", ignore = true)
+    })
     RecipeViewSO mapRecipeToRecipeViewSO(Recipe recipe);
     
     List<RecipeSO> mapRecipeListToRecipeSOList(List<Recipe> recipe);
