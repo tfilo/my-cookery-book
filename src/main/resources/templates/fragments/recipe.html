@@ -4,8 +4,10 @@
     </head>
     <body>
         <form autocomplete="off" method="post" th:if="${recipeSO!=null}" id="recipeForm" action="javascript:void(0);" th:fragment="recipeForm">
-            <h2 class="w3-center" th:if="${recipeSO.id==null}" th:text="#{recipe.add}">Add recipe</h2>
-            <h2 class="w3-center" th:if="${recipeSO.id!=null}" th:text="#{recipe.edit}">Edit recipe</h2>
+            <h2 class="w3-center" th:if="${recipeSO.id==null && sectionAsRecipe == null}" th:text="#{recipe.add}">Add recipe</h2>
+            <h2 class="w3-center" th:if="${recipeSO.id!=null && sectionAsRecipe == null}" th:text="#{recipe.edit}">Edit recipe</h2>
+            <h2 class="w3-center" th:if="${sectionAsRecipe != null && sectionAsRecipe == true}" th:text="#{common.section.as.recipe}">Save section as recipe</h2>
+            
             <input type="hidden" th:field="${recipeSO.id}"/>
             <input type="hidden" th:field="${recipeSO.creator}"/>
             <input type="hidden" th:field="${recipeSO.created}"/>
@@ -32,7 +34,7 @@
                         <input type="hidden" th:field="${recipeSO.sections[__${rowStat.index}__].id}"/>
                         <input type="hidden" th:field="${recipeSO.sections[__${rowStat.index}__].sortNumber}"/>
                         <div class="padding-8">
-                            <label th:text="#{recipe.section.name}">Name</label>&nbsp;<button th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/saveAsRecipe/__${rowStat.index}__'}', false);|" class="w3-button"><i class="fas fa-save"></i>&nbsp;<span th:text="#{'recipe.section.standalone'}"></span></button>
+                            <label th:text="#{recipe.section.name}">Name</label>&nbsp;<button th:if="${sectionAsRecipe == null}" th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/editAsRecipe/__${rowStat.index}__'}', true);|" class="w3-button"><i class="fas fa-save"></i>&nbsp;<span th:text="#{'recipe.section.standalone'}"></span></button>
                             <input class="w3-input w3-border" type="text" th:field="${recipeSO.sections[__${rowStat.index}__].name}" maxlength="80">
                             <label class="w3-text-red" th:if="${#fields.hasErrors('recipeSO.sections[__${rowStat.index}__].name')}" th:errors="${recipeSO.sections[__${rowStat.index}__].name}">Incorrect name</label>
                         </div>
@@ -93,9 +95,7 @@
 
                             <label class="w3-text-red" th:if="${#fields.hasErrors('recipeSO.sections[__${rowStat.index}__].method')}" th:errors="${recipeSO.sections[__${rowStat.index}__].method}">Incorrect method</label>
                         </div>
-
                         <a th:if="${!rowStat.first}" href="javascript:void(0);" th:onclick="|submitForm('recipeForm', 'sections', '@{'/recipe/sectionRemove/__${rowStat.index}__'}', false);|" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>
-
                     </div>
                 </div>
                 <label class="w3-text-red" th:if="${#fields.hasErrors('recipeSO.sections')}" th:errors="${recipeSO.sections}">Incorrect sections</label>
@@ -172,11 +172,17 @@
                 <div th:if="${recipeSO.creator}"><span th:text="#{recipe.created.by}">Created by</span> <i th:text="${recipeSO.creator}">username</i> <span th:text="#{recipe.created.at}" th:if="${recipeSO.created}">at</span> <i th:text="${#temporals.format(recipeSO.created, 'dd.MM.yyyy HH:mm')}" th:if="${recipeSO.created}">date</i>.</div>
                 <div th:if="${recipeSO.modifier}"><span th:text="#{recipe.modified.by}">Modified by</span> <i th:text="${recipeSO.modifier}">username</i> <span th:text="#{recipe.modified.at}">at</span> <i th:text="${#temporals.format(recipeSO.modified, 'dd.MM.yyyy HH:mm')}">date</i>.</div>
             </div>
-            <div class="padding-8">
+            <div class="padding-8" th:if="${sectionAsRecipe == null || sectionAsRecipe == false}">
                 <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/save'}', true);|"><i class="fas fa-save"></i>&nbsp;<span th:text="#{common.save}">Save</span></button>
                 <button type="button" class="w3-button w3-red" th:if="${recipeSO.id}" th:onclick="|$('#modalDeleteBtn').off('click').click(function(){ load('content', '@{'/recipe/delete/__${recipeSO.id}__'}', null, true); $('#modal').hide(); }); $('#modal').show();|"><i class="fas fa-trash-alt"></i>&nbsp;<span th:text="#{common.delete}">Delete</span></button>
                 <button type="button" class="w3-button w3-red" th:onclick="|load('content', '@{'/view/categoriesPreview'}', null, true);|"><i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span></button>
             </div>
+            
+            <div class="padding-8" th:if="${sectionAsRecipe != null && sectionAsRecipe == true}">
+                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/saveAsRecipe'}', true);|"><i class="fas fa-save"></i>&nbsp;<span th:text="#{common.save.and.back}">Save and back</span></button>
+                <button type="button" class="w3-button w3-red" th:onclick="|load('content', '@{'/recipe/backToEdited'}', null, true);|"><i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.back.to.recipe}">Back</span></button>
+            </div>
+            
             <script>
                 $('#searchDiv').hide();
             </script>
