@@ -33,7 +33,7 @@
             </form>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
-        <script>
+        <script th:inline="javascript">
         window.cookieconsent.initialise({
           "palette": {
             "popup": {
@@ -44,9 +44,9 @@
             }
           },
           "content": {
-            "message": "Stránka https://my-cookery-book.herokuapp.com/ používa súborý cookies ukladané na vašom počítači za účelom zapamätania prihlásania a na technické zabezpečenie funkčnosti tejto stránky. Používaním tejto stránky súhlasíte s ich ukladaním.",
-            "dismiss": "Súhlasím",
-            "link": "Informácie o cookies",
+            "message": [[${cookies.consent}]],
+            "dismiss": [[${cookies.dismiss}]],
+            "link": [[${cookies.link}]],
             "href": "https://my-cookery-book.herokuapp.com/cookies"
           }
         });
