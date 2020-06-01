@@ -33,6 +33,7 @@ public interface UserMapper {
     void mapUserSOToUser(UserSO userSO, @MappingTarget User user);
     
     @Mappings({
+        @Mapping(target = "username", ignore = true),
         @Mapping(target = "password", ignore = true)
     })
     void mapUserBasicSOToUser(UserBasicSO userBasicSO, @MappingTarget User user);

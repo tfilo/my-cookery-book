@@ -137,6 +137,11 @@ public class UserService {
         return userMapper.mapUserToUserSO(user);
     }
     
+    public UserBasicSO getBasicByUsername(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found!"));
+        return userMapper.mapUserToUserBasicSO(user);
+    }
+    
     public UserBasicSO getOwnUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();

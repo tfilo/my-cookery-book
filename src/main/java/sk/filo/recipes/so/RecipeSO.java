@@ -44,9 +44,9 @@ public class RecipeSO {
     @Valid
     private List<SourceSO> sources;
     
-    private String creator;
+    private UserBasicSO creator;
     
-    private String modifier;
+    private UserBasicSO modifier;
     
     private LocalDateTime created;
     

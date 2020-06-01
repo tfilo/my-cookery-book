@@ -3,11 +3,9 @@ package sk.filo.recipes.controller.user;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +28,7 @@ import sk.filo.recipes.service.CategoryService;
 import sk.filo.recipes.service.PictureService;
 import sk.filo.recipes.service.RecipeService;
 import sk.filo.recipes.service.UnitCategoryService;
+import sk.filo.recipes.service.UserService;
 import sk.filo.recipes.so.CategorySO;
 import sk.filo.recipes.so.IngredientSO;
 import sk.filo.recipes.so.PictureSO;
@@ -38,6 +37,7 @@ import sk.filo.recipes.so.RecipeSO;
 import sk.filo.recipes.so.SectionSO;
 import sk.filo.recipes.so.SourceSO;
 import sk.filo.recipes.so.UnitCategorySO;
+import sk.filo.recipes.so.UserBasicSO;
 import sk.filo.recipes.validator.IngredientValidator;
 
 /**
@@ -78,6 +78,9 @@ public class RecipeController {
     PictureService pictureService;
     
     @Autowired
+    UserService userService;
+    
+    @Autowired
     Preview preview;
 
     @ModelAttribute(MODEL_CATEGORIES)
@@ -99,7 +102,8 @@ public class RecipeController {
         SectionSO sectionSO = new SectionSO();
         sectionSO.setSortNumber(1); // set default sort number
         recipeSO.getSections().add(sectionSO);
-        recipeSO.setCreator(req.getUserPrincipal().getName());
+        UserBasicSO basicUser = userService.getBasicByUsername(req.getUserPrincipal().getName());
+        recipeSO.setCreator(basicUser);
         model.addAttribute(MODEL_RECIPE_SO, recipeSO);
         return "fragments/recipe::recipeForm";
     }
@@ -220,7 +224,8 @@ public class RecipeController {
         LOGGER.debug("Edit section as new recipe {}", recipeSO);
         
         RecipeSO newRecipe = new RecipeSO();
-        newRecipe.setCreator(req.getUserPrincipal().getName());
+        UserBasicSO basicUser = userService.getBasicByUsername(req.getUserPrincipal().getName());
+        recipeSO.setCreator(basicUser);
         SectionSO section = recipeSO.getSections().get(sectionRowId);
         section.setId(null);
         section.setSortNumber(1);

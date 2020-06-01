@@ -21,6 +21,7 @@
         <script th:src="@{'/js/quill-config.js'}"></script>
         <script th:src="@{'/js/form-controller.js'}"></script>
         <script th:src="@{'/js/sidebar.js'}"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css">
     </head>
     <body>
         <nav th:fragment="menu" onmouseleave="closeSidebar()" class="w3-sidebar w3-bar-block w3-border-right w3-animate-left menu" id="mySidebar">
@@ -48,6 +49,26 @@
                 <a th:href="@{'/logout'}"><i class="fas fa-sign-out-alt"></i></a>
             </div>
             <div class="w3-center w3-wide w3-large page-title" th:text="#{html.head.title}">My Cookery Book</div>
+            
+            <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+            <script th:inline="javascript">
+            window.cookieconsent.initialise({
+              "palette": {
+                "popup": {
+                  "background": "#000"
+                },
+                "button": {
+                  "background": "#f1d600"
+                }
+              },
+              "content": {
+                "message": [[#{cookies.consent}]],
+                "dismiss": [[#{cookies.dismiss}]],
+                "link": [[#{cookies.link}]],
+                "href": "https://my-cookery-book.herokuapp.com/cookies"
+              }
+            });
+            </script>
         </header>
     </body>
 </html>

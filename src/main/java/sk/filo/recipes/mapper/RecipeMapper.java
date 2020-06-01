@@ -18,7 +18,7 @@ import sk.filo.recipes.so.view.RecipeViewSO;
  */
 @Mapper(
     nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
-    uses = { SimpleCategoryMapper.class, SimpleSourceMapper.class, SimpleRecipeMapper.class, IngredientMapper.class, SimplePictureMapper.class}
+    uses = { SimpleCategoryMapper.class, SimpleSourceMapper.class, SimpleRecipeMapper.class, IngredientMapper.class, SimplePictureMapper.class, UserMapper.class}
 )
 public interface RecipeMapper {
 
@@ -46,10 +46,6 @@ public interface RecipeMapper {
     })
     void mapRecipeSOToRecipe(RecipeSO recipeSO, @MappingTarget Recipe recipe);
     
-    @Mappings({
-            @Mapping(target = "creator", source = "creator.username"),
-            @Mapping(target = "modifier", source = "modifier.username"),
-    })
     RecipeSO mapRecipeToRecipeSO(Recipe recipe);
     
     @Mappings({

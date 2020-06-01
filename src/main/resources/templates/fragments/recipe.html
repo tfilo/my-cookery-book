@@ -9,9 +9,13 @@
             <h2 class="w3-center" th:if="${sectionAsRecipe != null && sectionAsRecipe == true}" th:text="#{common.section.as.recipe}">Save section as recipe</h2>
             
             <input type="hidden" th:field="${recipeSO.id}"/>
-            <input type="hidden" th:field="${recipeSO.creator}"/>
+            <input type="hidden" th:field="${recipeSO.creator.username}"/>
+            <input type="hidden" th:field="${recipeSO.creator.firstName}"/>
+            <input type="hidden" th:field="${recipeSO.creator.lastName}"/>
             <input type="hidden" th:field="${recipeSO.created}"/>
-            <input type="hidden" th:field="${recipeSO.modifier}"/>
+            <input type="hidden" th:field="${recipeSO.modifier.username}"/>
+            <input type="hidden" th:field="${recipeSO.modifier.firstName}"/>
+            <input type="hidden" th:field="${recipeSO.modifier.lastName}"/>
             <input type="hidden" th:field="${recipeSO.modified}"/>
             <div class="padding-8">
                 <label><span th:text="#{recipe.title}">Title</span> <span class="w3-text-red">*</span></label>
@@ -169,8 +173,22 @@
                 </div> 
             </div>
             <div class="padding-8">
-                <div th:if="${recipeSO.creator}"><span th:text="#{recipe.created.by}">Created by</span> <i th:text="${recipeSO.creator}">username</i> <span th:text="#{recipe.created.at}" th:if="${recipeSO.created}">at</span> <i th:text="${#temporals.format(recipeSO.created, 'dd.MM.yyyy HH:mm')}" th:if="${recipeSO.created}">date</i>.</div>
-                <div th:if="${recipeSO.modifier}"><span th:text="#{recipe.modified.by}">Modified by</span> <i th:text="${recipeSO.modifier}">username</i> <span th:text="#{recipe.modified.at}">at</span> <i th:text="${#temporals.format(recipeSO.modified, 'dd.MM.yyyy HH:mm')}">date</i>.</div>
+                <div th:if="${recipeSO.creator}">
+                    <span th:text="#{recipe.created.by}">Created by</span>
+                    <i th:text="${recipeSO.creator.firstName} ? (${recipeSO.creator.firstName} + ' ' + ${recipeSO.creator.lastName}) : ${recipeSO.creator.username}">username</i>
+                    <span th:if="${recipeSO.created}">
+                        <span th:text="#{recipe.created.at}">at</span>
+                        <i th:text="${#temporals.format(recipeSO.created, 'dd.MM.yyyy HH:mm')}" >date</i>
+                    </span>
+                </div>
+                <div th:if="${recipeSO.modifier}">
+                    <span th:text="#{recipe.modified.by}">Modified by</span>
+                    <i th:text="${recipeSO.modifier.firstName} ? (${recipeSO.modifier.firstName} + ' ' + ${recipeSO.modifier.lastName}) : ${recipeSO.modifier.username}">username</i>
+                    <span th:if="${recipeSO.modified}">
+                        <span th:text="#{recipe.modified.at}">at</span>
+                        <i th:text="${#temporals.format(recipeSO.modified, 'dd.MM.yyyy HH:mm')}">date</i>
+                    </span>
+                </div>
             </div>
             <div class="padding-8" th:if="${sectionAsRecipe == null || sectionAsRecipe == false}">
                 <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/save'}', true);|"><i class="fas fa-save"></i>&nbsp;<span th:text="#{common.save}">Save</span></button>

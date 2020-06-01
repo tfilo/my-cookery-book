@@ -75,8 +75,22 @@
                             </section>
                             <hr>
                             <div class="padding-8">
-                                <div th:if="${ar.creator}"><span th:text="#{recipe.created.by}">Created by</span> <i th:text="${ar.creator.firstName} ? (${ar.creator.firstName} + ' ' + ${ar.creator.lastName}) : ${ar.creator.username}">username</i><span th:if="${ar.created}"> <span th:text="#{recipe.created.at}">at</span> <i th:text="${#temporals.format(ar.created, 'dd.MM.yyyy HH:mm')}" >date</i></span>.</div>
-                                <div th:if="${ar.modifier}"><span th:text="#{recipe.modified.by}">Modified by</span> <i th:text="${ar.modifier.firstName} ? (${ar.modifier.firstName} + ' ' + ${ar.modifier.lastName}) : ${ar.modifier.username}">username</i><span th:if="${ar.modified}"> <span th:text="#{recipe.modified.at}">at</span> <i th:text="${#temporals.format(ar.modified, 'dd.MM.yyyy HH:mm')}">date</i></span>.</div>
+                                <div th:if="${ar.creator}">
+                                    <span th:text="#{recipe.created.by}">Created by</span>
+                                    <i th:text="${ar.creator.firstName} ? (${ar.creator.firstName} + ' ' + ${ar.creator.lastName}) : ${ar.creator.username}">username</i>
+                                    <span th:if="${ar.created}">
+                                        <span th:text="#{recipe.created.at}">at</span>
+                                        <i th:text="${#temporals.format(ar.created, 'dd.MM.yyyy HH:mm')}" >date</i>
+                                    </span>
+                                </div>
+                                <div th:if="${ar.modifier}">
+                                    <span th:text="#{recipe.modified.by}">Modified by</span>
+                                    <i th:text="${ar.modifier.firstName} ? (${ar.modifier.firstName} + ' ' + ${ar.modifier.lastName}) : ${ar.modifier.username}">username</i>
+                                    <span th:if="${ar.modified}">
+                                        <span th:text="#{recipe.modified.at}">at</span>
+                                        <i th:text="${#temporals.format(ar.modified, 'dd.MM.yyyy HH:mm')}">date</i>
+                                    </span>
+                                </div>
                             </div>
                         </section> 
                     </div>
@@ -103,8 +117,22 @@
             </section>
             <hr>
             <div class="padding-8">
-                <div th:if="*{creator}"><span th:text="#{recipe.created.by}">Created by</span> <i th:text="*{creator.firstName} ? (*{creator.firstName} + ' ' + *{creator.lastName}) : *{creator.username}">username</i><span th:if="*{created}"> <span th:text="#{recipe.created.at}">at</span> <i th:text="*{#temporals.format(created, 'dd.MM.yyyy HH:mm')}" >date</i></span>.</div>
-                <div th:if="*{modifier}"><span th:text="#{recipe.modified.by}">Modified by</span> <i th:text="*{modifier.firstName} ? (*{modifier.firstName} + ' ' + *{modifier.lastName}) : *{modifier.username}">username</i><span th:if="*{modified}"> <span th:text="#{recipe.modified.at}">at</span> <i th:text="*{#temporals.format(modified, 'dd.MM.yyyy HH:mm')}">date</i></span>.</div>
+                <div th:if="*{creator}">
+                    <span th:text="#{recipe.created.by}">Created by</span>
+                    <i th:text="*{creator.firstName} ? (*{creator.firstName} + ' ' + *{creator.lastName}) : *{creator.username}">username</i>
+                    <span th:if="*{created}">
+                        <span th:text="#{recipe.created.at}">at</span>
+                        <i th:text="*{#temporals.format(created, 'dd.MM.yyyy HH:mm')}" >date</i>
+                    </span>
+                </div>
+                <div th:if="*{modifier}">
+                    <span th:text="#{recipe.modified.by}">Modified by</span>
+                    <i th:text="*{modifier.firstName} ? (*{modifier.firstName} + ' ' + *{modifier.lastName}) : *{modifier.username}">username</i>
+                    <span th:if="*{modified}">
+                        <span th:text="#{recipe.modified.at}">at</span>
+                        <i th:text="*{#temporals.format(modified, 'dd.MM.yyyy HH:mm')}">date</i>
+                    </span>
+                </div>
             </div>
             <script>
                 $('#searchDiv').hide();

@@ -13,6 +13,8 @@ import lombok.ToString;
 @Setter
 @ToString(exclude = {"password", "passwordConfirm"})
 public class UserBasicSO {
+
+    private String username;
     
     @Size(max=50)
     private String firstName;
