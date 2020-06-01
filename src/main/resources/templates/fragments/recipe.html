@@ -173,7 +173,7 @@
                 </div> 
             </div>
             <div class="padding-8">
-                <div th:if="${recipeSO.creator}">
+                <div th:if="${recipeSO.creator} and ${not #strings.isEmpty(recipeSO.creator.username)}">
                     <span th:text="#{recipe.created.by}">Created by</span>
                     <i th:text="${recipeSO.creator.firstName} ? (${recipeSO.creator.firstName} + ' ' + ${recipeSO.creator.lastName}) : ${recipeSO.creator.username}">username</i>
                     <span th:if="${recipeSO.created}">
@@ -181,7 +181,7 @@
                         <i th:text="${#temporals.format(recipeSO.created, 'dd.MM.yyyy HH:mm')}" >date</i>
                     </span>
                 </div>
-                <div th:if="${recipeSO.modifier}">
+                <div th:if="${recipeSO.modifier} and ${not #strings.isEmpty(recipeSO.modifier.username)}">
                     <span th:text="#{recipe.modified.by}">Modified by</span>
                     <i th:text="${recipeSO.modifier.firstName} ? (${recipeSO.modifier.firstName} + ' ' + ${recipeSO.modifier.lastName}) : ${recipeSO.modifier.username}">username</i>
                     <span th:if="${recipeSO.modified}">
