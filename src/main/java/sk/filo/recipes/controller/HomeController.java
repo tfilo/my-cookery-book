@@ -47,6 +47,12 @@ public class HomeController {
         model.addAttribute("loginError", true);
         return "login";
     }
+    
+    // Cookies info
+    @RequestMapping("/cookies")
+    public String cookies() {
+        return "cookies";
+    }
 
     @RequestMapping({"/", "/"})
     public String formPage(final Model model) {

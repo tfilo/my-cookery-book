@@ -12,6 +12,7 @@
         <link rel="stylesheet" th:href="@{'/css/fontawesome/css/solid.min.css'}">
         <link rel="stylesheet" th:href="@{'/css/w3.css'}">
         <link rel="stylesheet" th:href="@{'/css/style.css'}">
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css">
     </head>
     <body class="login-page">
         <div class="w3-container w3-content w3-card w3-padding-16 w3-margin-top w3-white" style="max-width: 400px">
@@ -31,5 +32,24 @@
                 </button>
             </form>
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+        <script>
+        window.cookieconsent.initialise({
+          "palette": {
+            "popup": {
+              "background": "#000"
+            },
+            "button": {
+              "background": "#f1d600"
+            }
+          },
+          "content": {
+            "message": "Stránka https://my-cookery-book.herokuapp.com/ používa súborý cookies ukladané na vašom počítači za účelom zapamätania prihlásania a na technické zabezpečenie funkčnosti tejto stránky. Používaním tejto stránky súhlasíte s ich ukladaním.",
+            "dismiss": "Súhlasím",
+            "link": "Informácie o cookies",
+            "href": "https://my-cookery-book.herokuapp.com/cookies"
+          }
+        });
+        </script>
     </body>
 </html>

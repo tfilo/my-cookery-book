@@ -30,7 +30,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                             "/css/**", 
                             "/js/**", 
                             "/icon/**",
-                            "/image/**"
+                            "/image/**",
+                            "/cookies"
                     ).permitAll()
                     .antMatchers("/admin/**").hasRole("ADMIN")
                     .antMatchers("/recipe/**").hasRole("USER")
