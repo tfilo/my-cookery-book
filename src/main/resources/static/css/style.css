@@ -187,5 +187,5 @@ input.empty {
 }
 
 .method {
-    white-space: pre;
+    white-space: pre-wrap;
 }

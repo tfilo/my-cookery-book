@@ -259,7 +259,7 @@
                     </li>
                 </ul>
                 <h5 th:if="${not #lists.isEmpty(section.ingredients)}" th:text="#{recipe.method}" style="margin-bottom: 0px;">Method</h5>
-                <div th:utext="${section.methodText}" class="w3-padding-16" style="white-space: pre; padding-top: 0px;"></div>
+                <div th:utext="${section.methodText}" class="w3-padding-16" style="white-space: pre-wrap; padding-top: 0px;"></div>
             </section>
 
             <section class="padding-8" th:if="*{not #lists.isEmpty(associatedRecipes)}">
@@ -280,7 +280,7 @@
                                 </li>
                             </ul>
                             <h5 th:if="${not #lists.isEmpty(section.ingredients)}" th:text="#{recipe.method}" style="margin-bottom: 0px;">Method</h5>
-                            <div th:utext="${section.methodText}" class="w3-padding-16" style="white-space: pre; padding-top: 0px;"></div>
+                            <div th:utext="${section.methodText}" class="w3-padding-16" style="white-space: pre-wrap; padding-top: 0px;"></div>
                         </section>
                     </div>
                 </div>
