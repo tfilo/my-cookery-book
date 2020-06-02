@@ -35,6 +35,10 @@ public class SectionSO {
     @Size(max=Integer.MAX_VALUE)
     private String method;
     
+    @NotBlank
+    @Size(max=Integer.MAX_VALUE)
+    private String methodText;
+    
     public List<IngredientSO> getIngredients() {
         if (Objects.isNull(ingredients)) {
             ingredients = new ArrayList<>();

@@ -86,6 +86,7 @@
                         <div class="padding-8">
                             <label><span th:text="#{recipe.method}">Method</span> <span class="w3-text-red">*</span></label>
                             <input th:field="${recipeSO.sections[__${rowStat.index}__].method}" th:id="|sections__${rowStat.index}__method|" type="hidden" required></input>
+                            <input th:field="${recipeSO.sections[__${rowStat.index}__].methodText}" th:id="|sections__${rowStat.index}__methodText|" type="hidden" required></input>
                             <div th:id="|method${rowStat.index}|" class="quill-editor-div"></div>
                             <div th:id="|method${rowStat.index}length|"></div>
                             <script th:inline="javascript">
@@ -96,7 +97,6 @@
                                     editor.setContents(JSON.parse(json));
                                 }
                             </script>
-
                             <label class="w3-text-red" th:if="${#fields.hasErrors('recipeSO.sections[__${rowStat.index}__].method')}" th:errors="${recipeSO.sections[__${rowStat.index}__].method}">Incorrect method</label>
                         </div>
                         <a th:if="${!rowStat.first}" href="javascript:void(0);" th:onclick="|submitForm('recipeForm', 'sections', '@{'/recipe/sectionRemove/__${rowStat.index}__'}', false);|" class="w3-button w3-text-red w3-display-topright"><i class="fas fa-minus-circle"></i></a>

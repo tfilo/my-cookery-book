@@ -12,9 +12,11 @@ Quill.register('modules/counter', function (quill, options) {
 
 Quill.register('modules/textarea', function (quill, options) {
     var container = document.querySelector(options.container);
+    var containerText = document.querySelector(options.containerText);
     quill.on('text-change', function () {
         var json = JSON.stringify(quill.getContents());
         container.setAttribute('value', json);
+        containerText.setAttribute('value', quill.getText());
     });
 });
 
@@ -35,7 +37,8 @@ function getQuillEditConfiguration(counterId, inputTargetId) {
                 unit: 'character'
             },
             textarea: {
-                container: inputTargetId
+                container: inputTargetId,
+                containerText: inputTargetId + "Text"
             }
         },
         theme: 'snow'

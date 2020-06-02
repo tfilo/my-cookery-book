@@ -73,7 +73,14 @@ public class PDFGenerator {
         for (int i = 0; i < recipeSO.getPictures().size(); i++) {
             PictureSO thumbail = pictureService.getThumbnail(recipeSO.getPictures().get(i).getId());
             recipeSO.getPictures().get(i).setBase64(Base64.toBase64String(thumbail.getData()));
-            LOGGER.debug("Obrazok: " + recipeSO.getPictures().get(i).getBase64());
+        }
+        
+        for (int j = 0; j < recipeSO.getAssociatedRecipes().size(); j++) {
+            RecipeViewSO recipeSO2 = recipeSO.getAssociatedRecipes().get(j);
+            for (int i = 0; i < recipeSO2.getPictures().size(); i++) {
+                PictureSO thumbail = pictureService.getThumbnail(recipeSO2.getPictures().get(i).getId());
+                recipeSO2.getPictures().get(i).setBase64(Base64.toBase64String(thumbail.getData()));
+            }
         }
         
         return templateEngine.process("pdf/pdf_template", context);

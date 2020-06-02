@@ -61,6 +61,9 @@ public class Section {
     @Column(columnDefinition = "jsonb", name = "method", nullable = false)
     private String method;
     
+    @Column(columnDefinition="TEXT", name = "method_text", nullable = false)
+    private String methodText;
+    
     public List<Ingredient> getIngredients() {
         if (Objects.isNull(ingredients)) {
             ingredients = new ArrayList<>();

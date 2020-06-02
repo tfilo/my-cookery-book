@@ -185,3 +185,7 @@ input.empty {
     padding-left: 50px;
     padding-right: 50px;
 }
+
+.method {
+    white-space: pre;
+}
