@@ -4,6 +4,10 @@ body,html{
     position: absolute;
 }
 
+*, input, select, textarea, option, button {
+    outline: none!important;
+}
+
 .login-page {
     /* The image used */
     background-image: url("../image/background3.jpg");
