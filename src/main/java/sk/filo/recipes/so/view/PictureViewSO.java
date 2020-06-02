@@ -16,4 +16,6 @@ public class PictureViewSO {
     private Long id;
     
     private String title;
+    
+    private String base64;
 }

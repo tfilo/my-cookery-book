@@ -42,6 +42,26 @@ function submitForm(formId, target, url, scroll) {
     return false; // cancel original event to prevent form submitting
 }
 
+function load(target, url, data, scroll) {
+    showLoader();
+    $.ajax({
+        type: "GET",
+        data: data ? data : null,
+        url: url,
+        success: function (response) { // on success..
+            $('#' + target).html(response); // update the DIV
+            if (scroll===true) {
+                $(window).scrollTop(($('#' + target).offset().top - $("#header").outerHeight()) - $("#searchDiv").outerHeight());
+            }
+            hideLoader();
+        },
+        error: function (err) {
+            hideLoader();
+            processError(err);
+        }
+    });
+}
+
 function uploadPicture(formId, fileInputId, target, url) {
     showLoader();
     var form = $('#' + formId)[0];
@@ -64,26 +84,6 @@ function uploadPicture(formId, fileInputId, target, url) {
         }
     });
     return false; // cancel original event to prevent form submitting
-}
-
-function load(target, url, data, scroll) {
-    showLoader();
-    $.ajax({
-        type: "GET",
-        data: data ? data : null,
-        url: url,
-        success: function (response) { // on success..
-            $('#' + target).html(response); // update the DIV
-            if (scroll===true) {
-                $(window).scrollTop(($('#' + target).offset().top - $("#header").outerHeight()) - $("#searchDiv").outerHeight());
-            }
-            hideLoader();
-        },
-        error: function (err) {
-            hideLoader();
-            processError(err);
-        }
-    });
 }
 
 const debounce = (func, delay) => {

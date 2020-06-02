@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.thymeleaf.util.StringUtils;
+import sk.filo.recipes.component.PDFGenerator;
 import sk.filo.recipes.component.Preview;
 import sk.filo.recipes.service.CategoryService;
 import sk.filo.recipes.service.PictureService;
@@ -63,6 +65,9 @@ public class RecipeViewController {
     
     @Autowired
     Preview preview;
+    
+    @Autowired
+    PDFGenerator pdfGenerator;
 
     @RequestMapping(value="recipe/{recipeId}")
     public String viewRecipe(final Model model, final @PathVariable Long recipeId, final HttpServletRequest req) {
@@ -165,6 +170,24 @@ public class RecipeViewController {
         headers.setContentType(MediaType.IMAGE_JPEG);
             
         return new ResponseEntity<>(pictureSO.getData(), headers, HttpStatus.CREATED);
+    }
+    
+    @RequestMapping(value = "/pdf/{recipeId}", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> generatePDFbyId(final @PathVariable Long recipeId) {
+        LOGGER.debug("Getting pdf recipe id");
+        RecipeViewSO recipeSO = recipeService.getView(recipeId);
+
+        byte[] generate = pdfGenerator.generate(recipeSO);
+
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        
+        ContentDisposition contentDisposition = ContentDisposition.builder("inline")
+          .filename(recipeSO.getTitle() + ".pdf")
+          .build();
+        
+        headers.setContentDisposition(contentDisposition);
+        return new ResponseEntity<>(generate, headers, HttpStatus.CREATED);
     }
     
 }
