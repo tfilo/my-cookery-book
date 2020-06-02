@@ -57,12 +57,8 @@ public class Section {
     @OrderBy("sortNumber ASC")
     private List<Ingredient> ingredients;
     
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb", name = "method", nullable = false)
+    @Column(columnDefinition="TEXT", name = "method", nullable = false)
     private String method;
-    
-    @Column(columnDefinition="TEXT", name = "method_text", nullable = false)
-    private String methodText;
     
     public List<Ingredient> getIngredients() {
         if (Objects.isNull(ingredients)) {

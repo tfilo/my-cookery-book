@@ -20,7 +20,7 @@ public class SectionViewSO {
     
     private List<IngredientViewSO> ingredients;
     
-    private String methodText;
+    private String method;
         
     private List<PictureViewSO> pictures;
     
