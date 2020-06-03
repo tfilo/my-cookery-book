@@ -96,6 +96,6 @@ public class PDFGenerator {
             }
         }
 
-        return templateEngine.process("/pdf/recipe", context);
+        return templateEngine.process("pdf/recipe", context);
     }
 }
