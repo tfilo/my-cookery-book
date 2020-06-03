@@ -1,5 +1,6 @@
 package sk.filo.recipes.component;
 
+import com.lowagie.text.pdf.BaseFont;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Locale;
@@ -42,18 +43,10 @@ public class PDFGenerator {
     
     @Autowired
     ISpringTemplateEngine templateEngine;
-    
-//    @Bean
-//    public ThymeleafViewResolver viewResolver() {
-//        ThymeleafViewResolver thymeleafViewResolver = new ThymeleafViewResolver();
-//        thymeleafViewResolver.setTemplateEngine(templateEngine);
-//        thymeleafViewResolver.setCharacterEncoding("UTF-8");
-//        return thymeleafViewResolver;
-//    }
 
     public byte[] generate(RecipeViewSO recipeSO) {
         String html = parseThymeleafTemplate(recipeSO);
-        
+        LOGGER.debug(html);
         ByteArrayOutputStream outputStream;
         try {
             outputStream = generatePdfOutputStreamFromHtml(html);
@@ -70,6 +63,10 @@ public class PDFGenerator {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         ITextRenderer renderer = new ITextRenderer();
+
+        renderer.getFontResolver().addFont("fonts/verdana.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        renderer.getFontResolver().addFont("fonts/arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        
         renderer.setDocumentFromString(html);
         renderer.layout();
         renderer.createPDF(outputStream);
