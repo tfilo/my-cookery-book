@@ -20,7 +20,7 @@
                     </li>
                 </ul>
                 <h5 th:if="${not #lists.isEmpty(section.ingredients)}" th:text="#{recipe.method}">Method</h5>
-                <div th:utext="${section.method}" class="method"></div>
+                <div th:utext="${section.method}" class="method w3-justify"></div>
             </section>
             <section class="padding-8" th:if="*{not #lists.isEmpty(associatedRecipes)}">
                 <h5 th:text="#{recipe.serve.with}">Serve with recipes</h5>
@@ -38,7 +38,7 @@
                                 </li>
                             </ul>
                             <h5 th:if="${not #lists.isEmpty(section.ingredients)}" th:text="#{recipe.method}">Method</h5>
-                            <div th:utext="${section.method}" class="method"></div>
+                            <div th:utext="${section.method}" class="method w3-justify"></div>
                             <div class="padding-8  w3-row">
                                 <div class="w3-col l3 m6 s12 w3-display-container" th:each="picture,rowStat : ${ar.pictures}">
                                     <img th:src="@{/view/picture/thumbnail/__${picture.id}__}" th:onclick="|$('#imageView__${picture.id}__').show();|" class="uploaded-picture" th:alt="${picture.title}" />
