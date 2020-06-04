@@ -32,6 +32,7 @@
             <a href="javascript:void(0);" th:onclick="|load('content', '@{'/recipe/add'}', null, true); closeSidebar();|" class="w3-bar-item w3-button" sec:authorize="hasRole('USER')"><i class="fas fa-pizza-slice icon"></i> <span th:text="#{common.add.recipe}">Add recipe</span></a>
             <hr sec:authorize="isAuthenticated()">
             <a href="javascript:void(0);" th:onclick="|load('content', '@{'/view/categoriesPreview'}', null, true); closeSidebar();|" class="w3-bar-item w3-button"><span th:text="#{common.homepage}">Homepage</span></a>
+            <a href="javascript:void(0);" th:onclick="|load('content', '@{'/view/find'}',{ 'page': 0, 'pageSize': 16, 'sortField': 'title', 'direction': 'ASC' }, true); closeSidebar();|" class="w3-bar-item w3-button"><span th:text="#{common.allrecipes}">All</span></a>
             <hr>
             <div id="categoryLinks">
                 <th:block th:each="category, rowStat : ${allCategories}">
