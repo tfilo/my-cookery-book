@@ -49,7 +49,7 @@
                            th:onkeypress="|if (event.key === 'Enter') load('content', '@{'/view/find'}' , { 'title': $('#search').val(), 'categoryId': $('#searchCategoryId').val(), 'page': 0, 'pageSize': 16, 'sortField': 'title', 'direction': 'ASC' }, true); return event.key != 'Enter';|"/>
                 </div>
             </div>
-            <div class="w3-main w3-content w3-padding" id="content" th:insert="fragments/view :: recipesList">&nbsp;</div>
-        </main>
+            <div class="w3-main w3-content w3-padding" id="content" th:insert="fragments/__${usedFragment}__">&nbsp;</div>
+        </main>     
     </body>
 </html>
