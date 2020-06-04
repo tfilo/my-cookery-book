@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,8 @@ public class RecipeViewController {
     private static final String CATEGORY_ID = "categoryId";
     private static final String SEARCHED_TITLE = "searchedTitle";
     
+    private static final String SEARCH_CRITERIA = "searchCriteria";
+    
     @Autowired
     RecipeService recipeService;
     
@@ -79,16 +82,34 @@ public class RecipeViewController {
     }
     
     @RequestMapping(value="/categoriesPreview")
-    public String viewRecipeCategoriesPreview(final Model model) {
+    public String viewRecipeCategoriesPreview(final Model model, final HttpServletRequest req) {
         LOGGER.debug("Getting categoriesPreview");
+        
+        HttpSession session = req.getSession();
+        session.removeAttribute(SEARCH_CRITERIA);
+        
         preview.setAllCategoriesWithRecipes(model);
         return "fragments/view::recipesList";
     }
     
+    @RequestMapping(value={"/back"})
+    public String backToCategory(final Model model, final HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        Object obj = session.getAttribute(SEARCH_CRITERIA);
+        if (obj == null) {
+            return viewRecipeCategoriesPreview(model, req);
+        } else {
+            return viewRecipesInCategory(model, (RecipeSearchCriteriaSO)obj, req);
+        }
+    }
+    
     @RequestMapping(value={"/find"})
-    public String viewRecipesInCategory(final Model model, final RecipeSearchCriteriaSO criteria) {
+    public String viewRecipesInCategory(final Model model, final RecipeSearchCriteriaSO criteria, final HttpServletRequest req) {
         LOGGER.debug("Getting recipes by criteria");
 
+        HttpSession session = req.getSession();
+        session.setAttribute(SEARCH_CRITERIA, criteria);
+        
         Page<RecipeBasicSO> results = recipeService.getAllBasicByCriteria(criteria);
         
         model.addAttribute(MODEL_RECIPES, results);

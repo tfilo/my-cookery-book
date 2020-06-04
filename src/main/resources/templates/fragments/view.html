@@ -5,7 +5,7 @@
     <body>
         <article th:object="${recipeViewSO}" th:fragment="recipeView">
             <div>
-                <a class="w3-button w3-text-green absolute" href="javascript:void(0);" th:onclick="|load('content', '@{'/view/categoriesPreview'}', null, true);|"><i class="fas fa-arrow-circle-left w3-xxlarge"></i></a>
+                <a class="w3-button w3-text-green absolute" href="javascript:void(0);" th:onclick="|load('content', '@{'/view/back'}', null, true);|"><i class="fas fa-arrow-circle-left w3-xxlarge"></i></a>
                 <a class="w3-button w3-text-red w3-right" target="_blank" th:href="@{'/view/pdf/__${recipeViewSO.id}__'}"><i class="fas fa-file-pdf w3-xxlarge"></i></a>
                 <h2 class="w3-center title" th:text="*{title}">Recipe title</h2>
             </div>
