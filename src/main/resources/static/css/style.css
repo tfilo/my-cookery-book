@@ -45,7 +45,6 @@ body,html{
 
 .page-title{
     padding-top: 14px;
-    padding-left: 70px;
 }
 
 .pointer {
@@ -179,11 +178,6 @@ input.empty {
     font-style: normal;
     font-weight: normal;
     text-decoration: inherit;
-}
-
-.title {
-    padding-left: 50px;
-    padding-right: 50px;
 }
 
 .method {
