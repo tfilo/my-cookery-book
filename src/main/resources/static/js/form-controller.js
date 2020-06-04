@@ -105,3 +105,14 @@ function processError(err) {
         $('#error').hide(1000);
     }, 10000);
 }
+
+function copyLink(link, tooltipId, copiedText) {
+    var textarea = document.createElement("textarea");
+    document.body.appendChild(textarea);
+    textarea.value = link;
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  
+    $('#' + tooltipId).text(copiedText);
+}

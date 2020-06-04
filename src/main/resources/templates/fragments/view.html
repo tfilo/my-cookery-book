@@ -5,8 +5,26 @@
     <body>
         <article th:object="${recipeViewSO}" th:fragment="recipeView">
             <div>
-                <a class="w3-button w3-text-green absolute" href="javascript:void(0);" th:onclick="|load('content', '@{'/view/back'}', null, true);|"><i class="fas fa-arrow-circle-left w3-xxlarge"></i></a>
-                <a class="w3-button w3-text-red w3-right" target="_blank" th:href="@{'/view/pdf/__${recipeViewSO.id}__'}"><i class="fas fa-file-pdf w3-xxlarge"></i></a>
+                <a class="w3-button w3-text-green w3-left" href="javascript:void(0);" th:onclick="|load('content', '@{'/view/back'}', null, true);|"><i class="fas fa-arrow-circle-left w3-xlarge"></i></a>
+                <div class="w3-right">
+                    <div class="tooltip">
+                        <a class="w3-button w3-text-blue" 
+                           href="javascript:void(0);" 
+                           th:onmouseover="|$('#tooltip_share').text('#{'recipe.share.link'}')|"
+                           th:onclick="|copyLink('@{'__${@environment.getProperty('app.base_url')}__/recipe/__*{id}__'}', 'tooltip_share', '#{'recipe.link.copied'}');|">
+                            <span class="tooltiptext" th:text="#{'recipe.share.link'}" id="tooltip_share">Share link</span>
+                            <i class="fas fa-share-square w3-xlarge"></i>
+                        </a>
+                    </div>
+                    <div class="tooltip">
+                        <a class="w3-button w3-text-red" 
+                           target="_blank" 
+                           th:href="@{'/view/pdf/__${recipeViewSO.id}__'}">
+                            <span class="tooltiptext" th:text="#{'recipe.download.pdf'}">Download PDF</span>
+                            <i class="fas fa-file-pdf w3-xlarge"></i>
+                        </a>
+                    </div>
+                </div>
                 <h2 class="w3-center title" th:text="*{title}">Recipe title</h2>
             </div>
             <section class="padding-8" th:each="section,rowStat : *{sections}">

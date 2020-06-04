@@ -4,6 +4,8 @@ server:
   error:
     whitelabel:
         enabled: false
+app:
+    base_url: ${BASE_URL:http://localhost:8080}
 spring:
     ## PostgreSQL
     datasource:
