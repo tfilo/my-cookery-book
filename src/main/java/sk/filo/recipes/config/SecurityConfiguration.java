@@ -31,6 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                             "/js/**", 
                             "/icon/**",
                             "/image/**",
+                            "/link/recipe/*",
                             "/cookies"
                     ).permitAll()
                     .antMatchers("/admin/**").hasRole("ADMIN")

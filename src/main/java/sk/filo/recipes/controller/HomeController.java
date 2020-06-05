@@ -32,7 +32,6 @@ public class HomeController {
     private static final String USED_FRAGMENT = "usedFragment";
     
     private static final String RECIPE_ID = "recipeId";
-    private static final String CATEGORY_ID = "categoryId";
     
     @Autowired
     CategoryService categoryService;
@@ -71,43 +70,33 @@ public class HomeController {
         return "cookies";
     }
 
-    @RequestMapping({"/", "/recipe/{recipeId}", "/category/{categoryId}"})
-    public String formPage(final Model model, @PathVariable Optional<Long> recipeId, @PathVariable Optional<Long> categoryId, final HttpServletRequest req) {
+    @RequestMapping("/")
+    public String formPage(final Model model, final HttpServletRequest req) {
         LOGGER.debug("Getting Home page");
-        
-        HttpSession session = req.getSession();
-        
-        if (recipeId.isEmpty() && categoryId.isEmpty()) {
-            if (session.getAttribute(RECIPE_ID)==null && session.getAttribute(CATEGORY_ID)==null) {
-                preview.setAllCategoriesWithRecipes(model);
-                model.addAttribute(USED_FRAGMENT, "view :: recipesList");
-            }
-            
-            if (session.getAttribute(RECIPE_ID)!=null) {
-                recipeViewController.viewRecipe(model, (Long)session.getAttribute(RECIPE_ID), req);
-                model.addAttribute(USED_FRAGMENT, "view :: recipeView");
-            }
-            
-            if (session.getAttribute(CATEGORY_ID)!=null) {
-                RecipeSearchCriteriaSO so = new RecipeSearchCriteriaSO();
-                so.setCategoryId((Long)session.getAttribute(CATEGORY_ID));
-                recipeViewController.viewRecipesInCategory(model, so, req);
-                model.addAttribute(USED_FRAGMENT, "view :: recipesList");
-            }
 
-            session.setAttribute(RECIPE_ID, null);
-            session.setAttribute(CATEGORY_ID, null);
-            return "home";
-        }      
+        HttpSession session = req.getSession();
+
+        if (session.getAttribute(RECIPE_ID) == null) {
+            preview.setAllCategoriesWithRecipes(model);
+            model.addAttribute(USED_FRAGMENT, "view :: recipesList");
+        } else {
+            recipeViewController.viewRecipe(model, (Long) session.getAttribute(RECIPE_ID), req);
+            model.addAttribute(USED_FRAGMENT, "view :: recipeView");
+        }
+
+        session.setAttribute(RECIPE_ID, null);
+
+        return "home";
+    }
+
+    @RequestMapping("/link/recipe/{recipeId}")
+    public String saveLinkToSession(@PathVariable Optional<Long> recipeId, final HttpServletRequest req) {
+        LOGGER.debug("Saving recipe link to session");
+        
+        HttpSession session = req.getSession();    
         
         if (recipeId.isPresent()) {
             session.setAttribute(RECIPE_ID, recipeId.get());
-            session.setAttribute(CATEGORY_ID, null);
-        }
-        
-        if (categoryId.isPresent()) {
-            session.setAttribute(RECIPE_ID, null);
-            session.setAttribute(CATEGORY_ID, categoryId.get());
         }
         
         return "redirect:/";
