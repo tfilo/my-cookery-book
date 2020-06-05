@@ -26,7 +26,7 @@
                         </div>
                     </div>
                 </div>
-                <h2 class="w3-center view-title" th:text="*{title}">Recipe title</h2>
+                <h2 class="w3-center" th:text="*{title}">Recipe title</h2>
             </div>
             <section class="padding-8" th:each="section,rowStat : *{sections}">
                 <h4 th:text="${section.name}" class="bold">Sections name</h4>
