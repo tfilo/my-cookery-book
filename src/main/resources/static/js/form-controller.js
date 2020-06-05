@@ -1,5 +1,6 @@
 var loaderSemaphore = 0;
 var showLoaderTimer = null;
+var tooltipChange = null;
 
 function showLoader() {
     loaderSemaphore++;
@@ -106,7 +107,7 @@ function processError(err) {
     }, 10000);
 }
 
-function copyLink(link, tooltipId, copiedText) {
+function copyLink(link, tooltipId, copyTitle, copiedTitle) {
     var textarea = document.createElement("textarea");
     document.body.appendChild(textarea);
     textarea.value = link;
@@ -114,5 +115,11 @@ function copyLink(link, tooltipId, copiedText) {
     document.execCommand("copy");
     document.body.removeChild(textarea);
   
-    $('#' + tooltipId).text(copiedText);
+    $('#' + tooltipId).text(copiedTitle);
+    if (tooltipChange) {
+        clearInterval(tooltipChange);
+    }
+    tooltipChange = setTimeout(function() {
+        $('#' + tooltipId).text(copyTitle);
+    }, 5000);
 }

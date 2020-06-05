@@ -1,5 +1,7 @@
 package sk.filo.recipes.controller;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -204,7 +206,7 @@ public class RecipeViewController {
         headers.setContentType(MediaType.APPLICATION_PDF);
         
         ContentDisposition contentDisposition = ContentDisposition.builder("inline")
-          .filename(recipeSO.getTitle() + ".pdf")
+          .filename(recipeSO.getTitle() + ".pdf", StandardCharsets.UTF_8)
           .build();
         
         headers.setContentDisposition(contentDisposition);
