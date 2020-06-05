@@ -71,6 +71,10 @@ body,html{
     padding-right: 16px;
 }
 
+.view-title{
+    padding-right: 105px;
+}
+
 .margin-bottom-16{
     margin-bottom: 16px;
 }
@@ -95,6 +99,14 @@ select[multiple] option:checked {
 
 .icon{
     width: 25px;
+}
+
+.large-icon{
+    width: 30px;
+}
+
+.recipie-view-action-menu {
+    width: 190px;
 }
 
 .w3-col.padding-bottom-16{

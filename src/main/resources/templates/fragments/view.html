@@ -5,27 +5,28 @@
     <body>
         <article th:object="${recipeViewSO}" th:fragment="recipeView">
             <div>
-                <a class="w3-button w3-text-green w3-left" href="javascript:void(0);" th:onclick="|load('content', '@{'/view/back'}', null, true);|"><i class="fas fa-arrow-circle-left w3-xlarge"></i></a>
-                <div class="w3-right">
-                    <div class="tooltip">
-                        <a class="w3-button w3-text-blue" 
-                           href="javascript:void(0);" 
-                           th:onmouseover="|$('#tooltip_share').text('#{'recipe.share.link'}')|"
-                           th:onclick="|copyLink('@{'__${@environment.getProperty('app.base_url')}__/link/recipe/__*{id}__'}', 'tooltip_share', '#{'recipe.link.copied'}');|">
-                            <span class="tooltiptext" th:text="#{'recipe.share.link'}" id="tooltip_share">Share link</span>
-                            <i class="fas fa-share-square w3-xlarge"></i>
-                        </a>
-                    </div>
-                    <div class="tooltip">
-                        <a class="w3-button w3-text-red" 
-                           target="_blank" 
-                           th:href="@{'/view/pdf/__${recipeViewSO.id}__'}">
-                            <span class="tooltiptext" th:text="#{'recipe.download.pdf'}">Download PDF</span>
-                            <i class="fas fa-file-pdf w3-xlarge"></i>
-                        </a>
+                <div class="w3-left">
+                    <a class="w3-button w3-text-green" href="javascript:void(0);" th:onclick="|load('content', '@{'/view/back'}', null, true);|"><i class="fas fa-arrow-circle-left w3-xlarge"></i></a>
+                    <div class="w3-dropdown-hover">
+                        <button class="w3-button" onclick="$('#view-action-menu').toggleClass('w3-show');"><i class="fas fa-ellipsis-v w3-xlarge"></i></button>
+                        <div id="view-action-menu" class="w3-dropdown-content w3-bar-block w3-border recipie-view-action-menu">
+                            <a class="w3-bar-item w3-button"
+                               href="javascript:void(0);"
+                               th:onmouseover="|$('#tooltip_share').text('#{'recipe.share.link'}')|"
+                               th:onclick="|copyLink('@{'__${@environment.getProperty('app.base_url')}__/link/recipe/__*{id}__'}', 'tooltip_share', '#{'recipe.link.copied'}');|">
+                                <i class="w3-text-blue fas fa-share-square w3-xlarge large-icon"></i>
+                                <span th:text="#{'recipe.share.link'}" id="tooltip_share">Share link</span>
+                            </a>
+                            <a target="_blank" 
+                               th:href="@{'/view/pdf/__${recipeViewSO.id}__'}"
+                               class="w3-bar-item w3-button">
+                                <i class="w3-text-red fas fa-file-pdf w3-xlarge large-icon"></i>
+                                <span th:text="#{'recipe.download.pdf'}">Download PDF</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
-                <h2 class="w3-center" th:text="*{title}">Recipe title</h2>
+                <h2 class="w3-center view-title" th:text="*{title}">Recipe title</h2>
             </div>
             <section class="padding-8" th:each="section,rowStat : *{sections}">
                 <h4 th:text="${section.name}" class="bold">Sections name</h4>
