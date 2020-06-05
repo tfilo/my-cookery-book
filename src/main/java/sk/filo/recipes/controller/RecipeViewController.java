@@ -44,18 +44,6 @@ public class RecipeViewController {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(RecipeViewController.class);
     
-    private static final String MODEL_RECIPE_VIEW_SO = "recipeViewSO";
-    
-    private static final String MODEL_RECIPES = "recipes";
-    
-    private static final String TITLE = "title";
-    private static final String PAGE_NUMBERS = "pageNumbers";
-    
-    private static final String CATEGORY_ID = "categoryId";
-    private static final String SEARCHED_TITLE = "searchedTitle";
-    
-    private static final String SEARCH_CRITERIA = "searchCriteria";
-    
     @Autowired
     RecipeService recipeService;
     
@@ -79,7 +67,7 @@ public class RecipeViewController {
         LOGGER.debug("View recipe by id {}", recipeId);
         RecipeViewSO recipeSO = recipeService.getView(recipeId);
         LOGGER.debug("Loaded recipe view {}", recipeSO);
-        model.addAttribute(MODEL_RECIPE_VIEW_SO, recipeSO);
+        model.addAttribute(ModelAttributeConstants.MODEL_RECIPE_VIEW_SO, recipeSO);
         return "fragments/view::recipeView";
     }
     
@@ -88,7 +76,7 @@ public class RecipeViewController {
         LOGGER.debug("Getting categoriesPreview");
         
         HttpSession session = req.getSession();
-        session.removeAttribute(SEARCH_CRITERIA);
+        session.removeAttribute(ModelAttributeConstants.SEARCH_CRITERIA);
         
         preview.setAllCategoriesWithRecipes(model);
         return "fragments/view::recipesList";
@@ -97,7 +85,7 @@ public class RecipeViewController {
     @RequestMapping(value={"/back"})
     public String backToCategory(final Model model, final HttpServletRequest req) {
         HttpSession session = req.getSession();
-        Object obj = session.getAttribute(SEARCH_CRITERIA);
+        Object obj = session.getAttribute(ModelAttributeConstants.SEARCH_CRITERIA);
         if (obj == null) {
             return viewRecipeCategoriesPreview(model, req);
         } else {
@@ -110,16 +98,16 @@ public class RecipeViewController {
         LOGGER.debug("Getting recipes by criteria");
 
         HttpSession session = req.getSession();
-        session.setAttribute(SEARCH_CRITERIA, criteria);
+        session.setAttribute(ModelAttributeConstants.SEARCH_CRITERIA, criteria);
         
         Page<RecipeBasicSO> results = recipeService.getAllBasicByCriteria(criteria);
         
-        model.addAttribute(MODEL_RECIPES, results);
+        model.addAttribute(ModelAttributeConstants.MODEL_RECIPES, results);
         String titleString = "";
         
         if (criteria.getCategoryId() != null) {
             titleString += categoryService.get(criteria.getCategoryId()).getName();
-            model.addAttribute(CATEGORY_ID, criteria.getCategoryId());
+            model.addAttribute(ModelAttributeConstants.CATEGORY_ID, criteria.getCategoryId());
         }
         
         if (criteria.getTitle() != null && !StringUtils.isEmptyOrWhitespace(criteria.getTitle())) {
@@ -129,7 +117,7 @@ public class RecipeViewController {
             MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
             String message = accessor.getMessage("recipe.filtered.by");
             titleString += message + " '" + criteria.getTitle() + "'";
-            model.addAttribute(SEARCHED_TITLE, criteria.getTitle());
+            model.addAttribute(ModelAttributeConstants.SEARCHED_TITLE, criteria.getTitle());
         }
         
         int totalPages = results.getTotalPages();
@@ -138,7 +126,7 @@ public class RecipeViewController {
             List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
                 .boxed()
                 .collect(Collectors.toList());
-            model.addAttribute(PAGE_NUMBERS, pageNumbers);
+            model.addAttribute(ModelAttributeConstants.PAGE_NUMBERS, pageNumbers);
         } else if (totalPages > 0) {
             List<Integer> pageNumbers;
             if ((currentPage - 2) > 1 && (currentPage + 2) < totalPages) {
@@ -158,10 +146,10 @@ public class RecipeViewController {
                 .collect(Collectors.toList());
                 pageNumbers.add(0, 1);
             }
-            model.addAttribute(PAGE_NUMBERS, pageNumbers);
+            model.addAttribute(ModelAttributeConstants.PAGE_NUMBERS, pageNumbers);
         }
 
-        model.addAttribute(TITLE, titleString);
+        model.addAttribute(ModelAttributeConstants.TITLE, titleString);
         return "fragments/view::recipesList";
     }
         

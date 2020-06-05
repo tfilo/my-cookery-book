@@ -27,30 +27,18 @@ public class CategoryService {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(CategoryService.class);
 
+    @Autowired
     private CategoryMapper categoryMapper;
     
+    @Autowired
     private CategoryRepository categoryRepository;
     
+    @Autowired
     private RecipeRepository recipeRepository;
     
     @Autowired
     MessageSource messageSource;
     
-    @Autowired
-    public void setCategoryMapper(CategoryMapper categoryMapper) {
-        this.categoryMapper = categoryMapper;
-    }
-    
-    @Autowired
-    public void setCategoryRepository(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
-    
-    @Autowired
-    public void setRecipeRepository(RecipeRepository recipeRepository) {
-        this.recipeRepository = recipeRepository;
-    }
-
     @Transactional
     public void save(CategorySO categorySO) {
         LOGGER.debug("save categorySO {}", categorySO);

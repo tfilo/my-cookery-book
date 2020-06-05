@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import sk.filo.recipes.controller.ModelAttributeConstants;
 import sk.filo.recipes.service.UserService;
 import sk.filo.recipes.so.UserSO;
 import sk.filo.recipes.validator.PasswordValidator;
@@ -25,10 +26,6 @@ public class UserController {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     
-    private static final String MODEL_USERS = "users";
-    
-    private static final String MODEL_USER_SO = "userSO";
-    
     private final Validator validator = new PasswordValidator();
     
     @Autowired
@@ -37,7 +34,7 @@ public class UserController {
     private void setAllUsers(final Model model) {
         List<UserSO> all = userService.getAll();
         LOGGER.debug("setAllUsers {}", all);
-        model.addAttribute(MODEL_USERS, all);
+        model.addAttribute(ModelAttributeConstants.MODEL_USERS, all);
     }
     
     @RequestMapping(value="/all")
@@ -50,7 +47,7 @@ public class UserController {
     @RequestMapping(value="/add")
     public String addUser(final Model model) {
         LOGGER.debug("Create user action");
-        model.addAttribute(MODEL_USER_SO, new UserSO());
+        model.addAttribute(ModelAttributeConstants.MODEL_USER_SO, new UserSO());
         return "fragments/user::userForm";
     }
     
@@ -58,7 +55,7 @@ public class UserController {
     public String getUserById(final @PathVariable Long id, final Model model) {
         LOGGER.debug("Get user by id {}", id);
         UserSO user = userService.get(id);
-        model.addAttribute(MODEL_USER_SO, user);
+        model.addAttribute(ModelAttributeConstants.MODEL_USER_SO, user);
         return "fragments/user::userForm";
     }
     
@@ -71,7 +68,7 @@ public class UserController {
         }
         userService.save(userSO);
         setAllUsers(model);
-        LOGGER.debug("Uzivatelia po ulozeni: {}",model.getAttribute(MODEL_USERS));
+        LOGGER.debug("Uzivatelia po ulozeni: {}",model.getAttribute(ModelAttributeConstants.MODEL_USERS));
         return "fragments/user::usersList";
     }
     

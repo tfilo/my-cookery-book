@@ -18,7 +18,6 @@ import sk.filo.recipes.so.UserSO;
 public class PasswordValidator implements Validator {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(PasswordValidator.class);
-    
 
     @Override
     public boolean supports(Class clazz) {

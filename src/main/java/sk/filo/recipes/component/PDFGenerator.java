@@ -10,18 +10,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
-import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.ISpringTemplateEngine;
-import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import sk.filo.recipes.service.PictureService;
 import sk.filo.recipes.so.PictureSO;
+import sk.filo.recipes.so.view.PictureViewSO;
 import sk.filo.recipes.so.view.RecipeViewSO;
 
 /**
@@ -46,7 +44,7 @@ public class PDFGenerator {
 
     public byte[] generate(RecipeViewSO recipeSO) {
         String html = parseThymeleafTemplate(recipeSO);
-        LOGGER.debug(html);
+        LOGGER.debug("Generated HTML {}", html);
         ByteArrayOutputStream outputStream;
         try {
             outputStream = generatePdfOutputStreamFromHtml(html);
@@ -80,18 +78,17 @@ public class PDFGenerator {
         context.setVariable(MODEL_RECIPE_VIEW_SO, recipeSO);
         context.setLocale(new Locale("sk"));
 
-        for (int i = 0; i < recipeSO.getPictures().size(); i++) {
-            PictureSO thumbail = pictureService.getThumbnail(recipeSO.getPictures().get(i).getId());
-            recipeSO.getPictures().get(i).setBase64(Base64.toBase64String(thumbail.getData()));
-        }
+        recipeSO.getPictures().forEach((PictureViewSO pictureViewSO) -> {
+            PictureSO thumbail = pictureService.getThumbnail(pictureViewSO.getId());
+            pictureViewSO.setBase64(Base64.toBase64String(thumbail.getData()));
+        });
         
-        for (int j = 0; j < recipeSO.getAssociatedRecipes().size(); j++) {
-            RecipeViewSO recipeSO2 = recipeSO.getAssociatedRecipes().get(j);
-            for (int i = 0; i < recipeSO2.getPictures().size(); i++) {
-                PictureSO thumbail = pictureService.getThumbnail(recipeSO2.getPictures().get(i).getId());
-                recipeSO2.getPictures().get(i).setBase64(Base64.toBase64String(thumbail.getData()));
-            }
-        }
+        recipeSO.getAssociatedRecipes().forEach((RecipeViewSO recipeViewSO) -> {
+            recipeViewSO.getPictures().forEach((PictureViewSO pictureViewSO) -> {
+                PictureSO thumbail = pictureService.getThumbnail(pictureViewSO.getId());
+                pictureViewSO.setBase64(Base64.toBase64String(thumbail.getData()));
+            });
+        });
 
         return templateEngine.process("pdf/recipe", context);
     }

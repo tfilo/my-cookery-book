@@ -38,43 +38,23 @@ public class UserService {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
+    @Autowired
     private UserMapper userMapper;
     
+    @Autowired
     private UserRepository userRepository;
     
+    @Autowired
     private RecipeRepository recipeRepository;
     
+    @Autowired
     private RoleRepository roleRepository;
     
+    @Autowired
     private PasswordEncoder passwordEncoder;
     
     @Autowired
     MessageSource messageSource;
-    
-    @Autowired
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
-    
-    @Autowired
-    public void setUserMapper(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
-    
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-    
-    @Autowired
-    public void setRoleRepository(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
-
-    @Autowired
-    public void setRecipeRepository(RecipeRepository recipeRepository) {
-        this.recipeRepository = recipeRepository;
-    }
     
     @Transactional
     public void save(UserSO userSO) {

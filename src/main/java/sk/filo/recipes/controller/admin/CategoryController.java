@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import sk.filo.recipes.controller.ModelAttributeConstants;
 import sk.filo.recipes.service.CategoryService;
 import sk.filo.recipes.so.CategorySO;
 
@@ -22,19 +23,11 @@ public class CategoryController {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
     
-    private static final String MODEL_CATEGORIES = "categories";
-    
-    private static final String RELOAD_MENU = "reloadMenu";
-    
-    private static final String MODEL_CATEGORY_SO = "categorySO";
-    
-    private static final String MODEL_ALL_CATEGORIES = "allCategories";
-    
     @Autowired
     CategoryService categoryService;
         
     private void setAllCategories(final Model model) {
-        model.addAttribute(MODEL_CATEGORIES, categoryService.getAll());
+        model.addAttribute(ModelAttributeConstants.MODEL_CATEGORIES, categoryService.getAll());
     }
     
     @RequestMapping(value="/all")
@@ -47,7 +40,7 @@ public class CategoryController {
     @RequestMapping(value="/add")
     public String addCategory(final Model model) {
         LOGGER.debug("Create category action");
-        model.addAttribute(MODEL_CATEGORY_SO, new CategorySO());
+        model.addAttribute(ModelAttributeConstants.MODEL_CATEGORY_SO, new CategorySO());
         return "fragments/category::categoryForm";
     }
     
@@ -55,7 +48,7 @@ public class CategoryController {
     public String getCategoryById(final @PathVariable Long id, final Model model) {
         LOGGER.debug("Get category by id {}", id);
         CategorySO category = categoryService.get(id);
-        model.addAttribute(MODEL_CATEGORY_SO, category);
+        model.addAttribute(ModelAttributeConstants.MODEL_CATEGORY_SO, category);
         return "fragments/category::categoryForm";
     }
     
@@ -67,7 +60,7 @@ public class CategoryController {
         }
         categoryService.save(category);
         setAllCategories(model);
-        model.addAttribute(RELOAD_MENU, true);
+        model.addAttribute(ModelAttributeConstants.RELOAD_MENU, true);
         return "fragments/category::categoriesList";
     }
     
@@ -76,14 +69,14 @@ public class CategoryController {
         LOGGER.debug("Delete category action {}", categoryId);
         categoryService.delete(categoryId);
         setAllCategories(model);
-        model.addAttribute(RELOAD_MENU, true);
+        model.addAttribute(ModelAttributeConstants.RELOAD_MENU, true);
         return "fragments/category::categoriesList";
     }
     
     @RequestMapping(value = "/reloadMenu")
     public String reloadMenu(final Model model) {
         LOGGER.debug("Reloading menu");
-        model.addAttribute(MODEL_ALL_CATEGORIES, categoryService.getAll());
+        model.addAttribute(ModelAttributeConstants.MODEL_CATEGORIES, categoryService.getAll());
         return "fragments/common :: menu";
     }
 }

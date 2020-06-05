@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import sk.filo.recipes.controller.ModelAttributeConstants;
 import sk.filo.recipes.service.UnitCategoryService;
 import sk.filo.recipes.service.UnitService;
 import sk.filo.recipes.so.UnitCategorySO;
@@ -25,12 +26,6 @@ public class UnitController {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(UnitController.class);
     
-    private static final String MODEL_UNIT_SO = "unitSO";
-    
-    private static final String MODEL_CATEGORIES = "categories";
-    
-    private static final String MODEL_AVAILABLE_UNIT_CATEGORIES = "availableUnitCategories";
-    
     @Autowired
     UnitService unitService;
     
@@ -38,12 +33,12 @@ public class UnitController {
     UnitCategoryService unitCategoryService;
     
     private void setAvailableUnitCategories(final Model model) {
-        model.addAttribute(MODEL_AVAILABLE_UNIT_CATEGORIES, unitCategoryService.getAllBasic());
+        model.addAttribute(ModelAttributeConstants.MODEL_AVAILABLE_UNIT_CATEGORIES, unitCategoryService.getAllBasic());
     }
     
     private void setAllCategories(final Model model) {
         List<UnitCategorySO> categories = unitCategoryService.getAll();
-        model.addAttribute(MODEL_CATEGORIES, categories);
+        model.addAttribute(ModelAttributeConstants.MODEL_CATEGORIES, categories);
     }
     
     @RequestMapping(value="/add/{category_id}")
@@ -51,7 +46,7 @@ public class UnitController {
         LOGGER.debug("Create unit action");
         UnitSO unitSO = new UnitSO();
         unitSO.setUnitCategoryId(category_id);
-        model.addAttribute(MODEL_UNIT_SO, unitSO);
+        model.addAttribute(ModelAttributeConstants.MODEL_UNIT_SO, unitSO);
         setAvailableUnitCategories(model);
         return "fragments/unit::unitForm";
     }
@@ -60,7 +55,7 @@ public class UnitController {
     public String getUnitById(final @PathVariable Long id, final Model model) {
         LOGGER.debug("Get unit by id {}", id);
         UnitSO unit = unitService.get(id);
-        model.addAttribute(MODEL_UNIT_SO, unit);
+        model.addAttribute(ModelAttributeConstants.MODEL_UNIT_SO, unit);
         setAvailableUnitCategories(model);
         return "fragments/unit::unitForm";
     }

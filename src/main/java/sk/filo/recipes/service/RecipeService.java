@@ -52,64 +52,32 @@ public class RecipeService {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(RecipeService.class);
 
+    @Autowired
     private RecipeMapper recipeMapper;
     
+    @Autowired
     private SectionMapper sectionMapper;
     
+    @Autowired
     private IngredientMapper ingredientMapper;
     
+    @Autowired
     private RecipeRepository recipeRepository;
     
+    @Autowired
     private PictureRepository pictureRepository;
     
+    @Autowired
     private UserRepository userRepository;
     
+    @Autowired
     private CategoryRepository categoryRepository;
     
+    @Autowired
     private UnitRepository unitRepository;
     
     @Autowired
     MessageSource messageSource;
-
-    @Autowired
-    public void setRecipeMapper(RecipeMapper recipeMapper) {
-        this.recipeMapper = recipeMapper;
-    }
-    
-    @Autowired
-    public void setSectionMapper(SectionMapper sectionMapper) {
-        this.sectionMapper = sectionMapper;
-    }
-    
-    @Autowired
-    public void setIngredientMapper(IngredientMapper ingredientMapper) {
-        this.ingredientMapper = ingredientMapper;
-    }
-    
-    @Autowired
-    public void setRecipeRepository(RecipeRepository recipeRepository) {
-        this.recipeRepository = recipeRepository;
-    }
-    
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-    
-    @Autowired
-    public void setPictureRepository(PictureRepository pictureRepository) {
-        this.pictureRepository = pictureRepository;
-    }
-    
-    @Autowired
-    public void setCategoryRepository(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
-    
-    @Autowired
-    public void setUnitRepository(UnitRepository unitRepository) {
-        this.unitRepository = unitRepository;
-    }
 
     @Transactional
     public RecipeSimpleSO save(RecipeSO recipeSO) {

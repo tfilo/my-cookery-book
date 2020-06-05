@@ -29,29 +29,17 @@ public class UnitCategoryService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UnitCategoryService.class);
 
+    @Autowired
     private UnitCategoryMapper unitCategoryMapper;
     
+    @Autowired
     private UnitCategoryRepository unitCategoryRepository;
     
+    @Autowired
     private UnitRepository unitRepository;
     
     @Autowired
     MessageSource messageSource;
-    
-    @Autowired
-    public void setUnitCategoryMapper(UnitCategoryMapper unitCategoryMapper) {
-        this.unitCategoryMapper = unitCategoryMapper;
-    }
-        
-    @Autowired
-    public void setUnitCategoryRepository(UnitCategoryRepository unitCategoryRepository) {
-        this.unitCategoryRepository = unitCategoryRepository;
-    }
-    
-    @Autowired
-    public void setUnitRepository(UnitRepository unitRepository) {
-        this.unitRepository = unitRepository;
-    }
 
     public void save(UnitCategoryBasicSO unitCategoryBasicSO) {
         LOGGER.debug("save unitCategoryBasicSO {}", unitCategoryBasicSO);

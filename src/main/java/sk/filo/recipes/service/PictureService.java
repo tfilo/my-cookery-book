@@ -32,26 +32,14 @@ public class PictureService {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(PictureService.class);
 
+    @Autowired
     private PictureMapper pictureMapper;
     
+    @Autowired
     private SimplePictureMapper simplePictureMapper;;
     
+    @Autowired
     private PictureRepository pictureRepository;
-
-    @Autowired
-    public void setPictureMapper(PictureMapper pictureMapper) {
-        this.pictureMapper = pictureMapper;
-    }
-    
-    @Autowired
-    public void setSimplePictureMapper(SimplePictureMapper simplePictureMapper) {
-        this.simplePictureMapper = simplePictureMapper;
-    }
-    
-    @Autowired
-    public void setPictureRepository(PictureRepository pictureRepository) {
-        this.pictureRepository = pictureRepository;
-    }
     
     @Transactional
     public PictureSO get(Long id) {

@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import sk.filo.recipes.component.Preview;
+import sk.filo.recipes.controller.ModelAttributeConstants;
 import sk.filo.recipes.service.RecipeService;
 import sk.filo.recipes.service.UserService;
 import sk.filo.recipes.so.UserBasicSO;
@@ -24,8 +25,6 @@ import sk.filo.recipes.validator.PasswordValidator;
 public class UserProfileController {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(UserProfileController.class);
-       
-    private static final String MODEL_USER_BASIC_SO = "userBasicSO";
  
     @Autowired
     PasswordValidator passwordValidator;
@@ -46,7 +45,7 @@ public class UserProfileController {
     public String getUsers(final Model model) {
         LOGGER.debug("Get own profile");
         UserBasicSO ownUser = userService.getOwnUser();
-        model.addAttribute(MODEL_USER_BASIC_SO, ownUser);
+        model.addAttribute(ModelAttributeConstants.MODEL_USER_BASIC_SO, ownUser);
         return "fragments/user :: profilForm";
     }
     

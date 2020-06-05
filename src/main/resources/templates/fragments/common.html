@@ -35,7 +35,7 @@
             <a href="javascript:void(0);" th:onclick="|load('content', '@{'/view/find'}',{ 'page': 0, 'pageSize': 16, 'sortField': 'title', 'direction': 'ASC' }, true); closeSidebar();|" class="w3-bar-item w3-button"><span th:text="#{common.allrecipes}">All</span></a>
             <hr>
             <div id="categoryLinks">
-                <th:block th:each="category, rowStat : ${allCategories}">
+                <th:block th:each="category, rowStat : ${categories}">
                     <a href="javascript:void(0);" th:onclick="|load('content', '@{'/view/find'}', { 'categoryId': ${category.id}, 'page': 0, 'pageSize': 16, 'sortField': 'title', 'direction': 'ASC' }, true); closeSidebar();|" class="w3-bar-item w3-button" th:text="${category.name}" th:classappend="${rowStat.last} ? 'margin-bottom-32'">Category name</a>
                 </th:block>
             </div>

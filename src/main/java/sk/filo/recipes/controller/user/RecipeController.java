@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 import sk.filo.recipes.component.Preview;
+import sk.filo.recipes.controller.ModelAttributeConstants;
 import sk.filo.recipes.service.CategoryService;
 import sk.filo.recipes.service.PictureService;
 import sk.filo.recipes.service.RecipeService;
@@ -50,18 +51,6 @@ public class RecipeController {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(RecipeController.class);
     
-    private static final String MODEL_RECIPE_SO = "recipeSO";
-    
-    private static final String MODEL_CATEGORIES = "allCategories";
-    
-    private static final String MODEL_UNIT_CATEGORIES_WITH_UNITS = "allUnitCategoriesWithUnits";
-
-    private static final String MODEL_FILTERED_RECIPES = "filteredRecipes";
-    
-    private static final String SECTION_AS_RECIPE = "sectionAsRecipe";
-    
-    private static final String SECTION_AS_RECIPE_IDX = "sectionAsRecipeIdx";
-    
     @Autowired
     IngredientValidator ingredientValidator;
     
@@ -83,13 +72,13 @@ public class RecipeController {
     @Autowired
     Preview preview;
 
-    @ModelAttribute(MODEL_CATEGORIES)
-    public List<CategorySO> allCategories() {
-        LOGGER.debug("allCategories");
+    @ModelAttribute(ModelAttributeConstants.MODEL_CATEGORIES)
+    public List<CategorySO> Categories() {
+        LOGGER.debug("categories");
         return categoryService.getAll();
     }
     
-    @ModelAttribute(MODEL_UNIT_CATEGORIES_WITH_UNITS)
+    @ModelAttribute(ModelAttributeConstants.MODEL_UNIT_CATEGORIES_WITH_UNITS)
     public List<UnitCategorySO> allUnitCategoriesWithUnits() {
         LOGGER.debug("allUnitCategories");
         return unitCategoryService.getAll();
@@ -104,7 +93,7 @@ public class RecipeController {
         recipeSO.getSections().add(sectionSO);
         UserBasicSO basicUser = userService.getBasicByUsername(req.getUserPrincipal().getName());
         recipeSO.setCreator(basicUser);
-        model.addAttribute(MODEL_RECIPE_SO, recipeSO);
+        model.addAttribute(ModelAttributeConstants.MODEL_RECIPE_SO, recipeSO);
         return "fragments/recipe::recipeForm";
     }
     
@@ -113,7 +102,7 @@ public class RecipeController {
         LOGGER.debug("Edit recipe by id {}", recipeId);
         RecipeSO recipeSO = recipeService.get(recipeId);
         LOGGER.debug("Loaded recipe {}", recipeSO);
-        model.addAttribute(MODEL_RECIPE_SO, recipeSO);
+        model.addAttribute(ModelAttributeConstants.MODEL_RECIPE_SO, recipeSO);
         return "fragments/recipe::recipeForm";
     }
     
@@ -236,10 +225,10 @@ public class RecipeController {
         newRecipe.getSections().add(section);
         
         HttpSession session = req.getSession();
-        session.setAttribute(MODEL_RECIPE_SO, recipeSO);
-        session.setAttribute(SECTION_AS_RECIPE_IDX, sectionRowId);
-        model.addAttribute(MODEL_RECIPE_SO, newRecipe);
-        model.addAttribute(SECTION_AS_RECIPE, true);
+        session.setAttribute(ModelAttributeConstants.MODEL_RECIPE_SO, recipeSO);
+        session.setAttribute(ModelAttributeConstants.SECTION_AS_RECIPE_IDX, sectionRowId);
+        model.addAttribute(ModelAttributeConstants.MODEL_RECIPE_SO, newRecipe);
+        model.addAttribute(ModelAttributeConstants.SECTION_AS_RECIPE, true);
         return "fragments/recipe::recipeForm";
     }
     
@@ -247,9 +236,9 @@ public class RecipeController {
     public String backToEdited(final Model model, final HttpServletRequest req) {
         LOGGER.debug("Back to edited");
         HttpSession session = req.getSession();
-        Object attribute = session.getAttribute(MODEL_RECIPE_SO);
-        session.removeAttribute(MODEL_RECIPE_SO);
-        model.addAttribute(MODEL_RECIPE_SO, attribute);
+        Object attribute = session.getAttribute(ModelAttributeConstants.MODEL_RECIPE_SO);
+        session.removeAttribute(ModelAttributeConstants.MODEL_RECIPE_SO);
+        model.addAttribute(ModelAttributeConstants.MODEL_RECIPE_SO, attribute);
         return "fragments/recipe::recipeForm";
     }
     
@@ -259,17 +248,17 @@ public class RecipeController {
         ingredientValidator.validate(recipe, bindingResult);
         if (bindingResult.hasErrors()) {
             LOGGER.debug(bindingResult.toString());
-            model.addAttribute(SECTION_AS_RECIPE, true);
+            model.addAttribute(ModelAttributeConstants.SECTION_AS_RECIPE, true);
             return "fragments/recipe::recipeForm";
         }
         RecipeSimpleSO saved = recipeService.save(recipe);
         
         HttpSession session = req.getSession();
-        RecipeSO editedRecipe = (RecipeSO)session.getAttribute(MODEL_RECIPE_SO);
-        Integer sectionIdx = (Integer)session.getAttribute(SECTION_AS_RECIPE_IDX);
+        RecipeSO editedRecipe = (RecipeSO)session.getAttribute(ModelAttributeConstants.MODEL_RECIPE_SO);
+        Integer sectionIdx = (Integer)session.getAttribute(ModelAttributeConstants.SECTION_AS_RECIPE_IDX);
         
-        session.removeAttribute(MODEL_RECIPE_SO);
-        session.removeAttribute(SECTION_AS_RECIPE_IDX);
+        session.removeAttribute(ModelAttributeConstants.MODEL_RECIPE_SO);
+        session.removeAttribute(ModelAttributeConstants.SECTION_AS_RECIPE_IDX);
         
         editedRecipe.getAssociatedRecipes().add(saved);
         
@@ -287,7 +276,7 @@ public class RecipeController {
             editedRecipe.getSections().add(sectionSO);
         }
         
-        model.addAttribute(MODEL_RECIPE_SO, editedRecipe);
+        model.addAttribute(ModelAttributeConstants.MODEL_RECIPE_SO, editedRecipe);
         
         return "fragments/recipe::recipeForm";
     }
@@ -314,7 +303,7 @@ public class RecipeController {
         } else {
             filtered = recipeService.findTop4RecipeSimpleByTitle(title, id);   
         }
-        model.addAttribute(MODEL_FILTERED_RECIPES, filtered);
+        model.addAttribute(ModelAttributeConstants.MODEL_FILTERED_RECIPES, filtered);
         return "fragments/recipe::filteredRecipes";
     }
 
