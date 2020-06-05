@@ -116,7 +116,12 @@
             <hr th:if="*{not #lists.isEmpty(sources)}">
             <section th:if="*{not #lists.isEmpty(sources)}">
                 <h5 th:text="#{recipe.sources}">Sources</h5>
-                <div th:each="source,rowStat : *{sources}"><i><a th:href="${source}" th:text="${source}" target="_blank">Source</a></i></div>
+                <div th:each="source,rowStat : *{sources}">
+                    <i th:if="${#strings.startsWith(source,'http')}">
+                        <a th:href="${source}" th:text="${source}" target="_blank">Source</a>
+                    </i>
+                    <span th:if="${!#strings.startsWith(source,'http')}" th:text="${source}"></pan>
+                </div>
             </section>
             <hr>
             <div class="padding-8">
