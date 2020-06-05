@@ -120,7 +120,7 @@
                     <i th:if="${#strings.startsWith(source,'http')}">
                         <a th:href="${source}" th:text="${source}" target="_blank">Source</a>
                     </i>
-                    <span th:if="${!#strings.startsWith(source,'http')}" th:text="${source}"></pan>
+                    <span th:if="${!#strings.startsWith(source,'http')}" th:text="${source}">Source</span>
                 </div>
             </section>
             <hr>
