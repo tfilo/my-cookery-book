@@ -107,7 +107,7 @@ function processError(err) {
     }, 10000);
 }
 
-function copyLink(link, tooltipId, copyTitle, copiedTitle) {
+function copyLink(link, tooltipId, copiedTitle) {
     var textarea = document.createElement("textarea");
     document.body.appendChild(textarea);
     textarea.value = link;
@@ -116,10 +116,4 @@ function copyLink(link, tooltipId, copyTitle, copiedTitle) {
     document.body.removeChild(textarea);
   
     $('#' + tooltipId).text(copiedTitle);
-    if (tooltipChange) {
-        clearInterval(tooltipChange);
-    }
-    tooltipChange = setTimeout(function() {
-        $('#' + tooltipId).text(copyTitle);
-    }, 5000);
 }
