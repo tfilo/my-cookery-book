@@ -13,13 +13,13 @@ import sk.filo.recipes.domain.Recipe;
  */
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     
-    public List<Recipe> findTop4ByCategoriesId(Long id, Sort sort);
+    public List<Recipe> findTop4ByCategoryId(Long id, Sort sort);
     
-    public Page<Recipe> findAllByCategoriesId(Long id, Pageable page);
+    public Page<Recipe> findAllByCategoryId(Long id, Pageable page);
     
     public Page<Recipe> findAllByTitleSearchIsContaining(String titleSearch, Pageable page);
     
-    public Page<Recipe> findAllByCategoriesIdAndTitleSearchIsContaining(Long categoryId, String titleSearch, Pageable page);
+    public Page<Recipe> findAllByCategoryIdAndTitleSearchIsContaining(Long categoryId, String titleSearch, Pageable page);
     
     public List<Recipe> findTop4ByTitleSearchIsContainingAndIdNot(String titleSearch, Long id, Sort sort);
 
@@ -27,7 +27,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     
     public Long countByAssociatedRecipesId(Long id);
 
-    public Long countByCategoriesId(Long id);
+    public Long countByCategoryId(Long id);
     
     public Long countByCreatorIdOrModifierId(Long creatorId, Long modifierId);
 }

@@ -101,8 +101,11 @@ public class RecipeService {
             recipe.setModifier(authenticatedUser);
         }
         
+        recipe.setCategory(categoryRepository.findById(recipeSO.getCategory())
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found!")));
+
+        
         mapAssociatedRecipes(recipeSO.getAssociatedRecipes(), recipe.getAssociatedRecipes());
-        mapCategories(recipeSO.getCategories(), recipe.getCategories());
         mapSections(recipeSO.getSections(), recipe.getSections());
         mapPictures(recipeSO.getPictures(), recipe.getPictures());
         
@@ -176,10 +179,10 @@ public class RecipeService {
         Page<Recipe> recipes;
         if (criteria.getCategoryId()!=null && !StringUtils.isEmptyOrWhitespace(criteria.getTitle())) {
             LOGGER.debug("Search by CategoryId and Title {}", criteria);
-            recipes = recipeRepository.findAllByCategoriesIdAndTitleSearchIsContaining(criteria.getCategoryId(), criteria.getTitle(), criteria.getPageRequest());
+            recipes = recipeRepository.findAllByCategoryIdAndTitleSearchIsContaining(criteria.getCategoryId(), criteria.getTitle(), criteria.getPageRequest());
         } else if (criteria.getCategoryId()!=null) {
             LOGGER.debug("Search by CategoryId {}", criteria);
-            recipes = recipeRepository.findAllByCategoriesId(criteria.getCategoryId(), criteria.getPageRequest());
+            recipes = recipeRepository.findAllByCategoryId(criteria.getCategoryId(), criteria.getPageRequest());
         } else if (!StringUtils.isEmptyOrWhitespace(criteria.getTitle())) {
             LOGGER.debug("Search by Title {}", criteria);
             recipes = recipeRepository.findAllByTitleSearchIsContaining(criteria.getTitle(),criteria.getPageRequest());
@@ -205,14 +208,6 @@ public class RecipeService {
         associatedRecipeSOs.forEach((RecipeSimpleSO so) -> {
             associatedRecipes.add(recipeRepository.findById(so.getId())
                                   .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Associated recipe not found!")));
-        });
-    }
-
-    private void mapCategories(final List<Long> categoriesIds, final List<Category> categories) {
-        categories.clear();
-        categoriesIds.forEach((id) -> {
-            categories.add(categoryRepository.findById(id)
-                           .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found!")));
         });
     }
 

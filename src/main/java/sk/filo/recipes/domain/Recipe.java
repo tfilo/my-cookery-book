@@ -67,12 +67,23 @@ public class Recipe {
     @OrderBy("title ASC")
     private List<Recipe> associatedRecipes;
     
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH})
+//    @JoinTable(name = "cb_recipe_category",
+//            joinColumns = @JoinColumn(name = "recipe_id", nullable = false),
+//            inverseJoinColumns = @JoinColumn(name = "category_id", nullable = false))
+//    @OrderBy("name ASC")
+//    private List<Category> categories;
+  
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+    
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH})
-    @JoinTable(name = "cb_recipe_category",
+    @JoinTable(name = "cb_recipe_tag",
             joinColumns = @JoinColumn(name = "recipe_id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "category_id", nullable = false))
+            inverseJoinColumns = @JoinColumn(name = "tag_id", nullable = false))
     @OrderBy("name ASC")
-    private List<Category> categories;
+    private List<Tag> tags;
     
     @OneToMany(
             fetch = FetchType.LAZY,
@@ -120,12 +131,12 @@ public class Recipe {
         return associatedRecipes;
     }
     
-    public List<Category> getCategories() {
-        if (Objects.isNull(categories)) {
-            categories = new ArrayList<>();
-        }
-        return categories;
-    }
+//    public List<Category> getCategories() {
+//        if (Objects.isNull(categories)) {
+//            categories = new ArrayList<>();
+//        }
+//        return categories;
+//    }
     
     public List<Source> getSources() {
         if (Objects.isNull(sources)) {

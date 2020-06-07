@@ -46,7 +46,7 @@ public class CategoryService {
     }
     
     public void delete(Long id) {
-        if (recipeRepository.countByCategoriesId(id) == 0) {
+        if (recipeRepository.countByCategoryId(id) == 0) {
             categoryRepository.deleteById(id);
         } else {
             MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);

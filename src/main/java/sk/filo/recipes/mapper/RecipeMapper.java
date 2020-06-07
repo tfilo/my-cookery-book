@@ -27,7 +27,7 @@ public interface RecipeMapper {
             @Mapping(target = "created", ignore = true),
             @Mapping(target = "modifier", ignore = true),
             @Mapping(target = "modified", ignore = true),
-            @Mapping(target = "categories", ignore = true),
+            @Mapping(target = "category", ignore = true),
             @Mapping(target = "associatedRecipes", ignore = true),
             @Mapping(target = "sections", ignore = true),
             @Mapping(target = "pictures", ignore = true)
@@ -39,13 +39,16 @@ public interface RecipeMapper {
             @Mapping(target = "created", ignore = true),
             @Mapping(target = "modifier", ignore = true),
             @Mapping(target = "modified", ignore = true),
-            @Mapping(target = "categories", ignore = true),
+            @Mapping(target = "category", ignore = true),
             @Mapping(target = "associatedRecipes", ignore = true),
             @Mapping(target = "sections", ignore = true),
             @Mapping(target = "pictures", ignore = true)
     })
     void mapRecipeSOToRecipe(RecipeSO recipeSO, @MappingTarget Recipe recipe);
     
+    @Mappings({
+        @Mapping(target = "category", source = "category.id")
+    })
     RecipeSO mapRecipeToRecipeSO(Recipe recipe);
     
     @Mappings({

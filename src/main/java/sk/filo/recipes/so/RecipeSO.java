@@ -7,6 +7,7 @@ import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,8 +39,8 @@ public class RecipeSO {
     
     private List<PictureBasicSO> pictures;
     
-    @NotEmpty
-    private List<Long> categories;
+    @NotNull
+    private Long category;
     
     @Valid
     private List<SourceSO> sources;
@@ -71,13 +72,6 @@ public class RecipeSO {
             pictures = new ArrayList<>();
         }
         return pictures;
-    }
-    
-    public List<Long> getCategories() {
-        if (Objects.isNull(categories)) {
-            categories = new ArrayList<>();
-        }
-        return categories;
     }
     
     public List<SourceSO> getSources() {
