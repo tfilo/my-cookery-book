@@ -49,7 +49,7 @@ public class Section {
    
     @OneToMany(
         fetch = FetchType.LAZY,   
-        cascade = CascadeType.ALL,
+        cascade={CascadeType.PERSIST, CascadeType.MERGE,  CascadeType.REFRESH},
         orphanRemoval = true
     )
     @JoinColumn(name = "section_id", nullable = false)

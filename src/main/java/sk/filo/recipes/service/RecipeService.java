@@ -207,9 +207,6 @@ public class RecipeService {
     }
 
     private void mapSections(final List<SectionSO> sectionSOs, final List<Section> sections) {
-        sections.forEach((Section sec) -> {
-            sec.getIngredients().clear();
-        });
         sections.clear();
         
         sectionSOs.forEach((SectionSO so) -> {
