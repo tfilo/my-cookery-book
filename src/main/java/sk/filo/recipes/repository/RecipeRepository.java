@@ -29,5 +29,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     public Long countByCategoryId(Long id);
     
+    public Long countByTagsId(Long id);
+    
     public Long countByCreatorIdOrModifierId(Long creatorId, Long modifierId);
 }

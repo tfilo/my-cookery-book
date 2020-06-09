@@ -24,6 +24,7 @@ import sk.filo.recipes.domain.Picture;
 import sk.filo.recipes.domain.Recipe;
 import sk.filo.recipes.domain.RoleName;
 import sk.filo.recipes.domain.Section;
+import sk.filo.recipes.domain.Tag;
 import sk.filo.recipes.domain.User;
 import sk.filo.recipes.mapper.IngredientMapper;
 import sk.filo.recipes.mapper.RecipeMapper;
@@ -31,6 +32,7 @@ import sk.filo.recipes.mapper.SectionMapper;
 import sk.filo.recipes.repository.CategoryRepository;
 import sk.filo.recipes.repository.PictureRepository;
 import sk.filo.recipes.repository.RecipeRepository;
+import sk.filo.recipes.repository.TagRepository;
 import sk.filo.recipes.repository.UnitRepository;
 import sk.filo.recipes.repository.UserRepository;
 import sk.filo.recipes.so.IngredientSO;
@@ -40,6 +42,7 @@ import sk.filo.recipes.so.RecipeSO;
 import sk.filo.recipes.so.RecipeSearchCriteriaSO;
 import sk.filo.recipes.so.RecipeSimpleSO;
 import sk.filo.recipes.so.SectionSO;
+import sk.filo.recipes.so.TagSO;
 import sk.filo.recipes.so.view.RecipeViewSO;
 
 /**
@@ -77,6 +80,9 @@ public class RecipeService {
     private UnitRepository unitRepository;
     
     @Autowired
+    private TagRepository tagRepository;
+    
+    @Autowired
     MessageSource messageSource;
 
     @Transactional
@@ -107,6 +113,7 @@ public class RecipeService {
         
         mapAssociatedRecipes(recipeSO.getAssociatedRecipes(), recipe.getAssociatedRecipes());
         mapSections(recipeSO.getSections(), recipe.getSections());
+        mapTags(recipeSO.getTags(), recipe.getTags());
         mapPictures(recipeSO.getPictures(), recipe.getPictures());
         
         LOGGER.debug("save recipe {}", recipe);
@@ -231,6 +238,14 @@ public class RecipeService {
             Picture picture = pictureRepository.findById(so.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Picture not found!"));
             picture.setTitle(so.getTitle());
             pictures.add(picture);
+        });
+    }
+    
+    private void mapTags(final List<TagSO> tagSOs, final List<Tag> tags) {
+        tags.clear();
+        tagSOs.forEach((TagSO so) -> {
+            tags.add(tagRepository.findById(so.getId())
+                           .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tag not found!")));
         });
     }
 }

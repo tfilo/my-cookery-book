@@ -42,6 +42,8 @@ public class RecipeSO {
     @NotNull
     private Long category;
     
+    private List<TagSO> tags;
+    
     @Valid
     private List<SourceSO> sources;
     
@@ -58,6 +60,13 @@ public class RecipeSO {
             sections = new ArrayList<>();
         }
         return sections;
+    }
+    
+    public List<TagSO> getTags() {
+        if (Objects.isNull(tags)) {
+            tags = new ArrayList<>();
+        }
+        return tags;
     }
 
     public List<RecipeSimpleSO> getAssociatedRecipes() {

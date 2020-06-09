@@ -18,7 +18,7 @@ import sk.filo.recipes.so.view.RecipeViewSO;
  */
 @Mapper(
     nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
-    uses = { SimpleCategoryMapper.class, SimpleSourceMapper.class, SimpleRecipeMapper.class, IngredientMapper.class, SimplePictureMapper.class, UserMapper.class}
+    uses = { SimpleSourceMapper.class, SimpleRecipeMapper.class, IngredientMapper.class, SimplePictureMapper.class, UserMapper.class}
 )
 public interface RecipeMapper {
 
@@ -30,7 +30,8 @@ public interface RecipeMapper {
             @Mapping(target = "category", ignore = true),
             @Mapping(target = "associatedRecipes", ignore = true),
             @Mapping(target = "sections", ignore = true),
-            @Mapping(target = "pictures", ignore = true)
+            @Mapping(target = "pictures", ignore = true),
+            @Mapping(target = "tags", ignore = true)
     })
     Recipe mapRecipeSOToRecipe(RecipeSO recipeSO);
     
@@ -42,7 +43,8 @@ public interface RecipeMapper {
             @Mapping(target = "category", ignore = true),
             @Mapping(target = "associatedRecipes", ignore = true),
             @Mapping(target = "sections", ignore = true),
-            @Mapping(target = "pictures", ignore = true)
+            @Mapping(target = "pictures", ignore = true),
+            @Mapping(target = "tags", ignore = true)
     })
     void mapRecipeSOToRecipe(RecipeSO recipeSO, @MappingTarget Recipe recipe);
     

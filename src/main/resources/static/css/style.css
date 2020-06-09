@@ -179,7 +179,13 @@ hr {
 
 .margin-bottom-32 {
     margin-bottom: 32px;
-} 
+}
+
+.tag {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding:3px;
+}
 
 input.empty {
     font-family: FontAwesome;

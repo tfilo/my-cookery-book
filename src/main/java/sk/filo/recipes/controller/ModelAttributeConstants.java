@@ -28,4 +28,6 @@ public class ModelAttributeConstants {
     public static final String SECTION_AS_RECIPE = "sectionAsRecipe";
     public static final String SECTION_AS_RECIPE_IDX = "sectionAsRecipeIdx";
     public static final String MODEL_USER_BASIC_SO = "userBasicSO";
+    public static final String MODEL_TAGS = "tags";
+    public static final String MODEL_TAG_SO = "tagSO";
 }

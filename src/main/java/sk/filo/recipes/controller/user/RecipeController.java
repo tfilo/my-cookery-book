@@ -28,6 +28,7 @@ import sk.filo.recipes.controller.ModelAttributeConstants;
 import sk.filo.recipes.service.CategoryService;
 import sk.filo.recipes.service.PictureService;
 import sk.filo.recipes.service.RecipeService;
+import sk.filo.recipes.service.TagService;
 import sk.filo.recipes.service.UnitCategoryService;
 import sk.filo.recipes.service.UserService;
 import sk.filo.recipes.so.CategorySO;
@@ -37,6 +38,7 @@ import sk.filo.recipes.so.RecipeSimpleSO;
 import sk.filo.recipes.so.RecipeSO;
 import sk.filo.recipes.so.SectionSO;
 import sk.filo.recipes.so.SourceSO;
+import sk.filo.recipes.so.TagSO;
 import sk.filo.recipes.so.UnitCategorySO;
 import sk.filo.recipes.so.UserBasicSO;
 import sk.filo.recipes.validator.IngredientValidator;
@@ -61,6 +63,9 @@ public class RecipeController {
     CategoryService categoryService;
     
     @Autowired
+    TagService tagService;
+    
+    @Autowired
     UnitCategoryService unitCategoryService;
     
     @Autowired
@@ -76,6 +81,12 @@ public class RecipeController {
     public List<CategorySO> Categories() {
         LOGGER.debug("categories");
         return categoryService.getAll();
+    }
+    
+    @ModelAttribute(ModelAttributeConstants.MODEL_TAGS)
+    public List<TagSO> Tags() {
+        LOGGER.debug("tags");
+        return tagService.getAll();
     }
     
     @ModelAttribute(ModelAttributeConstants.MODEL_UNIT_CATEGORIES_WITH_UNITS)
@@ -143,6 +154,27 @@ public class RecipeController {
             recipeSO.getAssociatedRecipes().remove(rowId.intValue());
         }
         return "fragments/recipe::associatedRecipes";
+    }
+    
+    @RequestMapping(value = "/tag/add/{tagId}")
+    public String addTag(final RecipeSO recipeSO, final @PathVariable Long tagId) {
+        LOGGER.debug("addTag {}, {}", recipeSO, tagId);
+        if (tagId!=null && recipeSO!=null) {
+            TagSO so = tagService.get(tagId);
+            if (!recipeSO.getTags().contains(so)) {
+                recipeSO.getTags().add(so);
+            }
+        }
+        return "fragments/recipe::tags";
+    }
+    
+    @RequestMapping(value = "/tag/remove/{rowId}")
+    public String removeTag(final RecipeSO recipeSO, final @PathVariable Integer rowId) {
+        LOGGER.debug("removeTag {}, {}", recipeSO, rowId);
+        if (recipeSO != null) {
+            recipeSO.getTags().remove(rowId.intValue());
+        }
+        return "fragments/recipe::tags";
     }
     
     @RequestMapping(value = "/sectionAdd")

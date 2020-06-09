@@ -66,13 +66,6 @@ public class Recipe {
             inverseJoinColumns = @JoinColumn(name = "associated_recipe_id", nullable = false))
     @OrderBy("title ASC")
     private List<Recipe> associatedRecipes;
-    
-//    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH})
-//    @JoinTable(name = "cb_recipe_category",
-//            joinColumns = @JoinColumn(name = "recipe_id", nullable = false),
-//            inverseJoinColumns = @JoinColumn(name = "category_id", nullable = false))
-//    @OrderBy("name ASC")
-//    private List<Category> categories;
   
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "category_id", nullable = false)
