@@ -80,6 +80,7 @@ public class RecipeViewController {
 
     @RequestMapping(value={"/find"})
     public String find(final Model model, final RecipeSearchCriteriaSO searchCriteria, final HttpServletRequest req) {
+        searchCriteria.setPage(0);
         return search.searchByCriteria(model, searchCriteria, req);
     }
     
@@ -98,13 +99,14 @@ public class RecipeViewController {
         if (!searchCriteria.getTags().contains(tag)) {
             searchCriteria.getTags().add(tag);
         }
-        
+        searchCriteria.setPage(0);
         return search.searchByCriteria(model, searchCriteria, req);
     }
     
     @RequestMapping(value={"/find/removeTag/{tagRowIdx}"})
     public String removeTagAndFind(final Model model, final RecipeSearchCriteriaSO searchCriteria, final @PathVariable Long tagRowIdx, final HttpServletRequest req) {        
         searchCriteria.getTags().remove(tagRowIdx.intValue());
+        searchCriteria.setPage(0);
         return search.searchByCriteria(model, searchCriteria, req);
     }
         
