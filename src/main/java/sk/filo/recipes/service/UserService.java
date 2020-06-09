@@ -70,12 +70,15 @@ public class UserService {
                 user.setPassword(passwordEncoder.encode(userSO.getPassword()));
             }
         }
+        user.getRoles().clear();
+        
         Set<Role> roles = new HashSet<>();
         Sort sort = Sort.by(Sort.Order.asc("name"));
         userSO.getRoles().forEach((roleName) -> {
             roles.add(roleRepository.findByName(RoleName.valueOf(roleName), sort).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role not found!")));
         });
-        user.setRoles(roles);
+        user.getRoles().addAll(roles);
+        
         LOGGER.debug("save user {}", user);
         userRepository.save(user);
     }
