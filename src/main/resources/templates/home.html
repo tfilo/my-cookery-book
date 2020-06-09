@@ -54,7 +54,7 @@
                 <div>
                     <div th:each="tag, rowStat : ${tags}"
                          class="w3-bar-item w3-button w3-center w3-padding-small" 
-                         th:onclick="|load('content', '@{'/view/find/addTag'}', { 'tagId': ${tag.id} }, true); closeSidebar('menuSidebar');|">
+                         th:onclick="|load('content', '@{'/view/find/addTag'}', { 'tagId': ${tag.id} }, true); closeSidebar('tagSidebar');|">
                         <span class="w3-tag w3-green tag margin-none">
                             <span class="w3-tag w3-round w3-green w3-border w3-border-white">
                                 <span th:text="${tag.name}" 

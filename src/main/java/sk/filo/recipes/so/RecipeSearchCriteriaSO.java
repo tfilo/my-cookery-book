@@ -50,7 +50,7 @@ public class RecipeSearchCriteriaSO {
         if (title!=null) {
             String titleSearch = Normalizer.normalize(title, Normalizer.Form.NFD);
             titleSearch = titleSearch.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
-            return titleSearch.toLowerCase();
+            return titleSearch.toLowerCase().trim();
         }
         return null;
     }

@@ -124,12 +124,12 @@ public class Recipe {
         return associatedRecipes;
     }
     
-//    public List<Category> getCategories() {
-//        if (Objects.isNull(categories)) {
-//            categories = new ArrayList<>();
-//        }
-//        return categories;
-//    }
+    public List<Tag> getTags() {
+        if (Objects.isNull(tags)) {
+            tags = new ArrayList<>();
+        }
+        return tags;
+    }
     
     public List<Source> getSources() {
         if (Objects.isNull(sources)) {

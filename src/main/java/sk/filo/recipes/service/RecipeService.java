@@ -34,6 +34,7 @@ import sk.filo.recipes.repository.RecipeRepository;
 import sk.filo.recipes.repository.TagRepository;
 import sk.filo.recipes.repository.UnitRepository;
 import sk.filo.recipes.repository.UserRepository;
+import sk.filo.recipes.specification.RecipeSpecification;
 import sk.filo.recipes.so.IngredientSO;
 import sk.filo.recipes.so.PictureBasicSO;
 import sk.filo.recipes.so.RecipeBasicSO;
@@ -183,19 +184,8 @@ public class RecipeService {
     
     public Page<RecipeBasicSO> getAllBasicByCriteria(RecipeSearchCriteriaSO criteria) {
         Page<Recipe> recipes;
-        if (criteria.getCategoryId()!=null && !StringUtils.isEmptyOrWhitespace(criteria.getTitleSearch())) {
-            LOGGER.debug("Search by CategoryId and Title {}", criteria);
-            recipes = recipeRepository.findAllByCategoryIdAndTitleSearchIsContaining(criteria.getCategoryId(), criteria.getTitleSearch(), criteria.getPageRequest());
-        } else if (criteria.getCategoryId()!=null) {
-            LOGGER.debug("Search by CategoryId {}", criteria);
-            recipes = recipeRepository.findAllByCategoryId(criteria.getCategoryId(), criteria.getPageRequest());
-        } else if (!StringUtils.isEmptyOrWhitespace(criteria.getTitleSearch())) {
-            LOGGER.debug("Search by Title {}", criteria);
-            recipes = recipeRepository.findAllByTitleSearchIsContaining(criteria.getTitleSearch(),criteria.getPageRequest());
-        } else {
-            LOGGER.debug("Search all {}", criteria);
-            recipes = recipeRepository.findAll(criteria.getPageRequest());
-        }
+        LOGGER.debug("Search by criteria {}", criteria);
+        recipes = recipeRepository.findAll(new RecipeSpecification(criteria), criteria.getPageRequest());
         LOGGER.debug("Found recipes {}", recipes.getContent());
         return mapToRecipeBasicSO(recipes);
     }
