@@ -67,8 +67,11 @@ body,html{
     min-width:300px;
 }
 
-.menu.tags{
+.tag-menu{
     right:0;
+    display:none;
+    z-index:2;
+    min-width:50px;
 }
 
 .padding-right{
@@ -178,7 +181,7 @@ hr {
 }
 
 .margin-none {
-    margin: 0px;
+    margin: 0px !important;
 }
 
 .margin-bottom-32 {

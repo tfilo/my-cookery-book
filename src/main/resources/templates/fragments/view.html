@@ -165,8 +165,8 @@
                     <th:block th:each="tag,rowStat : *{tags}">
                         <input type="hidden" th:field="*{tags[__${rowStat.index}__].id}"></input>
                         <input type="hidden" th:field="*{tags[__${rowStat.index}__].name}"></input>
-                        <span class="w3-tag w3-blue tag">
-                            <span class="w3-tag w3-round w3-blue w3-border w3-border-white">
+                        <span class="w3-tag w3-green tag">
+                            <span class="w3-tag w3-round w3-green w3-border w3-border-white">
                                 <span th:text="${tag.name}"></span>
                                 <a href="javascript:void(0);" th:onclick="|submitForm('searchForm', 'content', '@{'/view/find/removeTag/__${rowStat.index}__'}', true);|"><i class="fas fa-minus-circle"></i></a>
                             </span>

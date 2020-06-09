@@ -18,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.thymeleaf.util.StringUtils;
-import sk.filo.recipes.domain.Category;
 import sk.filo.recipes.domain.Ingredient;
 import sk.filo.recipes.domain.Picture;
 import sk.filo.recipes.domain.Recipe;

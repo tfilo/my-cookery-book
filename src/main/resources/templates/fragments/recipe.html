@@ -137,8 +137,8 @@
                         <th:block th:each="tag,rowStat : ${recipeSO.tags}">
                             <input type="hidden" th:field="${recipeSO.tags[__${rowStat.index}__].id}"></input>
                             <input type="hidden" th:field="${recipeSO.tags[__${rowStat.index}__].name}"></input>
-                            <span class="w3-tag w3-blue tag">
-                                <span class="w3-tag w3-round w3-blue w3-border w3-border-white">
+                            <span class="w3-tag w3-green tag">
+                                <span class="w3-tag w3-round w3-green w3-border w3-border-white">
                                     <span th:text="${recipeSO.tags[__${rowStat.index}__].name}"></span>
                                     <a href="javascript:void(0);" th:onclick="|submitForm('recipeForm', 'tags', '@{'/recipe/tag/remove/__${rowStat.index}__'}', false);|"><i class="fas fa-minus-circle"></i></a>
                                 </span>
