@@ -75,7 +75,7 @@ public class RecipeController {
     UserService userService;
     
     @Autowired
-    Search preview;
+    Search search;
 
     @ModelAttribute(ModelAttributeConstants.MODEL_CATEGORIES)
     public List<CategorySO> Categories() {
@@ -237,7 +237,7 @@ public class RecipeController {
         LOGGER.debug("Delete recipe action {}", recipeId);
         recipeService.delete(recipeId);
         
-        return preview.backToCategory(model, req);
+        return search.backToCategory(model, req);
     }
 
     @RequestMapping(value="/editAsRecipe/{sectionRowId}")
@@ -323,7 +323,7 @@ public class RecipeController {
         }
         recipeService.save(recipe);
         
-        return preview.backToCategory(model, req);
+        return search.backToCategory(model, req);
     }
     
     @RequestMapping(value="/filter")

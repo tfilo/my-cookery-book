@@ -35,7 +35,7 @@ public class HomeController {
     RecipeService recipeService;
     
     @Autowired
-    Search preview;
+    Search search;
     
     @Autowired
     TagService tagService;
@@ -81,7 +81,7 @@ public class HomeController {
         HttpSession session = req.getSession();
 
         if (session.getAttribute(ModelAttributeConstants.RECIPE_ID) == null) {
-            preview.showPreview(model, req);
+            search.showPreview(model, req);
             model.addAttribute(ModelAttributeConstants.USED_FRAGMENT, "view :: recipesList");
         } else {
             recipeViewController.viewRecipe(model, (Long) session.getAttribute(ModelAttributeConstants.RECIPE_ID), req);

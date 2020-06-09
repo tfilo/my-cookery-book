@@ -40,7 +40,7 @@ public class UserProfileController {
     MessageSource messageSource;
     
     @Autowired
-    Search preview;
+    Search search;
 
     @RequestMapping(value="/profile")
     public String getUsers(final Model model) {
@@ -59,7 +59,7 @@ public class UserProfileController {
         }
         userService.saveProfile(userBasicSO);
 
-        return preview.backToCategory(model, req);
+        return search.backToCategory(model, req);
     }
 
 }
