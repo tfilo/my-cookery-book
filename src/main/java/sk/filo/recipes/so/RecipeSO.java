@@ -3,7 +3,6 @@ package sk.filo.recipes.so;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -33,19 +32,19 @@ public class RecipeSO {
     
     @Valid
     @NotEmpty
-    private List<SectionSO> sections;
+    private final List<SectionSO> sections = new ArrayList<>();
 
-    private List<RecipeSimpleSO> associatedRecipes;
+    private final List<RecipeSimpleSO> associatedRecipes = new ArrayList<>();
     
-    private List<PictureBasicSO> pictures;
+    private final List<PictureBasicSO> pictures = new ArrayList<>();
     
     @NotNull
     private Long category;
     
-    private List<TagSO> tags;
+    private final List<TagSO> tags = new ArrayList<>();
     
     @Valid
-    private List<SourceSO> sources;
+    private final List<SourceSO> sources = new ArrayList<>();
     
     private UserBasicSO creator;
     
@@ -54,39 +53,4 @@ public class RecipeSO {
     private LocalDateTime created;
     
     private LocalDateTime modified;
-    
-    public List<SectionSO> getSections() {
-        if (Objects.isNull(sections)) {
-            sections = new ArrayList<>();
-        }
-        return sections;
-    }
-    
-    public List<TagSO> getTags() {
-        if (Objects.isNull(tags)) {
-            tags = new ArrayList<>();
-        }
-        return tags;
-    }
-
-    public List<RecipeSimpleSO> getAssociatedRecipes() {
-        if (Objects.isNull(associatedRecipes)) {
-            associatedRecipes = new ArrayList<>();
-        }
-        return associatedRecipes;
-    }
-    
-    public List<PictureBasicSO> getPictures() {
-        if (Objects.isNull(pictures)) {
-            pictures = new ArrayList<>();
-        }
-        return pictures;
-    }
-    
-    public List<SourceSO> getSources() {
-        if (Objects.isNull(sources)) {
-            sources = new ArrayList<>();
-        }
-        return sources;
-    }
 }

@@ -29,7 +29,7 @@ public class RecipeSearchCriteriaSO {
     
     private String title;
     
-    private List<TagSO> tags;
+    private final List<TagSO> tags = new ArrayList<>();
     
     private Integer page = 0;
     
@@ -38,13 +38,6 @@ public class RecipeSearchCriteriaSO {
     private SortField sortField = SortField.title;
     
     private Direction direction = Direction.ASC;
-    
-    public List<TagSO> getTags() {
-        if (tags == null) {
-            tags = new ArrayList<>();
-        }
-        return tags;
-    }
     
     public String getTitleSearch() {
         if (title!=null) {

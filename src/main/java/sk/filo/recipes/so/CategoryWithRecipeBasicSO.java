@@ -2,7 +2,6 @@ package sk.filo.recipes.so;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Getter;
@@ -24,12 +23,5 @@ public class CategoryWithRecipeBasicSO {
     @Size(max=80)
     private String name;
     
-    private List<RecipeBasicSO> recipes;
-    
-    public List<RecipeBasicSO> getRecipes() {
-        if (Objects.isNull(recipes)) {
-            recipes = new ArrayList<>();
-        }
-        return recipes;
-    }
+    private final List<RecipeBasicSO> recipes = new ArrayList<>();
 }

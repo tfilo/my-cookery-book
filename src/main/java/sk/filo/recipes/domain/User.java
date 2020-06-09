@@ -56,12 +56,5 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false))
     @OrderBy("name ASC")
-    private Set<Role> roles;
-    
-    public Set<Role> getRoles() {
-        if (Objects.isNull(roles)) {
-            roles = new HashSet<>();
-        }
-        return roles;
-    }
+    private final Set<Role> roles = new HashSet<>();
 }

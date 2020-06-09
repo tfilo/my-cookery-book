@@ -40,12 +40,5 @@ public class UserSO {
     @NotNull
     private Boolean enabled;
     
-    private Set<String> roles;
-    
-    public Set<String> getRoles() {
-        if (Objects.isNull(roles)) {
-            roles = new LinkedHashSet<>();
-        }
-        return roles;
-    }
+    private final Set<String> roles = new LinkedHashSet<>();
 }

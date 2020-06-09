@@ -58,11 +58,5 @@ public class Section {
     
     @Column(columnDefinition="TEXT", name = "method", nullable = false)
     private String method;
-    
-    //public List<Ingredient> getIngredients() {
-    //    if (Objects.isNull(ingredients)) {
-    //        ingredients = new ArrayList<>();
-    //    }
-    //    return ingredients;
-    //}    
+ 
 }

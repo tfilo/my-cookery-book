@@ -41,12 +41,5 @@ public class UnitCategory {
     
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
     @OrderBy("name ASC")
-    private List<Unit> units;
-    
-    public List<Unit> getUnits() {
-        if (Objects.isNull(units)) {
-            units = new ArrayList<>();
-        }
-        return units;
-    }
+    private final List<Unit> units = new ArrayList<>();
 }

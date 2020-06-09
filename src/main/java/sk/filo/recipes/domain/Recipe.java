@@ -4,7 +4,6 @@ import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -65,7 +64,7 @@ public class Recipe {
             joinColumns = @JoinColumn(name = "recipe_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "associated_recipe_id", nullable = false))
     @OrderBy("title ASC")
-    private List<Recipe> associatedRecipes;
+    private final List<Recipe> associatedRecipes = new ArrayList<>();
   
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "category_id", nullable = false)
@@ -76,7 +75,7 @@ public class Recipe {
             joinColumns = @JoinColumn(name = "recipe_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "tag_id", nullable = false))
     @OrderBy("name ASC")
-    private List<Tag> tags;
+    private final List<Tag> tags = new ArrayList<>();
     
     @OneToMany(
             fetch = FetchType.LAZY,
@@ -85,7 +84,7 @@ public class Recipe {
     )
     @JoinColumn(name = "recipe_id", nullable = false)
     @OrderBy("url ASC")
-    private List<Source> sources;
+    private final List<Source> sources = new ArrayList<>();
     
     @OneToMany(
         fetch = FetchType.LAZY,
@@ -94,7 +93,7 @@ public class Recipe {
     )
     @JoinColumn(name = "recipe_id")
     @OrderBy("id ASC")
-    private List<Picture> pictures;
+    private final List<Picture> pictures = new ArrayList<>();
     
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "creator_id", nullable = false)
@@ -109,41 +108,6 @@ public class Recipe {
     
     @Column(name = "modified", nullable = true)
     private LocalDateTime modified;
-    
-    // public List<Section> getSections() {
-    //   if (Objects.isNull(sections)) {
-    //        sections = new ArrayList<>();
-    //    }
-    //    return sections;
-    //}
-    
-    public List<Recipe> getAssociatedRecipes() {
-        if (Objects.isNull(associatedRecipes)) {
-            associatedRecipes = new ArrayList<>();
-        }
-        return associatedRecipes;
-    }
-    
-    public List<Tag> getTags() {
-        if (Objects.isNull(tags)) {
-            tags = new ArrayList<>();
-        }
-        return tags;
-    }
-    
-    public List<Source> getSources() {
-        if (Objects.isNull(sources)) {
-            sources = new ArrayList<>();
-        }
-        return sources;
-    }
-    
-    public List<Picture> getPictures() {
-        if (Objects.isNull(pictures)) {
-            pictures = new ArrayList<>();
-        }
-        return pictures;
-    }
     
     @PrePersist
     public void prePersist() {

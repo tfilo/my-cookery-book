@@ -208,7 +208,6 @@ public class RecipeService {
 
     private void mapSections(final List<SectionSO> sectionSOs, final List<Section> sections) {
         sections.clear();
-        
         sectionSOs.forEach((SectionSO so) -> {
             Section s = sectionMapper.mapSectionSOToSection(so);
             so.getIngredients().forEach((IngredientSO iso) -> {
