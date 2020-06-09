@@ -54,15 +54,15 @@ public class Section {
     )
     @JoinColumn(name = "section_id", nullable = false)
     @OrderBy("sortNumber ASC")
-    private List<Ingredient> ingredients;
+    private final List<Ingredient> ingredients = new ArrayList<>();
     
     @Column(columnDefinition="TEXT", name = "method", nullable = false)
     private String method;
     
-    public List<Ingredient> getIngredients() {
-        if (Objects.isNull(ingredients)) {
-            ingredients = new ArrayList<>();
-        }
-        return ingredients;
-    }    
+    //public List<Ingredient> getIngredients() {
+    //    if (Objects.isNull(ingredients)) {
+    //        ingredients = new ArrayList<>();
+    //    }
+    //    return ingredients;
+    //}    
 }

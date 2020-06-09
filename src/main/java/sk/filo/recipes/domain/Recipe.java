@@ -58,7 +58,7 @@ public class Recipe {
     )
     @JoinColumn(name = "recipe_id", nullable = false)
     @OrderBy("sortNumber ASC")
-    private List<Section> sections;
+    private final List<Section> sections = new ArrayList<>();
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH})
     @JoinTable(name = "cb_recipe_recipe",
@@ -110,12 +110,12 @@ public class Recipe {
     @Column(name = "modified", nullable = true)
     private LocalDateTime modified;
     
-    public List<Section> getSections() {
-        if (Objects.isNull(sections)) {
-            sections = new ArrayList<>();
-        }
-        return sections;
-    }
+    // public List<Section> getSections() {
+    //   if (Objects.isNull(sections)) {
+    //        sections = new ArrayList<>();
+    //    }
+    //    return sections;
+    //}
     
     public List<Recipe> getAssociatedRecipes() {
         if (Objects.isNull(associatedRecipes)) {
