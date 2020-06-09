@@ -210,17 +210,13 @@
             <div class="padding-8" th:if="${sectionAsRecipe == null || sectionAsRecipe == false}">
                 <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/save'}', true);|"><i class="fas fa-save"></i>&nbsp;<span th:text="#{common.save}">Save</span></button>
                 <button type="button" class="w3-button w3-red" th:if="${recipeSO.id}" th:onclick="|$('#modalDeleteBtn').off('click').click(function(){ load('content', '@{'/recipe/delete/__${recipeSO.id}__'}', null, true); $('#modal').hide(); }); $('#modal').show();|"><i class="fas fa-trash-alt"></i>&nbsp;<span th:text="#{common.delete}">Delete</span></button>
-                <button type="button" class="w3-button w3-red" th:onclick="|load('content', '@{'/view/categoriesPreview'}', null, true);|"><i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span></button>
+                <button type="button" class="w3-button w3-red" th:onclick="|load('content', '@{'/view/back'}', null, true);|"><i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span></button>
             </div>
             
             <div class="padding-8" th:if="${sectionAsRecipe != null && sectionAsRecipe == true}">
                 <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('recipeForm', 'content', '@{'/recipe/saveAsRecipe'}', true);|"><i class="fas fa-save"></i>&nbsp;<span th:text="#{common.save.and.back}">Save and back</span></button>
                 <button type="button" class="w3-button w3-red" th:onclick="|load('content', '@{'/recipe/backToEdited'}', null, true);|"><i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.back.to.recipe}">Back</span></button>
             </div>
-            
-            <script>
-                $('#searchDiv').hide();
-            </script>
         </form>
     </body>
 </html>

@@ -60,6 +60,7 @@ public class TagController {
         }
         tagService.save(tagSO);
         setAllTags(model);
+        model.addAttribute(ModelAttributeConstants.RELOAD_TAGS, true);
         return "fragments/tag::tagList";
     }
     
@@ -68,6 +69,14 @@ public class TagController {
         LOGGER.debug("Delete tag action {}", tagId);
         tagService.delete(tagId);
         setAllTags(model);
+        model.addAttribute(ModelAttributeConstants.RELOAD_TAGS, true);
         return "fragments/tag::tagList";
+    }
+    
+    @RequestMapping(value = "/reloadTags")
+    public String reloadTags(final Model model) {
+        LOGGER.debug("Reloading tags");
+        model.addAttribute(ModelAttributeConstants.MODEL_TAGS, tagService.getAll());
+        return "home::tags";
     }
 }

@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
-import sk.filo.recipes.component.Preview;
+import sk.filo.recipes.component.Search;
 import sk.filo.recipes.controller.ModelAttributeConstants;
 import sk.filo.recipes.service.CategoryService;
 import sk.filo.recipes.service.PictureService;
@@ -75,7 +75,7 @@ public class RecipeController {
     UserService userService;
     
     @Autowired
-    Preview preview;
+    Search preview;
 
     @ModelAttribute(ModelAttributeConstants.MODEL_CATEGORIES)
     public List<CategorySO> Categories() {
@@ -233,11 +233,11 @@ public class RecipeController {
     }
     
     @RequestMapping(value="/delete/{recipeId}")
-    public String deleteRecipe(final Model model, final @PathVariable Long recipeId) {
+    public String deleteRecipe(final Model model, final @PathVariable Long recipeId, final HttpServletRequest req) {
         LOGGER.debug("Delete recipe action {}", recipeId);
         recipeService.delete(recipeId);
-        preview.setAllCategoriesWithRecipes(model);
-        return "fragments/view::recipesList";
+        
+        return preview.backToCategory(model, req);
     }
 
     @RequestMapping(value="/editAsRecipe/{sectionRowId}")
@@ -314,7 +314,7 @@ public class RecipeController {
     }
        
     @RequestMapping(value="/save")
-    public String saveRecipe(final Model model, final @Valid RecipeSO recipe, final BindingResult bindingResult) {
+    public String saveRecipe(final Model model, final @Valid RecipeSO recipe, final BindingResult bindingResult, final HttpServletRequest req) {
         LOGGER.debug("Save recipe action {}", recipe);
         ingredientValidator.validate(recipe, bindingResult);
         if (bindingResult.hasErrors()) {
@@ -322,8 +322,8 @@ public class RecipeController {
             return "fragments/recipe::recipeForm";
         }
         recipeService.save(recipe);
-        preview.setAllCategoriesWithRecipes(model);
-        return "fragments/view::recipesList";
+        
+        return preview.backToCategory(model, req);
     }
     
     @RequestMapping(value="/filter")

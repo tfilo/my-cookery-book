@@ -1,6 +1,8 @@
 package sk.filo.recipes.so;
 
 import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -27,15 +29,24 @@ public class RecipeSearchCriteriaSO {
     
     private String title;
     
-    private Integer page;
+    private List<TagSO> tags;
     
-    private Integer pageSize;
+    private Integer page = 0;
     
-    private SortField sortField;
+    private Integer pageSize = 16;
     
-    private Direction direction;
+    private SortField sortField = SortField.title;
     
-    public String getTitle() {
+    private Direction direction = Direction.ASC;
+    
+    public List<TagSO> getTags() {
+        if (tags == null) {
+            tags = new ArrayList<>();
+        }
+        return tags;
+    }
+    
+    public String getTitleSearch() {
         if (title!=null) {
             String titleSearch = Normalizer.normalize(title, Normalizer.Form.NFD);
             titleSearch = titleSearch.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");

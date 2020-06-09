@@ -12,10 +12,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import sk.filo.recipes.component.Preview;
+import sk.filo.recipes.component.Search;
 import sk.filo.recipes.service.CategoryService;
 import sk.filo.recipes.service.RecipeService;
+import sk.filo.recipes.service.TagService;
 import sk.filo.recipes.so.CategorySO;
+import sk.filo.recipes.so.TagSO;
 
 /**
  *
@@ -30,10 +32,13 @@ public class HomeController {
     CategoryService categoryService;
     
     @Autowired
-    Preview preview;
+    RecipeService recipeService;
     
     @Autowired
-    RecipeService recipeService;
+    Search preview;
+    
+    @Autowired
+    TagService tagService;
     
     @Autowired
     RecipeViewController recipeViewController;
@@ -42,6 +47,12 @@ public class HomeController {
     public List<CategorySO> Categories() {
         LOGGER.debug("categories");
         return categoryService.getAll();
+    }
+    
+    @ModelAttribute(ModelAttributeConstants.MODEL_TAGS)
+    public List<TagSO> Tags() {
+        LOGGER.debug("tags");
+        return tagService.getAll();
     }
     
     // Login form
@@ -70,7 +81,7 @@ public class HomeController {
         HttpSession session = req.getSession();
 
         if (session.getAttribute(ModelAttributeConstants.RECIPE_ID) == null) {
-            preview.setAllCategoriesWithRecipes(model);
+            preview.showPreview(model, req);
             model.addAttribute(ModelAttributeConstants.USED_FRAGMENT, "view :: recipesList");
         } else {
             recipeViewController.viewRecipe(model, (Long) session.getAttribute(ModelAttributeConstants.RECIPE_ID), req);

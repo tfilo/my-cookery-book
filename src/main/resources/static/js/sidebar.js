@@ -1,8 +1,8 @@
-function openSidebar() {
-    document.getElementById("mySidebar").style.display = "block";
+function openSidebar(id) {
+    $('#' + id).show();
 }
 
-function closeSidebar() {
-    document.getElementById("mySidebar").style.display = "none";
+function closeSidebar(id) {
+    $('#' + id).hide();
 }
  

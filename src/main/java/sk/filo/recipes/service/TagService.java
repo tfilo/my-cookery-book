@@ -42,7 +42,15 @@ public class TagService {
     @Transactional
     public void save(TagSO tagSO) {
         LOGGER.debug("save TagSO {}", tagSO);
-        tagRepository.save(tagMapper.mapTagSOToTag(tagSO));
+        
+        Tag tag = tagRepository.findByName(tagSO.getName());
+        if (tag == null) {
+            tagRepository.save(tagMapper.mapTagSOToTag(tagSO));
+        } else {
+            MessageSourceAccessor accessor = new MessageSourceAccessor(messageSource);
+            String message = accessor.getMessage("tag.add.constraint");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, message);
+        }
     }
     
     public void delete(Long id) {

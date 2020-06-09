@@ -16,6 +16,7 @@ public class ModelAttributeConstants {
     public static final String SEARCHED_TITLE = "searchedTitle";
     public static final String SEARCH_CRITERIA = "searchCriteria";
     public static final String RELOAD_MENU = "reloadMenu";
+    public static final String RELOAD_TAGS = "reloadTags";
     public static final String MODEL_CATEGORY_SO = "categorySO";
     public static final String MODEL_UNIT_CATEGORY_SO = "unitCategoryBasicSO";
     public static final String MODEL_UNIT_SO = "unitSO";

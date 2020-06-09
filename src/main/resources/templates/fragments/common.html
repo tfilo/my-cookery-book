@@ -21,33 +21,5 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css">
     </head>
     <body>
-        <nav th:fragment="menu" onmouseleave="closeSidebar()" class="w3-sidebar w3-bar-block w3-border-right w3-animate-left menu" id="mySidebar">
-            <div class="w3-button w3-padding-16 w3-left" onclick="closeSidebar()"><i class="fas fa-angle-double-left"></i></div>
-            <a href="javascript:void(0);" th:onclick="|load('content', '@{'/admin/user/all'}', null, true); closeSidebar();|" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-user icon"></i> <span th:text="#{common.users}">Users</span></a>
-            <a href="javascript:void(0);" th:onclick="|load('content', '@{'/admin/category/all'}', null, true); closeSidebar();|" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-list icon"></i> <span th:text="#{common.categories}">Categories</span></a>
-            <a href="javascript:void(0);" th:onclick="|load('content', '@{'/admin/unitcategory/all'}', null, true); closeSidebar();|" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-prescription-bottle icon"></i> <span th:text="#{common.units}">Units</span></a>
-            <a href="javascript:void(0);" th:onclick="|load('content', '@{'/tag/all'}', null, true); closeSidebar();|" class="w3-bar-item w3-button" sec:authorize="hasRole('USER')"><i class="fas fa-tags icon"></i> <span th:text="#{common.tags}">Tags</span></a>
-            <a href="javascript:void(0);" th:onclick="|load('content', '@{'/recipe/add'}', null, true); closeSidebar();|" class="w3-bar-item w3-button" sec:authorize="hasRole('USER')"><i class="fas fa-pizza-slice icon"></i> <span th:text="#{common.add.recipe}">Add recipe</span></a>
-            <hr sec:authorize="isAuthenticated()">
-            <a href="javascript:void(0);" th:onclick="|load('content', '@{'/view/categoriesPreview'}', null, true); closeSidebar();|" class="w3-bar-item w3-button"><span th:text="#{common.homepage}">Homepage</span></a>
-            <a href="javascript:void(0);" th:onclick="|load('content', '@{'/view/find'}',{ 'page': 0, 'pageSize': 16, 'sortField': 'title', 'direction': 'ASC' }, true); closeSidebar();|" class="w3-bar-item w3-button"><span th:text="#{common.allrecipes}">All</span></a>
-            <hr>
-            <div id="categoryLinks">
-                <th:block th:each="category, rowStat : ${categories}">
-                    <a href="javascript:void(0);" th:onclick="|load('content', '@{'/view/find'}', { 'categoryId': ${category.id}, 'page': 0, 'pageSize': 16, 'sortField': 'title', 'direction': 'ASC' }, true); closeSidebar();|" class="w3-bar-item w3-button" th:text="${category.name}" th:classappend="${rowStat.last} ? 'margin-bottom-32'">Category name</a>
-                </th:block>
-            </div>
-        </nav>
-        <header id="header" th:fragment="header" class="w3-top w3-card transparent-white">
-            <div class="w3-button w3-padding-16 w3-left" onclick="openSidebar()"><i class="fas fa-bars"></i></div>
-            <div class="w3-right w3-padding-16 padding-right" sec:authorize="!isAuthenticated()">
-                <a th:href="@{'/login.html'}"><i class="fas fa-sign-in-alt"></i></a>
-            </div>
-            <div class="w3-right w3-padding-16 padding-right" sec:authorize="isAuthenticated()">
-                <a href="javascript:void(0);" th:onclick="|load('content', '@{'/user/profile'}', null, true);|"><b sec:authentication="name"></b></a><span>&nbsp;&nbsp;</span>
-                <a th:href="@{'/logout'}"><i class="fas fa-sign-out-alt"></i></a>
-            </div>
-            <div class="w3-center w3-wide w3-large page-title" th:text="#{html.head.title}">My Cookery Book</div>
-        </header>
     </body>
 </html>

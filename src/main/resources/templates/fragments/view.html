@@ -140,12 +140,40 @@
                     </span>
                 </div>
             </div>
-            <script>
-                $('#searchDiv').hide();
-            </script>
         </article>
         
         <article th:fragment="recipesList">
+            <form action="javascript:void(0);" class="w3-row w3-content w3-padding" th:object="${searchCriteria}" id="searchForm">
+                <input type="hidden" th:field="*{categoryId}"/>
+                <input type="hidden" th:field="*{page}"/>
+                <input type="hidden" th:field="*{pageSize}"/>
+                <input type="hidden" th:field="*{sortField}"/>
+                <input type="hidden" th:field="*{direction}"/>
+                <div class="w3-col w3-button"
+                     style="width:50px;"
+                     th:onclick="|submitForm('searchForm', 'content', '@{'/view/find'}', true);|">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="w3-rest">
+                    <input class="w3-input"
+                           type="text" 
+                           th:field="*{title}" 
+                           th:placeholder="#{home.search.placeholder}" 
+                           th:onkeypress="|if (event.key === 'Enter') submitForm('searchForm', 'content', '@{'/view/find'}', true); return event.key != 'Enter';|"/>
+                </div>
+                <div class="selectedTags">
+                    <th:block th:each="tag,rowStat : *{tags}">
+                        <input type="hidden" th:field="*{tags[__${rowStat.index}__].id}"></input>
+                        <input type="hidden" th:field="*{tags[__${rowStat.index}__].name}"></input>
+                        <span class="w3-tag w3-blue tag">
+                            <span class="w3-tag w3-round w3-blue w3-border w3-border-white">
+                                <span th:text="${tag.name}"></span>
+                                <a href="javascript:void(0);" th:onclick="|submitForm('searchForm', 'content', '@{'/view/find/removeTag/__${rowStat.index}__'}', true);|"><i class="fas fa-minus-circle"></i></a>
+                            </span>
+                        </span>
+                    </th:block>
+                </div>
+            </form>
             <h2 class="w3-center" th:text="${title}">Title</h2>
             <div class="w3-row-padding">
                 <div th:onclick="|load('content', '@{'/view/recipe/__${recipe.id}__'}', null, true);|" class="w3-col l3 m6 s12 w3-container padding-bottom-16 pointer" th:each="recipe, rowStat : ${recipes}">
@@ -169,16 +197,9 @@
                 <div th:if="${recipes.totalPages > 0}" 
                      class="w3-bar w3-tiny w3-border w3-border-light-grey"
                      th:each="pageNumber, rowStat : ${pageNumbers}">
-                    <a href="javascript:void(0);" th:onclick="|load('content', '@{'/view/find'}', { 'categoryId': $('#searchCategoryId').val(), 'title': $('#search').val(), 'page': ${pageNumber - 1}, 'pageSize': 16, 'sortField': 'title', 'direction': 'ASC' }, true);|" class="w3-button" th:classappend="${pageNumber==recipes.number + 1} ? w3-green : (${rowStat.first} or ${rowStat.last} ? 'w3-light-grey')" th:text=${pageNumber}>PageNumber</a>
+                    <a href="javascript:void(0);" th:onclick="|$('#page').val(${pageNumber - 1}) && submitForm('searchForm', 'content', '@{'/view/find'}', true);|" class="w3-button" th:classappend="${pageNumber==recipes.number + 1} ? w3-green : (${rowStat.first} or ${rowStat.last} ? 'w3-light-grey')" th:text=${pageNumber}>PageNumber</a>
                 </div>
             </div>
-            <script th:inline="javascript">
-                $('#searchDiv').show();
-                var categoryId = [[${categoryId != null ? categoryId : null}]] ;
-                var title = [[${searchedTitle} ? ${searchedTitle}]];
-                $('#searchCategoryId').val(categoryId);
-                $('#search').val(title);
-            </script>
         </article>
     </body>
 </html>

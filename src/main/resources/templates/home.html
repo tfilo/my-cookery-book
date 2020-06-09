@@ -27,28 +27,45 @@
             </div>
         </div>
         <div id="menu">
-            <nav th:replace="fragments/common :: menu">&nbsp;</nav>
+            <nav th:fragment="menu" onmouseleave="closeSidebar('menuSidebar')" class="w3-sidebar w3-bar-block w3-border-right w3-animate-left menu" id="menuSidebar">
+                <div class="w3-button w3-padding-16 w3-left" onclick="closeSidebar('menuSidebar')"><i class="fas fa-angle-double-left"></i></div>
+                <a href="javascript:void(0);" th:onclick="|load('content', '@{'/user/profile'}', null, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button" sec:authorize="isAuthenticated()"><i class="fas fa-user-circle icon"></i> <b sec:authentication="name">Username</b></a>
+                <a th:href="@{'/logout'}" class="w3-bar-item w3-button" sec:authorize="isAuthenticated()"><i class="fas fa-sign-out-alt icon"></i> <span th:text="#{common.logout}">Logout</span></a>
+                <hr sec:authorize="isAuthenticated()">
+                <a href="javascript:void(0);" th:onclick="|load('content', '@{'/admin/user/all'}', null, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-user icon"></i> <span th:text="#{common.users}">Users</span></a>
+                <a href="javascript:void(0);" th:onclick="|load('content', '@{'/admin/category/all'}', null, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-list icon"></i> <span th:text="#{common.categories}">Categories</span></a>
+                <a href="javascript:void(0);" th:onclick="|load('content', '@{'/admin/unitcategory/all'}', null, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-prescription-bottle icon"></i> <span th:text="#{common.units}">Units</span></a>
+                <a href="javascript:void(0);" th:onclick="|load('content', '@{'/tag/all'}', null, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button" sec:authorize="hasRole('USER')"><i class="fas fa-tags icon"></i> <span th:text="#{common.tags}">Tags</span></a>
+                <a href="javascript:void(0);" th:onclick="|load('content', '@{'/recipe/add'}', null, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button" sec:authorize="hasRole('USER')"><i class="fas fa-pizza-slice icon"></i> <span th:text="#{common.add.recipe}">Add recipe</span></a>
+                <hr sec:authorize="isAuthenticated()">
+                <a href="javascript:void(0);" th:onclick="|load('content', '@{'/view/categoriesPreview'}', null, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button"><span th:text="#{common.homepage}">Homepage</span></a>
+                <a href="javascript:void(0);" th:onclick="|load('content', '@{'/view/find'}',{ 'page': 0, 'pageSize': 16, 'sortField': 'title', 'direction': 'ASC' }, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button"><span th:text="#{common.allrecipes}">All</span></a>
+                <hr>
+                <div id="categoryLinks">
+                    <th:block th:each="category, rowStat : ${categories}">
+                        <a href="javascript:void(0);" th:onclick="|load('content', '@{'/view/find'}', { 'categoryId': ${category.id} }, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button" th:text="${category.name}" th:classappend="${rowStat.last} ? 'margin-bottom-32'">Category name</a>
+                    </th:block>
+                </div>
+            </nav>
         </div>
-        <header th:replace="fragments/common :: header">&nbsp;</header>
-
+        <div id="tags">
+            <nav th:fragment="tags" onmouseleave="closeSidebar('tagSidebar')" class="w3-sidebar w3-bar-block w3-border-left w3-animate-right menu tags" id="tagSidebar">
+                <div class="w3-button w3-padding-16 w3-right" onclick="closeSidebar('tagSidebar')"><i class="fas fa-angle-double-right"></i></div>
+                <div id="tagLinks">
+                    <th:block th:each="tag, rowStat : ${tags}">
+                        <a href="javascript:void(0);" th:onclick="|load('content', '@{'/view/find/addTag'}', { 'tagId': ${tag.id} }, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button" th:text="${tag.name}" th:classappend="${rowStat.last} ? 'margin-bottom-32'">Tag name</a>
+                    </th:block>
+                </div>
+            </nav>
+        </div>
+        <header id="header" th:fragment="header" class="w3-top w3-card transparent-white">
+            <div class="w3-button w3-padding-16 w3-left" onclick="openSidebar('menuSidebar')"><i class="fas fa-bars"></i></div>
+            <div class="w3-button w3-padding-16 w3-right" onclick="openSidebar('tagSidebar')"><i class="fas fa-tags"></i></div>
+            <div class="w3-center w3-wide w3-large page-title" th:text="#{html.head.title}">My Cookery Book</div>
+        </header>
         <main class="content">
             <div class="spacer">&nbsp;</div>
             <div style="display: none;" id="error">&nbsp;</div>
-            <div class="w3-row w3-content w3-padding" id="searchDiv">
-                <div class="w3-col w3-button"
-                     style="width:50px;"
-                     th:onclick="|load('content', '@{'/view/find'}' , { 'title': $('#search').val(), 'categoryId': $('#searchCategoryId').val(), 'page': 0, 'pageSize': 16, 'sortField': 'title', 'direction': 'ASC' }, true);|">
-                    <i class="fas fa-search"></i>
-                </div>
-                <div class="w3-rest">
-                    <input type="hidden" id="searchCategoryId" />
-                    <input class="w3-input" 
-                           type="text" 
-                           id="search" 
-                           th:placeholder="#{home.search.placeholder}" 
-                           th:onkeypress="|if (event.key === 'Enter') load('content', '@{'/view/find'}' , { 'title': $('#search').val(), 'categoryId': $('#searchCategoryId').val(), 'page': 0, 'pageSize': 16, 'sortField': 'title', 'direction': 'ASC' }, true); return event.key != 'Enter';|"/>
-                </div>
-            </div>
             <div class="w3-main w3-content w3-padding" id="content" th:insert="fragments/__${usedFragment}__">&nbsp;</div>
         </main>
         <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>

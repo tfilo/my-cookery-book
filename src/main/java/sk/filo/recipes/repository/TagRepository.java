@@ -9,4 +9,6 @@ import sk.filo.recipes.domain.Tag;
  */
 public interface TagRepository extends JpaRepository<Tag, Long> {
     
+    Tag findByName(String name);
+
 }

@@ -67,6 +67,10 @@ body,html{
     min-width:300px;
 }
 
+.menu.tags{
+    right:0;
+}
+
 .padding-right{
     padding-right: 16px;
 }

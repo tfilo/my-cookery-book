@@ -34,9 +34,6 @@
                     <i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span>
                 </button>
             </div>
-            <script>
-                $('#searchDiv').hide();
-            </script>
         </form>
         <div th:fragment="categoriesList">
             <div>
@@ -60,9 +57,6 @@
                        th:text="${category.name}"></a>
                 </li>
             </ul>
-            <script>
-                $('#searchDiv').hide();
-            </script>
             
             <script th:inline="javascript" th:if="${reloadMenu != null && reloadMenu == true}">
                 load('menu', '[(@{'/admin/category/reloadMenu'})]', null, false);

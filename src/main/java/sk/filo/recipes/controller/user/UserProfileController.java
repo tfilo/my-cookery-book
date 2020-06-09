@@ -1,5 +1,6 @@
 package sk.filo.recipes.controller.user;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
-import sk.filo.recipes.component.Preview;
+import sk.filo.recipes.component.Search;
 import sk.filo.recipes.controller.ModelAttributeConstants;
 import sk.filo.recipes.service.RecipeService;
 import sk.filo.recipes.service.UserService;
@@ -39,7 +40,7 @@ public class UserProfileController {
     MessageSource messageSource;
     
     @Autowired
-    Preview preview;
+    Search preview;
 
     @RequestMapping(value="/profile")
     public String getUsers(final Model model) {
@@ -50,7 +51,7 @@ public class UserProfileController {
     }
     
     @RequestMapping(value="/save")
-    public String saveUser(final Model model, final @Valid UserBasicSO userBasicSO, final BindingResult bindingResult) {
+    public String saveUser(final Model model, final @Valid UserBasicSO userBasicSO, final BindingResult bindingResult, final HttpServletRequest req) {
         LOGGER.debug("Save user profile action {}", userBasicSO);
         passwordValidator.validate(userBasicSO, bindingResult);
         if (bindingResult.hasErrors()) {
@@ -58,8 +59,7 @@ public class UserProfileController {
         }
         userService.saveProfile(userBasicSO);
 
-        preview.setAllCategoriesWithRecipes(model);
-        return "fragments/view::recipesList";
+        return preview.backToCategory(model, req);
     }
 
 }

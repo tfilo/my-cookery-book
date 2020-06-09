@@ -184,15 +184,15 @@ public class RecipeService {
     
     public Page<RecipeBasicSO> getAllBasicByCriteria(RecipeSearchCriteriaSO criteria) {
         Page<Recipe> recipes;
-        if (criteria.getCategoryId()!=null && !StringUtils.isEmptyOrWhitespace(criteria.getTitle())) {
+        if (criteria.getCategoryId()!=null && !StringUtils.isEmptyOrWhitespace(criteria.getTitleSearch())) {
             LOGGER.debug("Search by CategoryId and Title {}", criteria);
-            recipes = recipeRepository.findAllByCategoryIdAndTitleSearchIsContaining(criteria.getCategoryId(), criteria.getTitle(), criteria.getPageRequest());
+            recipes = recipeRepository.findAllByCategoryIdAndTitleSearchIsContaining(criteria.getCategoryId(), criteria.getTitleSearch(), criteria.getPageRequest());
         } else if (criteria.getCategoryId()!=null) {
             LOGGER.debug("Search by CategoryId {}", criteria);
             recipes = recipeRepository.findAllByCategoryId(criteria.getCategoryId(), criteria.getPageRequest());
-        } else if (!StringUtils.isEmptyOrWhitespace(criteria.getTitle())) {
+        } else if (!StringUtils.isEmptyOrWhitespace(criteria.getTitleSearch())) {
             LOGGER.debug("Search by Title {}", criteria);
-            recipes = recipeRepository.findAllByTitleSearchIsContaining(criteria.getTitle(),criteria.getPageRequest());
+            recipes = recipeRepository.findAllByTitleSearchIsContaining(criteria.getTitleSearch(),criteria.getPageRequest());
         } else {
             LOGGER.debug("Search all {}", criteria);
             recipes = recipeRepository.findAll(criteria.getPageRequest());

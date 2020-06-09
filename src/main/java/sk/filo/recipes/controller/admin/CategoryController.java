@@ -77,6 +77,6 @@ public class CategoryController {
     public String reloadMenu(final Model model) {
         LOGGER.debug("Reloading menu");
         model.addAttribute(ModelAttributeConstants.MODEL_CATEGORIES, categoryService.getAll());
-        return "fragments/common :: menu";
+        return "home::menu";
     }
 }

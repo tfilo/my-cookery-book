@@ -34,9 +34,6 @@
                     <i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span>
                 </button>
             </div>
-            <script>
-                $('#searchDiv').hide();
-            </script>
         </form>
         <div th:fragment="tagList">
             <div>
@@ -60,8 +57,8 @@
                        th:text="${tag.name}"></a>
                 </li>
             </ul>
-            <script>
-                $('#searchDiv').hide();
+            <script th:inline="javascript" th:if="${reloadTags != null && reloadTags == true}">
+                load('tags', '[(@{'/tag/reloadTags'})]', null, false);
             </script>
         </div>
     </body>
