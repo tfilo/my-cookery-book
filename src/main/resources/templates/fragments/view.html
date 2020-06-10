@@ -55,8 +55,8 @@
             <section class="padding-8" th:if="*{not #lists.isEmpty(associatedRecipes)}">
                 <h5 th:text="#{recipe.serve.with}">Serve with recipes</h5>
                 <div th:each="ar,rowStat : *{associatedRecipes}">
-                    <button th:onclick="|$('#recipe${ar.id}').toggleClass('w3-show')|" class="w3-button w3-block w3-left-align w3-border w3-border-black"><b><span th:text="${ar.title}">Recipe title</span></b> <i class="fas fa-caret-down"></i></button>
-                    <div th:id="|recipe${ar.id}|" class="w3-hide w3-border w3-border-black w3-padding">
+                    <button th:onclick="|$('#recipe${ar.id}').toggleClass('w3-show')|" class="w3-button w3-block w3-left-align"><b><span th:text="${ar.title}">Recipe title</span></b> <i class="fas fa-caret-down"></i></button>
+                    <div th:id="|recipe${ar.id}|" class="w3-hide w3-border w3-border-lightgray w3-round-large w3-padding">
                         <div th:if="${serves != null}"> <!-- SHOW number of portions only if main recipe has set number of portions -->
                             <span th:text="#{recipe.serves}"></span>: 
                             <span th:if="${ar.serves != null}" th:text="${serves}">1</span>
