@@ -49,6 +49,9 @@ public class Recipe {
     
     @Column(name = "description", length = 160)
     private String description;
+    
+    @Column(name = "serves")
+    private Integer serves;
 
     @OneToMany(
         fetch = FetchType.LAZY,

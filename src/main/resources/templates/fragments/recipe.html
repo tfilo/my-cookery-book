@@ -27,6 +27,11 @@
                 <textarea class="w3-input w3-border" th:field="${recipeSO.description}" style="resize:none" maxlength="160"></textarea>
                 <label class="w3-text-red" th:if="${#fields.hasErrors('recipeSO.description')}" th:errors="${recipeSO.description}">Incorrect description</label>
             </div>
+            <div class="padding-8">
+                <label th:text="#{recipe.serves}">Serves</label>
+                <input class="w3-input w3-border" type="number" step="1" th:field="${recipeSO.serves}" min="1" max="10"></input>
+                <label class="w3-text-red" th:if="${#fields.hasErrors('recipeSO.serves')}" th:errors="${recipeSO.serves}">Incorrect serves</label>
+            </div>
             <div id="sections">
             <div class="padding-8" th:fragment="sections" >
                 <div>

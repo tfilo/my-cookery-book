@@ -84,7 +84,7 @@ public class HomeController {
             search.showPreview(model, req);
             model.addAttribute(ModelAttributeConstants.USED_FRAGMENT, "view :: recipesList");
         } else {
-            recipeViewController.viewRecipe(model, (Long) session.getAttribute(ModelAttributeConstants.RECIPE_ID), req);
+            recipeViewController.viewRecipe(model, (Long) session.getAttribute(ModelAttributeConstants.RECIPE_ID), null, req);
             model.addAttribute(ModelAttributeConstants.USED_FRAGMENT, "view :: recipeView");
         }
 

@@ -24,13 +24,27 @@
                     </div>
                 </div>
                 <h2 class="w3-center" th:text="*{title}">Recipe title</h2>
+                <div th:if="*{serves != null}">
+                    <span th:text="#{recipe.serves}"></span>
+                    <div class="w3-dropdown-click">
+                        <button onclick="$('#servesAvailable').toggleClass('w3-show')" class="w3-button" th:text="${serves}">Serves</button>
+                        <div id="servesAvailable" class="w3-dropdown-content w3-bar-block w3-border serves-btn">
+                            <th:block th:each="i: ${#numbers.sequence(1, 15)}">
+                                <a href="javascript:void(0);" 
+                                   th:onclick="|load('content', '@{'/view/recipe'}', { 'recipeId': *{id} , 'serves': ${i} }, true);|" 
+                                   class="w3-bar-item w3-small w3-button" 
+                                   th:text="${i}">1</a> 
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
             </div>
             <section class="padding-8" th:each="section,rowStat : *{sections}">
                 <h4 th:text="${section.name}" class="bold">Sections name</h4>
                 <h5 th:if="${not #lists.isEmpty(section.ingredients)}" th:text="#{recipe.ingredients}">Ingredients</h5>
                 <ul>
                     <li th:each="ingredient,rowStat2 : ${section.ingredients}">
-                        <span th:text="${ingredient.value}">Ingredient value</span> 
+                        <span th:text="${ingredient.formattedValue}">Ingredient value</span> 
                         <div class="tooltip"><span th:text="${ingredient.unit.abbreviation}">Ingredient unit</span><span class="tooltiptext" th:text="${ingredient.unit.name}">Ingredient unit value</span></div>
                         <span th:text="${ingredient.name}">Ingredient name</span>
                     </li>
@@ -43,12 +57,17 @@
                 <div th:each="ar,rowStat : *{associatedRecipes}">
                     <button th:onclick="|$('#recipe${ar.id}').toggleClass('w3-show')|" class="w3-button w3-block w3-left-align w3-border w3-border-black"><b><span th:text="${ar.title}">Recipe title</span></b> <i class="fas fa-caret-down"></i></button>
                     <div th:id="|recipe${ar.id}|" class="w3-hide w3-border w3-border-black w3-padding">
+                        <div th:if="${recipeViewSO.serves != null}"> <!-- SHOW number of portions only if main recipe has set number of portions -->
+                            <span th:text="#{recipe.serves}"></span>: 
+                            <span th:if="${ar.serves != null}" th:text="${serves}">1</span>
+                            <span th:if="${ar.serves == null}" th:text="#{recipe.serves.undefined}" class="w3-text-red">Undefined</span>
+                        </div>                        
                         <section class="padding-8" th:each="section,rowStat : ${ar.sections}">
                             <h4 th:text="${section.name}" class="bold">Sections name</h4>
                             <h5 th:if="${not #lists.isEmpty(section.ingredients)}" th:text="#{recipe.ingredients}">Ingredients</h5>
                             <ul>
                                 <li th:each="ingredient,rowStat2 : ${section.ingredients}">
-                                    <span th:text="${ingredient.value}">Ingredient value</span> 
+                                    <span th:text="${ingredient.formattedValue}">Ingredient value</span> 
                                     <div class="tooltip"><span th:text="${ingredient.unit.abbreviation}">Ingredient unit</span><span class="tooltiptext" th:text="${ingredient.unit.name}">Ingredient unit value</span></div>
                                     <span th:text="${ingredient.name}">Ingredient name</span>
                                 </li>
@@ -176,7 +195,7 @@
             </form>
             <h2 class="w3-center" th:text="${title}">Title</h2>
             <div class="w3-row-padding">
-                <div th:onclick="|load('content', '@{'/view/recipe/__${recipe.id}__'}', null, true);|" class="w3-col l3 m6 s12 w3-container padding-bottom-16 pointer" th:each="recipe, rowStat : ${recipes}">
+                <div th:onclick="|load('content', '@{'/view/recipe'}', { recipeId: __${recipe.id}__ }, true);|" class="w3-col l3 m6 s12 w3-container padding-bottom-16 pointer" th:each="recipe, rowStat : ${recipes}">
                     <div class="w3-display-container">
                         <button th:if="${recipe.creator == #authentication.getPrincipal().getUsername() || #strings.contains(#authentication.principal.authorities,'ADMIN')}" th:onclick="|event.stopPropagation(); load('content', '@{'/recipe/edit/__${recipe.id}__'}', null, true);|" class="w3-button w3-text-green w3-display-topright w3-hover-black" sec:authorize="hasAnyRole('USER', 'ADMIN')"><i class="fas fa-edit"></i></button>
                         <div class="w3-center">

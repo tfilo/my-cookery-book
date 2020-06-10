@@ -31,4 +31,5 @@ public class ModelAttributeConstants {
     public static final String MODEL_USER_BASIC_SO = "userBasicSO";
     public static final String MODEL_TAGS = "tags";
     public static final String MODEL_TAG_SO = "tagSO";
+    public static final String MODEL_SERVES = "serves";
 }

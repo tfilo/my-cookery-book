@@ -23,6 +23,8 @@ public class RecipeViewSO {
     
     private String description;
     
+    private Integer serves;
+    
     private List<SectionViewSO> sections;
 
     private List<RecipeViewSO> associatedRecipes;

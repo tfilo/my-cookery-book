@@ -26,7 +26,9 @@ import sk.filo.recipes.service.TagService;
 import sk.filo.recipes.so.PictureSO;
 import sk.filo.recipes.so.RecipeSearchCriteriaSO;
 import sk.filo.recipes.so.TagSO;
+import sk.filo.recipes.so.view.IngredientViewSO;
 import sk.filo.recipes.so.view.RecipeViewSO;
+import sk.filo.recipes.so.view.SectionViewSO;
 
 /**
  *
@@ -59,11 +61,44 @@ public class RecipeViewController {
     @Autowired
     PDFGenerator pdfGenerator;
 
-    @RequestMapping(value="recipe/{recipeId}")
-    public String viewRecipe(final Model model, final @PathVariable Long recipeId, final HttpServletRequest req) {
+    private void recountIngredients(final RecipeViewSO recipeSO, final Integer serves) {
+        recipeSO.getSections().forEach((SectionViewSO svSO) -> {
+            svSO.getIngredients().forEach((IngredientViewSO ivSO) -> {
+                if (ivSO.getValue() != null) {
+                    ivSO.setValue((ivSO.getValue() / recipeSO.getServes().floatValue()) * serves.floatValue());
+                }
+            });
+        });
+    }
+    
+    @RequestMapping(value="/recipe")
+    public String viewRecipe(final Model model, final Long recipeId, final Integer serves, final HttpServletRequest req) {
         LOGGER.debug("View recipe by id {}", recipeId);
         RecipeViewSO recipeSO = recipeService.getView(recipeId);
         LOGGER.debug("Loaded recipe view {}", recipeSO);
+        
+        Integer _serves = serves;
+        
+        if (recipeSO.getServes() != null) { // recount if serves defined
+            if (_serves == null) {
+                _serves = recipeSO.getServes(); // if no count from gui than set default from DB
+            }
+            if (recipeSO.getServes() != null) {
+                // if serves is defined than set all ingredients to baseline of one portion
+                if (!_serves.equals(recipeSO.getServes())) { // don't recount if already equal number of portions
+                    recountIngredients(recipeSO, serves);
+                }
+                for (RecipeViewSO aRecipeSO : recipeSO.getAssociatedRecipes()) { // count for asociated recipes
+                    if (aRecipeSO.getServes() != null) {
+                        if (!_serves.equals(aRecipeSO.getServes())) {  // don't recount if already equal number of portions
+                            recountIngredients(aRecipeSO, _serves);
+                        }
+                    }
+                }
+            }
+            model.addAttribute(ModelAttributeConstants.MODEL_SERVES, _serves);
+        }
+        
         model.addAttribute(ModelAttributeConstants.MODEL_RECIPE_VIEW_SO, recipeSO);
         return "fragments/view::recipeView";
     }

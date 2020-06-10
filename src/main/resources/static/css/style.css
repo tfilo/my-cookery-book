@@ -204,3 +204,7 @@ input.empty {
 .method {
     white-space: pre-wrap;
 }
+
+.serves-btn {
+    min-width: 0px !important;
+}

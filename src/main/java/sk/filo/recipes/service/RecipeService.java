@@ -42,7 +42,9 @@ import sk.filo.recipes.so.RecipeSearchCriteriaSO;
 import sk.filo.recipes.so.RecipeSimpleSO;
 import sk.filo.recipes.so.SectionSO;
 import sk.filo.recipes.so.TagSO;
+import sk.filo.recipes.so.view.IngredientViewSO;
 import sk.filo.recipes.so.view.RecipeViewSO;
+import sk.filo.recipes.so.view.SectionViewSO;
 
 /**
  *
@@ -150,10 +152,11 @@ public class RecipeService {
         
         RecipeViewSO recipeViewSO = recipeMapper.mapRecipeToRecipeViewSO(recipe);
         
-        for (Recipe r : recipe.getAssociatedRecipes()) { // map only first level of asociated recipes
+        recipe.getAssociatedRecipes().forEach((Recipe r) -> {
+            // map only first level of asociated recipes
             recipeViewSO.getAssociatedRecipes().add(recipeMapper.mapRecipeToRecipeViewSO(r));
-        }
-        
+        });
+
         return recipeViewSO;
     }
     
