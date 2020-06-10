@@ -1,6 +1,7 @@
 package sk.filo.recipes.controller;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -80,7 +81,6 @@ public class RecipeViewController {
 
     @RequestMapping(value={"/find"})
     public String find(final Model model, final RecipeSearchCriteriaSO searchCriteria, final HttpServletRequest req) {
-        searchCriteria.setPage(0);
         return search.searchByCriteria(model, searchCriteria, req);
     }
     

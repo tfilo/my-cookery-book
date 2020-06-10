@@ -151,7 +151,7 @@
                 <input type="hidden" th:field="*{direction}"/>
                 <div class="w3-col w3-button"
                      style="width:50px;"
-                     th:onclick="|submitForm('searchForm', 'content', '@{'/view/find'}', true);|">
+                     th:onclick="|$('#page').val(0) && submitForm('searchForm', 'content', '@{'/view/find'}', true);|">
                     <i class="fas fa-search"></i>
                 </div>
                 <div class="w3-rest">
@@ -159,7 +159,7 @@
                            type="text" 
                            th:field="*{title}" 
                            th:placeholder="#{home.search.placeholder}" 
-                           th:onkeypress="|if (event.key === 'Enter') submitForm('searchForm', 'content', '@{'/view/find'}', true); return event.key != 'Enter';|"/>
+                           th:onkeypress="|if (event.key === 'Enter') $('#page').val(0) && submitForm('searchForm', 'content', '@{'/view/find'}', true); return event.key != 'Enter';|"/>
                 </div>
                 <div class="selectedTags">
                     <th:block th:each="tag,rowStat : *{tags}">
