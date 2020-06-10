@@ -24,5 +24,12 @@ public class UnitCategorySO {
     @Size(max=80)
     private String name;
     
-    private final List<UnitSO> units = new ArrayList<>();
+    private List<UnitSO> units;
+    
+    public List<UnitSO> getUnits() {
+        if (Objects.isNull(units)) {
+            units = new ArrayList<>();
+        }
+        return units;
+    }
 }

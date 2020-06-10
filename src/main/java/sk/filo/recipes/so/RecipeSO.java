@@ -3,6 +3,7 @@ package sk.filo.recipes.so;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -38,19 +39,19 @@ public class RecipeSO {
     
     @Valid
     @NotEmpty
-    private final List<SectionSO> sections = new ArrayList<>();
+    private List<SectionSO> sections;
 
-    private final List<RecipeSimpleSO> associatedRecipes = new ArrayList<>();
+    private List<RecipeSimpleSO> associatedRecipes;
     
-    private final List<PictureBasicSO> pictures = new ArrayList<>();
+    private List<PictureBasicSO> pictures;
     
     @NotNull
     private Long category;
     
-    private final List<TagSO> tags = new ArrayList<>();
+    private List<TagSO> tags;
     
     @Valid
-    private final List<SourceSO> sources = new ArrayList<>();
+    private List<SourceSO> sources;
     
     private UserBasicSO creator;
     
@@ -59,4 +60,39 @@ public class RecipeSO {
     private LocalDateTime created;
     
     private LocalDateTime modified;
+    
+    public List<SectionSO> getSections() {
+        if (Objects.isNull(sections)) {
+            sections = new ArrayList<>();
+        }
+        return sections;
+    }
+    
+    public List<RecipeSimpleSO> getAssociatedRecipes() {
+        if (Objects.isNull(associatedRecipes)) {
+            associatedRecipes = new ArrayList<>();
+        }
+        return associatedRecipes;
+    }
+    
+    public List<PictureBasicSO> getPictures() {
+        if (Objects.isNull(pictures)) {
+            pictures = new ArrayList<>();
+        }
+        return pictures;
+    }
+    
+    public List<TagSO> getTags() {
+        if (Objects.isNull(tags)) {
+            tags = new ArrayList<>();
+        }
+        return tags;
+    }
+    
+    public List<SourceSO> getSources() {
+        if (Objects.isNull(sources)) {
+            sources = new ArrayList<>();
+        }
+        return sources;
+    }
 }

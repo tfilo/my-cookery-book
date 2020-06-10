@@ -42,9 +42,7 @@ import sk.filo.recipes.so.RecipeSearchCriteriaSO;
 import sk.filo.recipes.so.RecipeSimpleSO;
 import sk.filo.recipes.so.SectionSO;
 import sk.filo.recipes.so.TagSO;
-import sk.filo.recipes.so.view.IngredientViewSO;
 import sk.filo.recipes.so.view.RecipeViewSO;
-import sk.filo.recipes.so.view.SectionViewSO;
 
 /**
  *

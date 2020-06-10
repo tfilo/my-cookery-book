@@ -3,6 +3,7 @@ package sk.filo.recipes.so;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -29,7 +30,7 @@ public class RecipeSearchCriteriaSO {
     
     private String title;
     
-    private final List<TagSO> tags = new ArrayList<>();
+    private List<TagSO> tags;
     
     private Integer page = 0;
     
@@ -96,5 +97,11 @@ public class RecipeSearchCriteriaSO {
         
         return PageRequest.of(_page, _pageSize, _direction, _sortField);
     }
-           
+
+    public List<TagSO> getTags() {
+        if (Objects.isNull(tags)) {
+            tags = new ArrayList<>();
+        }
+        return tags;
+    }
 }

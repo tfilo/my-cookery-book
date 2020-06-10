@@ -4,6 +4,7 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Getter;
@@ -40,5 +41,13 @@ public class UserSO {
     @NotNull
     private Boolean enabled;
     
-    private final Set<String> roles = new LinkedHashSet<>();
+    @NotEmpty
+    private Set<String> roles;
+    
+    public Set<String> getRoles() {
+        if (Objects.isNull(roles)) {
+            roles = new LinkedHashSet<>();
+        }
+        return roles;
+    }
 }

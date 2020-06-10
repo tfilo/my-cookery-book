@@ -1,0 +1,1 @@
+INSERT INTO cb_role (id, name) VALUES (3, 'ROLE_EDITOR');

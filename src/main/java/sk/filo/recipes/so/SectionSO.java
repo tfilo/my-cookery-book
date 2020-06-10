@@ -29,9 +29,16 @@ public class SectionSO {
     private String name;
     
     @Valid
-    private final List<IngredientSO> ingredients = new ArrayList<>();
+    private List<IngredientSO> ingredients;
         
     @NotBlank
     @Size(max=Integer.MAX_VALUE)
     private String method;
+    
+    public List<IngredientSO> getIngredients() {
+        if (Objects.isNull(ingredients)) {
+            ingredients = new ArrayList<>();
+        }
+        return ingredients;
+    }
 }

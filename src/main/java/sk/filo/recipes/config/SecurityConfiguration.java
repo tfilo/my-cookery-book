@@ -40,9 +40,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                             "/cookies"
                     ).permitAll()
                     .antMatchers("/admin/**").hasRole("ADMIN")
-                    .antMatchers("/recipe/**").hasRole("USER")
-                    .antMatchers("/user/**").hasRole("USER")
-                    .antMatchers("/tag/**").hasRole("USER")
+                    .antMatchers("/recipe/**").hasAnyRole("EDITOR", "ADMIN")
+                    .antMatchers("/user/**").hasAnyRole("USER", "EDITOR", "ADMIN")
+                    .antMatchers("/tag/**").hasAnyRole("EDITOR", "ADMIN")
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
