@@ -1,6 +1,7 @@
 package sk.filo.recipes.controller;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -174,12 +175,28 @@ public class RecipeViewController {
         return new ResponseEntity<>(pictureSO.getData(), headers, HttpStatus.CREATED);
     }
     
-    @RequestMapping(value = "/pdf/{recipeId}", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> generatePDFbyId(final @PathVariable Long recipeId) {
+    @RequestMapping(value = {"/pdf/{recipeId}", "/pdf/{recipeId}/{serves}" }, method = RequestMethod.GET)
+    public ResponseEntity<byte[]> generatePDFbyId(final @PathVariable Long recipeId, final @PathVariable Optional<Integer> serves) {
         LOGGER.debug("Getting pdf recipe id");
         RecipeViewSO recipeSO = recipeService.getView(recipeId);
+        
+        if (serves.isPresent()) {
+            if (recipeSO.getServes() != null) {
+                // if serves is defined than set all ingredients to baseline of one portion
+                if (!serves.get().equals(recipeSO.getServes())) { // don't recount if already equal number of portions
+                    recountIngredients(recipeSO, serves.get());
+                }
+                for (RecipeViewSO aRecipeSO : recipeSO.getAssociatedRecipes()) { // count for asociated recipes
+                    if (aRecipeSO.getServes() != null) {
+                        if (!serves.get().equals(aRecipeSO.getServes())) {  // don't recount if already equal number of portions
+                            recountIngredients(aRecipeSO, serves.get());
+                        }
+                    }
+                }
+            }
+        }
 
-        byte[] generate = pdfGenerator.generate(recipeSO);
+        byte[] generate = pdfGenerator.generate(recipeSO, serves.orElse(null));
 
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);

@@ -33,6 +33,8 @@ public class PDFGenerator {
     
     private static final String MODEL_RECIPE_VIEW_SO = "recipeViewSO";
     
+    private static final String MODEL_SERVES = "serves";
+    
     @Autowired
     MessageSource messageSource;
     
@@ -42,8 +44,8 @@ public class PDFGenerator {
     @Autowired
     ISpringTemplateEngine templateEngine;
 
-    public byte[] generate(RecipeViewSO recipeSO) {
-        String html = parseThymeleafTemplate(recipeSO);
+    public byte[] generate(RecipeViewSO recipeSO, Integer serves) {
+        String html = parseThymeleafTemplate(recipeSO, serves);
         LOGGER.debug("Generated HTML {}", html);
         ByteArrayOutputStream outputStream;
         try {
@@ -73,9 +75,10 @@ public class PDFGenerator {
         return outputStream;
     }
     
-    private String parseThymeleafTemplate(RecipeViewSO recipeSO) {        
+    private String parseThymeleafTemplate(RecipeViewSO recipeSO, Integer serves) {        
         Context context = new Context();                
         context.setVariable(MODEL_RECIPE_VIEW_SO, recipeSO);
+        context.setVariable(MODEL_SERVES, serves);
         context.setLocale(new Locale("sk"));
 
         recipeSO.getPictures().forEach((PictureViewSO pictureViewSO) -> {
