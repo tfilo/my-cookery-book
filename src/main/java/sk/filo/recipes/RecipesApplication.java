@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import sk.filo.recipes.config.ConfigProperties;
 
-@SpringBootApplication(scanBasePackages = "sk.filo")
+@SpringBootApplication(scanBasePackages = "sk.filo.recipes")
 @EnableConfigurationProperties(ConfigProperties.class)
 public class RecipesApplication {
 

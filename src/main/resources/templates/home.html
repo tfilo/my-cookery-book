@@ -75,7 +75,6 @@
             <div style="display: none;" id="error">&nbsp;</div>
             <div class="w3-main w3-content w3-padding" id="content" th:insert="fragments/__${usedFragment}__">&nbsp;</div>
         </main>
-        <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
         <script th:inline="javascript">
             window.cookieconsent.initialise({
                 "palette": {
@@ -87,10 +86,10 @@
                     }
                 },
                 "content": {
-                    "message": [[#{cookies.consent}]],
+                    "message": [[#{cookies.consent(${@environment.getProperty('app.base_url')})}]],
                     "dismiss": [[#{cookies.dismiss}]],
                     "link": [[#{cookies.link}]],
-                    "href": "https://my-cookery-book.herokuapp.com/cookies"
+                    "href": "[(${@environment.getProperty('app.base_url')})]" + "/cookies"
                 }
             });
         </script>

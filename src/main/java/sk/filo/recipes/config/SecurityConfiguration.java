@@ -27,10 +27,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers(
                             "/login.html", 
                             "/login-error.html",
-                            "/css/**", 
-                            "/js/**", 
-                            "/icon/**",
-                            "/image/**",
+                            "/css/style.css",
+                            "/css/w3.css",
+                            "/css/cookieconsent.min.css",
+                            "/css/fontawesome/**",
+                            "/js/cookieconsent.min.js",
+                            "/icon/*.png",
+                            "/icon/favicon.ico",
+                            "/icon/site.webmanifest",
+                            "/image/background.jpg",
                             "/link/recipe/*",
                             "/cookies"
                     ).permitAll()

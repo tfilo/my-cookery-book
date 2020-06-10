@@ -1,7 +1,6 @@
 package sk.filo.recipes.controller;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
