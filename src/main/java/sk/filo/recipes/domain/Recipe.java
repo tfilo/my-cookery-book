@@ -30,7 +30,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString(exclude = "associatedRecipes")
+@ToString(exclude = { "sections", "associatedRecipes", "tags", "sources", "pictures", "creator", "modifier" })
 @Entity
 @Table(name = "cb_recipe")
 @SequenceGenerator(name = "recipe_generator", allocationSize = 1, sequenceName = "cb_recipe_seq")

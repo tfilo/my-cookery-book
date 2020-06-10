@@ -23,7 +23,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString(exclude = { "data", "recipe" })
+@ToString(exclude = { "data", "thumbnail","recipe" })
 @Entity
 @Table(name = "cb_picture")
 @SequenceGenerator(name = "picture_generator", allocationSize = 1, sequenceName = "cb_picture_seq")

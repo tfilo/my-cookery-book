@@ -26,7 +26,7 @@ import org.hibernate.annotations.TypeDef;
  */
 @Getter
 @Setter
-@ToString
+@ToString(exclude = { "ingredients" })
 @Entity
 @Table(name = "cb_section")
 @TypeDef(
