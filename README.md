@@ -23,3 +23,17 @@ Main features:
 * Divide recipe into sections
 * Recaulculate ingredients by number of portions
 * and more ...
+
+Screenshots:
+
+![Login screen](https://github.com/tfilo/my-cookery-book/blob/assets/login.png?raw=true)
+
+![Recipes in soups category](https://github.com/tfilo/my-cookery-book/blob/assets/soups.png?raw=true)
+
+![Categories administration](https://github.com/tfilo/my-cookery-book/blob/assets/categories.png?raw=true)
+
+![Edit one category](https://github.com/tfilo/my-cookery-book/blob/assets/category.png?raw=true)
+
+![Main menu](https://github.com/tfilo/my-cookery-book/blob/assets/menu.png?raw=true)
+
+![Tags](https://github.com/tfilo/my-cookery-book/blob/assets/tags.png?raw=true)
