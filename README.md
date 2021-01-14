@@ -9,3 +9,4 @@ Main used technologies:
 * [jQuery](https://jquery.com/)
 * [W3.CSS](https://www.w3schools.com/w3css/defaulT.asp)
 * [Fontawesome](https://fontawesome.com/)
+* [Postgres docker image](https://hub.docker.com/_/postgres)
