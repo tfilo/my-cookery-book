@@ -9,7 +9,7 @@ https://hub.docker.com/r/tfilo/recipes
 * default admin: admin/admin
 * default user: user/user
 
-##Run in docker:
+## Run in docker:
 
 * require running instance of postgres database 
 * `docker run -p 8080:8080 -e CB_DATASOURCE=jdbc:postgresql://localhost:5432/recipes -e CB_DATASOURCE_USER=username -e CB_DATASOURCE_PASS=password tfilo/recipes:latest`
@@ -18,14 +18,14 @@ Language can be configured from default Slovak to English by environmental prope
 However init script creates some basic categories and units in database in Slovak language.
 You will need to modify this category and unit names to English after login in to app as admin.
 
-##Main technologies:
+## Main technologies:
 
-###required for build:
+### required for build:
 * [AdoptOpenJDK 16 OpenJ9](https://adoptopenjdk.net/?variant=openjdk16&jvmVariant=openj9)
 * [Apache Maven 3.8.1](https://maven.apache.org/)
 * [Docker](https://www.docker.com/)
   
-###used in project:
+### used in project:
 
 * [SpringBoot](https://spring.io/projects/spring-boot)
 * [Thymeleaf](https://www.thymeleaf.org/)
@@ -34,13 +34,13 @@ You will need to modify this category and unit names to English after login in t
 * [Fontawesome](https://fontawesome.com/)
 * [Postgres 13.1-alpine](https://hub.docker.com/_/postgres)
 
-##Build and run instructions for local development:
+## Build and run instructions for local development:
 
 * `mvn clean install`
 * `./run-postgre-server.sh`
 * `./run-cookery-book.sh`
 
-##Main features:
+## Main features:
 
 * User accounts with admin/editor/viewer roles
 * User defined categories
@@ -54,7 +54,7 @@ You will need to modify this category and unit names to English after login in t
 * Print to PDF
 * and more ...
 
-##Screenshots:
+## Screenshots:
 
 ![Login screen](https://github.com/tfilo/my-cookery-book/blob/assets/login.png?raw=true)
 
