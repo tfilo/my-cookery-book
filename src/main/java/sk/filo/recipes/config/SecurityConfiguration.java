@@ -19,6 +19,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    private ConfigProperties configProperties;
     
     @Override
     public void configure(final HttpSecurity http) throws Exception {
@@ -56,7 +59,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .logoutUrl("/logout")
                     .logoutSuccessUrl("/login.html")
                 .and()
-                    .rememberMe().key("0f8fb167-6ff5-4dc4-9b42-6fb046aebd28").tokenValiditySeconds(31536000);
+                    .rememberMe().key(configProperties.getRememberMeKey()).tokenValiditySeconds(31536000);
     }
 
     @Override

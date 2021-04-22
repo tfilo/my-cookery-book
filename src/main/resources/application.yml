@@ -5,9 +5,13 @@ server:
     whitelabel:
         enabled: false
 app:
-    base_url: ${BASE_URL:http://localhost:8080}
+    base_url: ${CB_BASE_URL:http://localhost:8080}
+    remember_me_key: ${CB_REMEMBER_ME_KEY:0f8fb167-6ff5-4dc4-9b42-6fb046aebd28}
+    locale: ${CB_LOCALE:sk}
 spring:
-    ## PostgreSQL
+    main:
+      allow-bean-definition-overriding: true
+  ## PostgreSQL
     datasource:
         hikari:
             connectionTimeout: ${CB_DATASOURCE_CONNECTION_TIMEOUT:20000}

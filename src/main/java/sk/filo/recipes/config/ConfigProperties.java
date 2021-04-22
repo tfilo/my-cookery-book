@@ -13,6 +13,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import javax.validation.constraints.NotEmpty;
+
 /**
  *
  * @author tomas
@@ -20,9 +22,18 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 @Getter
 @Setter
 @ToString
-@ConfigurationProperties
+@ConfigurationProperties("app")
 @Validated
 public class ConfigProperties implements WebMvcConfigurer {
+
+    @NotEmpty
+    private String baseUrl;
+
+    @NotEmpty
+    private String rememberMeKey;
+
+    @NotEmpty
+    private String locale;
 
     @Bean
     public MessageSource messageSource() {
@@ -35,7 +46,7 @@ public class ConfigProperties implements WebMvcConfigurer {
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(new Locale("sk"));
+        slr.setDefaultLocale(new Locale(locale));
         return slr;
     }
 

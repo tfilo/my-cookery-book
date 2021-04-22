@@ -1,17 +1,46 @@
 # My cookery book
 
-This is simple webapp based on Thymeleafe + SpringBoot. It is deployed on heroku platform. It's used as personal Coockery Book.
+My cookery book is simple webapp for storing my personal recipes.
+Available in English and Slovak localisation.
 
-Main used technologies:
+Avalaible as docker container:
+https://hub.docker.com/r/tfilo/recipes
+
+* default admin: admin/admin
+* default user: user/user
+
+##Run in docker:
+
+* require running instance of postgres database 
+* `docker run -p 8080:8080 -e CB_DATASOURCE=jdbc:postgresql://localhost:5432/recipes -e CB_DATASOURCE_USER=username -e CB_DATASOURCE_PASS=password tfilo/recipes:latest`
+
+Language can be configured from default Slovak to English by environmental property `CB_LOCALE=en`.
+However init script creates some basic categories and units in database in Slovak language.
+You will need to modify this category and unit names to English after login in to app as admin.
+
+##Main technologies:
+
+###required for build:
+* [AdoptOpenJDK 16 OpenJ9](https://adoptopenjdk.net/?variant=openjdk16&jvmVariant=openj9)
+* [Apache Maven 3.8.1](https://maven.apache.org/)
+* [Docker](https://www.docker.com/)
+  
+###used in project:
 
 * [SpringBoot](https://spring.io/projects/spring-boot)
-* [Thymeleafe](https://www.thymeleaf.org/)
+* [Thymeleaf](https://www.thymeleaf.org/)
 * [jQuery](https://jquery.com/)
 * [W3.CSS](https://www.w3schools.com/w3css/defaulT.asp)
 * [Fontawesome](https://fontawesome.com/)
-* [Postgres docker image](https://hub.docker.com/_/postgres)
+* [Postgres 13.1-alpine](https://hub.docker.com/_/postgres)
 
-Main features:
+##Build and run instructions for local development:
+
+* `mvn clean install`
+* `./run-postgre-server.sh`
+* `./run-cookery-book.sh`
+
+##Main features:
 
 * User accounts with admin/editor/viewer roles
 * User defined categories
@@ -21,10 +50,11 @@ Main features:
 * Filter by category
 * Filter by multiple tags
 * Divide recipe into sections
-* Recaulculate ingredients by number of portions
+* Recalculate ingredients by number of portions
+* Print to PDF
 * and more ...
 
-Screenshots:
+##Screenshots:
 
 ![Login screen](https://github.com/tfilo/my-cookery-book/blob/assets/login.png?raw=true)
 
