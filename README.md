@@ -1,5 +1,4 @@
 # My cookery book
-
 My cookery book is simple webapp for storing my personal recipes.
 Available in English and Slovak localisation.
 
@@ -9,10 +8,14 @@ https://hub.docker.com/r/tfilo/recipes
 * default admin: admin/admin
 * default user: user/user
 
-## Run in docker:
+## Run in docker standalone or docker-compose:
 
-* require running instance of postgres database 
+### standalone
+* require running postgres instance
 * `docker run -p 8080:8080 -e CB_DATASOURCE=jdbc:postgresql://localhost:5432/recipes -e CB_DATASOURCE_USER=username -e CB_DATASOURCE_PASS=password tfilo/recipes:latest`
+
+### docker-compose
+* `cd my-cookery-book && docker-compose up`
 
 Language can be configured from default Slovak to English by environmental property `CB_LOCALE=en`.
 Also setting custom CB_REMEMBER_ME_KEY is recomended for security reasons.
@@ -27,22 +30,18 @@ You will need to modify this category and unit names to English after login in t
 * [Docker](https://www.docker.com/)
   
 ### used in project:
-
 * [SpringBoot](https://spring.io/projects/spring-boot)
 * [Thymeleaf](https://www.thymeleaf.org/)
 * [jQuery](https://jquery.com/)
 * [W3.CSS](https://www.w3schools.com/w3css/defaulT.asp)
 * [Fontawesome](https://fontawesome.com/)
-* [Postgres 13.1-alpine](https://hub.docker.com/_/postgres)
+* [Postgres 13.2-alpine](https://hub.docker.com/_/postgres)
 
 ## Build and run instructions for local development:
-
 * `mvn clean install`
-* `./run-postgre-server.sh`
-* `./run-cookery-book.sh`
+* `cd my-cookery-book && docker-compose up`
 
 ## Main features:
-
 * User accounts with admin/editor/viewer roles
 * User defined categories
 * User defined tags
@@ -56,7 +55,6 @@ You will need to modify this category and unit names to English after login in t
 * and more ...
 
 ## Screenshots:
-
 ![Login screen](https://github.com/tfilo/my-cookery-book/blob/assets/login.png?raw=true)
 
 ![Recipes in soups category](https://github.com/tfilo/my-cookery-book/blob/assets/soups.png?raw=true)
