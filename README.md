@@ -15,6 +15,7 @@ https://hub.docker.com/r/tfilo/recipes
 * `docker run -p 8080:8080 -e CB_DATASOURCE=jdbc:postgresql://localhost:5432/recipes -e CB_DATASOURCE_USER=username -e CB_DATASOURCE_PASS=password tfilo/recipes:latest`
 
 Language can be configured from default Slovak to English by environmental property `CB_LOCALE=en`.
+Also setting custom CB_REMEMBER_ME_KEY is recomended for security reasons.
 However init script creates some basic categories and units in database in Slovak language.
 You will need to modify this category and unit names to English after login in to app as admin.
 
