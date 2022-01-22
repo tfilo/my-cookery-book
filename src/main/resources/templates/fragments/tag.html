@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="sk">
+    <head th:replace="fragments/common :: htmlHeader">
+    </head>
+    <body>
+        <form method="post" 
+              th:if="${tagSO!=null}" 
+              action="javascript:void(0);" 
+              id="tagForm" 
+              th:object="${tagSO}" 
+              th:fragment="tagForm">
+            <h2 class="w3-center" th:text="#{tag.title}">Tag</h2>
+            <input type="hidden" th:field="*{id}"/>
+            <div class="padding-8">
+                <label><span th:text="#{tag.name}">Name</span> <span class="w3-text-red">*</span></label>
+                <input class="w3-input w3-border" type="text" th:field="*{name}" maxlength="80">
+                <label class="w3-text-red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect  name</label>
+            </div>
+            <div class="padding-8 button-wrapper">
+                <button type="submit" 
+                        class="w3-button w3-light-green" 
+                        th:onclick="|submitForm('tagForm', 'content', '@{'/tag/save'}', true);|">
+                    <i class="fas fa-save"></i>&nbsp;<span th:text="#{common.save}">Save</span>
+                </button>
+                <span class="flex-row-spacer"></span>
+                <button type="button" 
+                        class="w3-button w3-red" 
+                        th:if="*{id}" 
+                        th:onclick="|$('#modalDeleteBtn').off('click').click(function(){ load('content', '@{'/tag/delete/__*{id}__'}', null, true); $('#modalDelete').hide(); }); $('#modalDelete').show();|">
+                    <i class="fas fa-trash-alt"></i>&nbsp;<span th:text="#{common.delete}">Delete</span>
+                </button>
+                <span class="flex-row-spacer"></span>
+                <button type="button" 
+                        class="w3-button w3-amber"
+                        th:onclick="|$('#modalCancelBtn').off('click').click(function(){ load('content', '@{'/tag/all'}', null, true); $('#modalCancel').hide(); }); $('#modalCancel').show();|">
+                    <i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span>
+                </button>
+            </div>
+        </form>
+        <div th:fragment="tagList">
+            <div>
+                <div class="w3-right">
+                    <a href="javascript:void(0);" 
+                       th:onclick="|load('content', '@{'/tag/add'}', null, true);|" 
+                       class="w3-button w3-xlarge w3-text-green">
+                        <i class="fas fa-plus-circle"></i>
+                    </a>
+                </div>
+                <div><h2 class="w3-center" th:text="#{tags.title}">Tags</h2></div>
+            </div>
+            <ul class="w3-ul w3-border" th:if="${tags}">
+                <li class="w3-row w3-light-grey w3-strong">
+                    <label class="w3-col l12 m12 s12"><b th:text="#{tag.name}">Tag Name</b></label>
+                </li>
+                <li class="w3-row" th:each="tag,rowStat : ${tags}">
+                    <a class="w3-col l12 m12 s12"
+                       href="javascript:void(0);"
+                       th:onclick="|load('content', '@{'/tag/get/__${tag.id}__'}', null, true);|"
+                       th:text="${tag.name}"></a>
+                </li>
+            </ul>
+            <script th:inline="javascript" th:if="${reloadTags != null && reloadTags == true}">
+                load('tagsMenu', '[(@{'/tag/reloadTags'})]', null, false);
+            </script>
+        </div>
+    </body>
+</html>

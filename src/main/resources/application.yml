@@ -1,0 +1,59 @@
+## default connection pool
+server:
+  port: ${CB_SERVER_PORT:8080}
+  error:
+    whitelabel:
+      enabled: false
+app:
+  base_url: ${CB_BASE_URL:http://localhost:8080}
+  remember_me_key: ${CB_REMEMBER_ME_KEY:0f8fb167-6ff5-4dc4-9b42-6fb046aebd28}
+  locale: ${CB_LOCALE:sk}
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  ## PostgreSQL
+  datasource:
+    hikari:
+      connectionTimeout: ${CB_DATASOURCE_CONNECTION_TIMEOUT:20000}
+      maximumPoolSize: ${CB_DATASOURCE_MAXIMUM_POOL_SIZE:5}
+    url: ${CB_DATASOURCE:jdbc:postgresql://localhost:5432/recipes}
+    username: ${CB_DATASOURCE_USER:user}
+    password: ${CB_DATASOURCE_PASS:User123}
+  #jpa
+  #drop n create table again, good for testing, comment this in production
+  jpa:
+    show-sql: ${CB_JPA_SHOW_SQL:true}
+    properties:
+      hibernate:
+        format_sql: ${CB_JPA_FORMAT_SQL:true}
+        enable_lazy_load_no_trans: ${CB_JPA_ENABLE_LAZY_LOAD_NO_TRANS:true}
+        event:
+          merge:
+            entity_copy_observer: ${CB_JPA_ENTITY_COPY_OBSERVER:allow}
+        jdbc:
+          lob:
+            non_contextual_creation: ${CB_JPA_NON_CONTEXTUAL_CREATION:true}
+    hibernate:
+      ddl-auto: validate
+
+  #flyway
+  flyway:
+    check-location: ${CB_FLYWAY_CHECK_LOCATION:true}
+  #thymeleaf
+  thymeleaf:
+    cache: ${CB_THYMELEAF_CACHE:false}
+  servlet:
+    multipart:
+      max-file-size: ${CB_SERVLET_MULTIPART_MAX_FILE_SIZE:5MB}
+      max-request-size: ${CB_SERVLET_MULTIPART_MAX_REQUEST_SIZE:10MB}
+#log
+logging:
+  level:
+    sk:
+      filo:
+        recipes: ${CB_LOG_SK_FILO_RECIPES:debug}
+    org:
+      springframework:
+        security: ${CB_LOG_ORG_SPRINGFRAMEWORK_SECURITY:info}
+                    
+

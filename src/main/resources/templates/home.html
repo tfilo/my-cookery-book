@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="sk">
+    <head th:replace="fragments/common :: htmlHeader">
+    </head>
+    <body>
+        <div id="loaderOverlay"><div id="loader"></div></div>
+        <div id="modalDelete" class="w3-modal">
+            <div class="w3-modal-content">
+                <header class="w3-container w3-red"> 
+                    <h2 th:text="#{common.question}">Question</h2>
+                </header>
+                <div class="w3-container">
+                    <p th:text="#{common.delete.question}">Realy delete?</p>
+                </div>
+                <footer class="w3-container w3-red w3-padding button-wrapper">
+                    <button type="button"
+                            id="modalDeleteBtn"
+                            class="w3-button">
+                        <i class="fas fa-trash-alt"></i>&nbsp;<span th:text="#{common.delete}">Delete</span>
+                    </button>
+                    <span class="flex-row-spacer"></span>
+                    <button type="button"
+                            onclick="$('#modalDelete').hide();"
+                            class="w3-button">
+                        <i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span>
+                    </button>
+                </footer>
+            </div>
+        </div>
+        <div id="modalCancel" class="w3-modal">
+            <div class="w3-modal-content">
+                <header class="w3-container w3-amber">
+                    <h2 th:text="#{common.question}">Question</h2>
+                </header>
+                <div class="w3-container">
+                    <p th:text="#{common.cancel.question}">Realy cancel?</p>
+                </div>
+                <footer class="w3-container w3-amber w3-padding button-wrapper">
+                    <button type="button"
+                            id="modalCancelBtn"
+                            class="w3-button">
+                        <i class="fas fa-undo-alt"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span>
+                    </button>
+                    <span class="flex-row-spacer"></span>
+                    <button type="button"
+                            onclick="$('#modalCancel').hide();"
+                            class="w3-button">
+                        <i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.keep}">Return to edit</span>
+                    </button>
+                </footer>
+            </div>
+        </div>
+        <div id="menu">
+            <nav th:fragment="menu" onmouseleave="closeSidebar('menuSidebar')" class="w3-sidebar w3-bar-block w3-border-right w3-animate-left menu" id="menuSidebar">
+                <div class="w3-button w3-padding-16 w3-left" onclick="closeSidebar('menuSidebar')"><i class="fas fa-angle-double-left"></i></div>
+                <a href="javascript:void(0);" th:onclick="|load('content', '@{'/user/profile'}', null, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button" sec:authorize="isAuthenticated()"><i class="fas fa-user-circle icon"></i> <b sec:authentication="name">Username</b></a>
+                <a th:href="@{'/logout'}" class="w3-bar-item w3-button" sec:authorize="isAuthenticated()"><i class="fas fa-sign-out-alt icon"></i> <span th:text="#{common.logout}">Logout</span></a>
+                <hr sec:authorize="isAuthenticated()">
+                <a href="javascript:void(0);" th:onclick="|load('content', '@{'/admin/user/all'}', null, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-user icon"></i> <span th:text="#{common.users}">Users</span></a>
+                <a href="javascript:void(0);" th:onclick="|load('content', '@{'/admin/category/all'}', null, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-list icon"></i> <span th:text="#{common.categories}">Categories</span></a>
+                <a href="javascript:void(0);" th:onclick="|load('content', '@{'/admin/unitcategory/all'}', null, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button" sec:authorize="hasRole('ADMIN')"><i class="fas fa-prescription-bottle icon"></i> <span th:text="#{common.units}">Units</span></a>
+                <a href="javascript:void(0);" th:onclick="|load('content', '@{'/tag/all'}', null, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button" sec:authorize="hasAnyRole('EDITOR', 'ADMIN')"><i class="fas fa-tags icon"></i> <span th:text="#{common.tags}">Tags</span></a>
+                <a href="javascript:void(0);" th:onclick="|load('content', '@{'/recipe/add'}', null, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button" sec:authorize="hasAnyRole('EDITOR', 'ADMIN')"><i class="fas fa-pizza-slice icon"></i> <span th:text="#{common.add.recipe}">Add recipe</span></a>
+                <hr sec:authorize="isAuthenticated()">
+                <a href="javascript:void(0);" th:onclick="|load('content', '@{'/view/categoriesPreview'}', null, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button"><span th:text="#{common.homepage}">Homepage</span></a>
+                <a href="javascript:void(0);" th:onclick="|load('content', '@{'/view/find'}',{ 'page': 0, 'pageSize': 16, 'sortField': 'title', 'direction': 'ASC' }, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button"><span th:text="#{common.allrecipes}">All</span></a>
+                <hr>
+                <div id="categoryLinks">
+                    <th:block th:each="category, rowStat : ${categories}">
+                        <a href="javascript:void(0);" th:onclick="|load('content', '@{'/view/find'}', { 'categoryId': ${category.id} }, true); closeSidebar('menuSidebar');|" class="w3-bar-item w3-button" th:text="${category.name}" th:classappend="${rowStat.last} ? 'margin-bottom-32'">Category name</a>
+                    </th:block>
+                </div>
+            </nav>
+        </div>
+        <div id="tagsMenu">
+            <nav th:fragment="tags" onmouseleave="closeSidebar('tagSidebar')" class="w3-sidebar w3-bar-block w3-border-left w3-animate-right tag-menu" id="tagSidebar">
+                <div class="w3-button w3-padding-16 w3-right" onclick="closeSidebar('tagSidebar')"><i class="fas fa-angle-double-right"></i></div>
+                <div>
+                    <div th:each="tag, rowStat : ${tags}"
+                         class="w3-bar-item w3-button w3-center w3-padding-small" 
+                         th:onclick="|load('content', '@{'/view/find/addTag'}', { 'tagId': ${tag.id} }, true); closeSidebar('tagSidebar');|">
+                        <span class="w3-tag w3-green tag margin-none">
+                            <span class="w3-tag w3-round w3-green w3-border w3-border-white">
+                                <span th:text="${tag.name}" 
+                                      th:classappend="${rowStat.last} ? 'margin-bottom-32'"></span>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <header id="header" th:fragment="header" class="w3-top w3-card transparent-white">
+            <div class="w3-button w3-padding-16 w3-left" onclick="openSidebar('menuSidebar')"><i class="fas fa-bars"></i></div>
+            <div class="w3-button w3-padding-16 w3-right" onclick="openSidebar('tagSidebar')"><i class="fas fa-tags"></i></div>
+            <div class="w3-center w3-wide w3-large page-title" th:text="#{html.head.title}">My Cookery Book</div>
+        </header>
+        <main class="content">
+            <div class="spacer">&nbsp;</div>
+            <div style="display: none;" id="error">&nbsp;</div>
+            <div class="w3-main w3-content w3-padding" id="content" th:insert="fragments/__${usedFragment}__">&nbsp;</div>
+        </main>
+        <script th:inline="javascript">
+            window.cookieconsent.initialise({
+                "palette": {
+                    "popup": {
+                        "background": "#000"
+                    },
+                    "button": {
+                        "background": "#f1d600"
+                    }
+                },
+                "content": {
+                    "message": [[#{cookies.consent(${@environment.getProperty('app.base_url')})}]],
+                    "dismiss": [[#{cookies.dismiss}]],
+                    "link": [[#{cookies.link}]],
+                    "href": "[(${@environment.getProperty('app.base_url')})]" + "/cookies"
+                }
+            });
+        </script>
+    </body>
+</html>

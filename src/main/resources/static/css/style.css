@@ -1,0 +1,219 @@
+body,html{
+    height: 100%;
+    width:100%;
+    position: absolute;
+}
+
+*, input, select, textarea, option, button {
+    outline: none!important;
+}
+
+.login-page {
+    /* The image used */
+    background-image: url("../image/background.jpg");
+
+    /* Full height */
+    height: 100%; 
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.w3-content{
+    max-width: 1280px;
+}
+
+.w3-content.view{
+    max-width: 960px;
+}
+
+.w3-modal {
+    padding-top: 32px;
+    padding-bottom: 32px;
+}
+
+.content{
+    position:absolute;
+    top:0px;
+    bottom:0px;
+    left:0px;
+    right:0px;
+}
+
+.page-title{
+    padding-top: 14px;
+}
+
+.pointer {
+    cursor:pointer;
+}
+
+.spacer {
+    width: 100%;
+    height: 54px;
+}
+
+.transparent-white{
+    background-color: rgba(255,255,255, 0.9);
+}
+
+.menu{
+    display:none;
+    z-index:2;
+    width:20%;
+    min-width:300px;
+}
+
+.tag-menu{
+    right:0;
+    display:none;
+    z-index:2;
+    min-width:50px;
+}
+
+.padding-right{
+    padding-right: 16px;
+}
+
+.margin-bottom-16{
+    margin-bottom: 16px;
+}
+
+.meal-preview-image{
+    max-width: 170px;
+    max-height: 170px;
+    padding-top: 10px;
+    object-fit: cover;
+    width: 170px;
+    height: 170px;
+}
+
+select[multiple] option:checked {
+    background: #4CAF50 linear-gradient(0deg, #4CAF50 0%, #4CAF50 100%);
+}
+
+.circle-btn{
+    width: 40px;
+    height: 40px;
+}
+
+.icon{
+    width: 25px;
+}
+
+.large-icon{
+    width: 30px;
+}
+
+.recipie-view-action-menu {
+    width: 190px;
+}
+
+.w3-col.padding-bottom-16{
+    padding-bottom: 16px;
+}
+
+.login-dialog{
+    left: -153px;
+    width: 200px;
+}
+
+.margin-top-16{
+    margin-top: 16px;
+}
+
+.float-left{
+    float: left;
+}
+
+.padding-8{
+    padding-top:8px!important;padding-bottom:8px!important
+}
+
+.quill-editor-div{
+    min-height: 100px;
+}
+
+.quill-editor-div.ql-container{
+    font-size: 15px;
+}
+
+.quill-viewer-div{
+    border: none!important;
+}
+
+.quill-viewer-div .ql-editor{
+    padding: 0px;
+}
+
+.quill-viewer-div.ql-container{
+    font-size: 15px;
+}
+ 
+.bold{
+    font-weight: bold;
+}
+
+hr {
+    margin: 12px 0px 4px 0px;
+}
+
+.absolute{
+    position: absolute;
+}
+
+.no-padding {
+    padding: 0px;
+}
+
+.uploaded-picture {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.picture-title {
+    background-color: rgba(0,0,0,0.7);
+    padding: 8px;
+}
+
+.margin-none {
+    margin: 0px !important;
+}
+
+.margin-bottom-32 {
+    margin-bottom: 32px;
+}
+
+.tag {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding:3px;
+}
+
+input.empty {
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+}
+
+.method {
+    white-space: pre-wrap;
+}
+
+.serves-btn {
+    min-width: 0px !important;
+}
+
+.button-wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-row-spacer {
+    flex-grow: 1;
+}

@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="sk">
+    <head th:fragment="htmlHeader">
+        <title th:text="#{html.head.title}">Recipes</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="apple-touch-icon" sizes="180x180" th:href="@{'/icon/apple-touch-icon.png'}" />
+        <link rel="icon" type="image/png" sizes="32x32" th:href="@{'/icon/favicon-32x32.png'}" />
+        <link rel="icon" type="image/png" sizes="16x16" th:href="@{'/icon/favicon-16x16.png'}" />
+        <link rel="manifest" th:href="@{'/icon/site.webmanifest'}" />
+        <link rel="stylesheet" th:href="@{'/css/fontawesome/css/fontawesome.min.css'}" />
+        <link rel="stylesheet" th:href="@{'/css/fontawesome/css/solid.min.css'}" />
+        <link rel="stylesheet" th:href="@{'/css/w3.css'}" />
+        <link rel="stylesheet" th:href="@{'/css/style.css'}" />
+        <link rel="stylesheet" th:href="@{'/css/cookieconsent.min.css'}" />
+        <script th:src="@{'/js/cookieconsent.min.js'}" data-cfasync="false"></script>
+    </head>
+    <body class="login-page">
+        <div class="w3-container w3-content w3-card w3-padding-16 w3-margin-top w3-white" style="max-width: 400px">
+            <h1 th:text="#{login.title}">Login page</h1>
+            <div class="w3-panel w3-red" th:if="${loginError}">
+                <p th:text="#{login.wrong}">Wrong user or password</p>
+            </div>
+            <form th:action="@{/login.html}" method="post">
+                <label for="username" th:text="#{login.username}">Username</label>:
+                <input class="w3-input w3-border" type="text" id="username" name="username" autofocus="autofocus" /> <br />
+                <label for="password" th:text="#{login.password}">Password</label>:
+                <input class="w3-input w3-border" type="password" id="password" name="password" /> <br />
+                <input class="w3-check" type="checkbox" id="remember-me" name="remember-me" checked>
+                <label th:text="#{login.remember.me}">Remember Me</label> <br /><br />
+                <button type="submit" class="w3-button w3-green">
+                    <i class="fas fa-sign-in-alt"></i> <span th:text="#{login.login.button}">Log in</span>
+                </button>
+            </form>
+        </div>
+        <script th:inline="javascript">
+        window.cookieconsent.initialise({
+          "palette": {
+            "popup": {
+              "background": "#000"
+            },
+            "button": {
+              "background": "#f1d600"
+            }
+          },
+          "content": {
+            "message": [[#{cookies.consent(${@environment.getProperty('app.base_url')})}]],
+            "dismiss": [[#{cookies.dismiss}]],
+            "link": [[#{cookies.link}]],
+            "href": "[(${@environment.getProperty('app.base_url')})]" + "/cookies"
+          }
+        });
+        </script>
+    </body>
+</html>

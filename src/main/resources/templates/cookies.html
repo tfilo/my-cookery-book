@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="sk">
+    <head th:fragment="htmlHeader">
+        <title th:text="#{html.head.title}">Recipes</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="apple-touch-icon" sizes="180x180" th:href="@{'/icon/apple-touch-icon.png'}">
+        <link rel="icon" type="image/png" sizes="32x32" th:href="@{'/icon/favicon-32x32.png'}">
+        <link rel="icon" type="image/png" sizes="16x16" th:href="@{'/icon/favicon-16x16.png'}">
+        <link rel="manifest" th:href="@{'/icon/site.webmanifest'}">
+        <link rel="stylesheet" th:href="@{'/css/w3.css'}">
+        <link rel="stylesheet" th:href="@{'/css/style.css'}">
+    </head>
+    <body class="login-page">
+        <div class="w3-container w3-content w3-card w3-padding-16 w3-margin-top w3-white" style="max-width: 800px">
+            <h1 th:text="#{cookies.title}">Cookies</h1>
+            <div>
+                <p th:text="#{cookies.info(${@environment.getProperty('app.base_url')})}" class="w3-justify">Cookies info</p>
+            </div>
+        </div>
+    </body>
+</html>

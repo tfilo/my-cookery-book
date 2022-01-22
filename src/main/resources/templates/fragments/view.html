@@ -1,0 +1,228 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="sk">
+    <head th:replace="fragments/common :: htmlHeader">
+    </head>
+    <body>
+        <article th:object="${recipeViewSO}" th:fragment="recipeView">
+            <div>
+                <a class="w3-button w3-text-green w3-left" href="javascript:void(0);" th:onclick="|load('content', '@{'/view/back'}', null, true);|"><i class="fas fa-arrow-circle-left w3-xlarge"></i></a>
+                <div class="w3-dropdown-click w3-right">
+                    <button class="w3-button" th:onclick="|$('#view-action-menu').toggleClass('w3-show'); $('#share_title').text('#{'recipe.share.link'}');|"><i class="fas fa-ellipsis-v w3-xlarge"></i></button>
+                    <div id="view-action-menu" class="w3-dropdown-content w3-bar-block w3-border recipie-view-action-menu" style="right:0">
+                        <a class="w3-bar-item w3-button"
+                           href="javascript:void(0);"
+                           th:onclick="|copyLink('@{'__${@environment.getProperty('app.base_url')}__/link/recipe/__*{id}__'}', 'share_title', '#{'recipe.link.copied'}');|">
+                            <i class="w3-text-blue fas fa-share-square w3-xlarge large-icon"></i>
+                            <span th:text="#{'recipe.share.link'}" id="share_title">Share link</span>
+                        </a>
+                        <a target="_blank"
+                           th:href="${serves} ? @{'/view/pdf/__${recipeViewSO.id}__/__${serves}__'} : @{'/view/pdf/__${recipeViewSO.id}__'}"
+                           class="w3-bar-item w3-button">
+                            <i class="w3-text-red fas fa-file-pdf w3-xlarge large-icon"></i>
+                            <span th:text="#{'recipe.download.pdf'}">Download PDF</span>
+                        </a>
+                    </div>
+                </div>
+                <h2 class="w3-center" th:text="*{title}">Recipe title</h2>
+                <div th:if="${serves != null}">
+                    <span th:text="#{recipe.serves}"></span>
+                    <div class="w3-dropdown-click">
+                        <button onclick="$('#servesAvailable').toggleClass('w3-show')" class="w3-button" th:text="${serves}">Serves</button>
+                        <div id="servesAvailable" class="w3-dropdown-content w3-bar-block w3-border serves-btn">
+                            <th:block th:each="i: ${#numbers.sequence(1, 15)}">
+                                <a href="javascript:void(0);" 
+                                   th:onclick="|load('content', '@{'/view/recipe'}', { 'recipeId': *{id} , 'serves': ${i} }, true);|" 
+                                   class="w3-bar-item w3-small w3-button" 
+                                   th:text="${i}">1</a> 
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="padding-8" th:each="section,rowStat : *{sections}">
+                <h4 th:text="${section.name}" class="bold">Sections name</h4>
+                <h5 th:if="${not #lists.isEmpty(section.ingredients)}" th:text="#{recipe.ingredients}">Ingredients</h5>
+                <ul>
+                    <li th:each="ingredient,rowStat2 : ${section.ingredients}">
+                        <span th:text="${ingredient.formattedValue}">Ingredient value</span> 
+                        <div class="tooltip"><span th:text="${ingredient.unit.abbreviation}">Ingredient unit</span><span class="tooltiptext" th:text="${ingredient.unit.name}">Ingredient unit value</span></div>
+                        <span th:text="${ingredient.name}">Ingredient name</span>
+                    </li>
+                </ul>
+                <h5 th:if="${not #lists.isEmpty(section.ingredients)}" th:text="#{recipe.method}">Method</h5>
+                <div th:utext="${section.method}" class="method w3-justify"></div>
+            </section>
+            <section class="padding-8" th:if="*{not #lists.isEmpty(associatedRecipes)}">
+                <h5 th:text="#{recipe.serve.with}">Serve with recipes</h5>
+                <div th:each="ar,rowStat : *{associatedRecipes}">
+                    <button th:onclick="|$('#recipe${ar.id}').toggleClass('w3-show')|" class="w3-button w3-block w3-left-align"><b><span th:text="${ar.title}">Recipe title</span></b> <i class="fas fa-caret-down"></i></button>
+                    <div th:id="|recipe${ar.id}|" class="w3-hide w3-border w3-border-lightgray w3-padding">
+                        <div th:if="${serves != null}"> <!-- SHOW number of portions only if main recipe has set number of portions -->
+                            <span th:text="#{recipe.serves}"></span>: 
+                            <span th:if="${ar.serves != null}" th:text="${serves}">1</span>
+                            <span th:if="${ar.serves == null}" th:text="#{recipe.serves.undefined}" class="w3-text-red">Undefined</span>
+                        </div>
+                        <div th:if="${serves == null} and ${ar.serves != null}">
+                            <span th:text="#{recipe.serves}"></span>: 
+                            <span th:text="${ar.serves}">1</span>
+                        </div>
+                        <section class="padding-8" th:each="section,rowStat : ${ar.sections}">
+                            <h4 th:text="${section.name}" class="bold">Sections name</h4>
+                            <h5 th:if="${not #lists.isEmpty(section.ingredients)}" th:text="#{recipe.ingredients}">Ingredients</h5>
+                            <ul>
+                                <li th:each="ingredient,rowStat2 : ${section.ingredients}">
+                                    <span th:text="${ingredient.formattedValue}">Ingredient value</span> 
+                                    <div class="tooltip"><span th:text="${ingredient.unit.abbreviation}">Ingredient unit</span><span class="tooltiptext" th:text="${ingredient.unit.name}">Ingredient unit value</span></div>
+                                    <span th:text="${ingredient.name}">Ingredient name</span>
+                                </li>
+                            </ul>
+                            <h5 th:if="${not #lists.isEmpty(section.ingredients)}" th:text="#{recipe.method}">Method</h5>
+                            <div th:utext="${section.method}" class="method w3-justify"></div>
+                        </section>
+                        <div class="padding-8  w3-row">
+                            <div class="w3-col l3 m6 s12 w3-display-container" th:each="picture,rowStat : ${ar.pictures}">
+                                <img th:src="@{/view/picture/thumbnail/__${picture.id}__}" th:onclick="|$('#imageView__${picture.id}__').show();|" class="uploaded-picture" th:alt="${picture.title}" />
+                                <span style="display: inline;" class="w3-block w3-text-white w3-display-bottomleft picture-title" th:text="${picture.title}"></span>
+
+                                <div th:id="|imageView__${picture.id}__|" class="w3-modal" th:onclick="|$('#imageView__${picture.id}__').hide();|">
+                                    <div class="w3-modal-content w3-animate-zoom">
+                                        <span class="w3-button w3-hover-red w3-display-topright">&times;</span>
+                                        <img th:src="@{/view/picture/__${picture.id}__}" style="width:100%">
+                                        <span style="display: inline;" class="w3-block w3-text-white w3-display-bottomleft picture-title" th:text="${picture.title}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr th:if="${not #lists.isEmpty(ar.sources)}">
+                        <section th:if="${not #lists.isEmpty(ar.sources)}">
+                            <h5 th:text="#{recipe.sources}">Sources</h5>
+                            <div th:each="source,rowStat : ${ar.sources}"><i><a th:href="${source}" th:text="${source}" target="_blank">Source</a></i></div>
+                        </section>
+                        <hr>
+                        <div class="padding-8">
+                            <div th:if="${ar.creator} and ${not #strings.isEmpty(ar.creator.username)}">
+                                <span th:text="#{recipe.created.by}">Created by</span>
+                                <i th:text="${ar.creator.firstName} ? (${ar.creator.firstName} + ' ' + ${ar.creator.lastName}) : ${ar.creator.username}">username</i>
+                                <span th:if="${ar.created}">
+                                        <span th:text="#{recipe.created.at}">at</span>
+                                        <i th:text="${#temporals.format(ar.created, 'dd.MM.yyyy HH:mm')}" >date</i>
+                                    </span>
+                            </div>
+                            <div th:if="${ar.modifier} and ${not #strings.isEmpty(ar.modifier.username)}">
+                                <span th:text="#{recipe.modified.by}">Modified by</span>
+                                <i th:text="${ar.modifier.firstName} ? (${ar.modifier.firstName} + ' ' + ${ar.modifier.lastName}) : ${ar.modifier.username}">username</i>
+                                <span th:if="${ar.modified}">
+                                        <span th:text="#{recipe.modified.at}">at</span>
+                                        <i th:text="${#temporals.format(ar.modified, 'dd.MM.yyyy HH:mm')}">date</i>
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="padding-8  w3-row">
+                <div class="w3-col l3 m6 s12 w3-display-container" th:each="picture,rowStat : *{pictures}">
+                    <img th:src="@{/view/picture/thumbnail/__${picture.id}__}" th:onclick="|$('#imageView__${picture.id}__').show();|" class="uploaded-picture" th:alt="${picture.title}" />
+                    <span style="display: inline;" class="w3-block w3-text-white w3-display-bottomleft picture-title" th:text="${picture.title}"></span>
+                    
+                    <div th:id="|imageView__${picture.id}__|" class="w3-modal" th:onclick="|$('#imageView__${picture.id}__').hide();|">
+                        <div class="w3-modal-content w3-animate-zoom">
+                            <span class="w3-button w3-hover-red w3-display-topright">&times;</span>
+                            <img th:src="@{/view/picture/__${picture.id}__}" style="width:100%">
+                            <span style="display: inline;" class="w3-block w3-text-white w3-display-bottomleft picture-title" th:text="${picture.title}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr th:if="*{not #lists.isEmpty(sources)}">
+            <section th:if="*{not #lists.isEmpty(sources)}">
+                <h5 th:text="#{recipe.sources}">Sources</h5>
+                <div th:each="source,rowStat : *{sources}">
+                    <i th:if="${#strings.startsWith(source,'http')}">
+                        <a th:href="${source}" th:text="${source}" target="_blank">Source</a>
+                    </i>
+                    <span th:if="${!#strings.startsWith(source,'http')}" th:text="${source}">Source</span>
+                </div>
+            </section>
+            <hr>
+            <div class="padding-8">
+                <div th:if="${recipeViewSO.creator} and ${not #strings.isEmpty(recipeViewSO.creator.username)}">
+                    <span th:text="#{recipe.created.by}">Created by</span>
+                    <i th:text="*{creator.firstName} ? (*{creator.firstName} + ' ' + *{creator.lastName}) : *{creator.username}">username</i>
+                    <span th:if="*{created}">
+                        <span th:text="#{recipe.created.at}">at</span>
+                        <i th:text="*{#temporals.format(created, 'dd.MM.yyyy HH:mm')}" >date</i>
+                    </span>
+                </div>
+                <div th:if="${recipeViewSO.modifier} and ${not #strings.isEmpty(recipeViewSO.modifier.username)}">
+                    <span th:text="#{recipe.modified.by}">Modified by</span>
+                    <i th:text="*{modifier.firstName} ? (*{modifier.firstName} + ' ' + *{modifier.lastName}) : *{modifier.username}">username</i>
+                    <span th:if="*{modified}">
+                        <span th:text="#{recipe.modified.at}">at</span>
+                        <i th:text="*{#temporals.format(modified, 'dd.MM.yyyy HH:mm')}">date</i>
+                    </span>
+                </div>
+            </div>
+        </article>
+        
+        <article th:fragment="recipesList">
+            <form action="javascript:void(0);" class="w3-row w3-content w3-padding" th:object="${searchCriteria}" id="searchForm">
+                <input type="hidden" th:field="*{categoryId}"/>
+                <input type="hidden" th:field="*{page}"/>
+                <input type="hidden" th:field="*{pageSize}"/>
+                <input type="hidden" th:field="*{sortField}"/>
+                <input type="hidden" th:field="*{direction}"/>
+                <div class="w3-col w3-button"
+                     style="width:50px;"
+                     th:onclick="|$('#page').val(0) && submitForm('searchForm', 'content', '@{'/view/find'}', true);|">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="w3-rest">
+                    <input class="w3-input"
+                           type="text" 
+                           th:field="*{title}" 
+                           th:placeholder="#{home.search.placeholder}" 
+                           th:onkeypress="|if (event.key === 'Enter') $('#page').val(0) && submitForm('searchForm', 'content', '@{'/view/find'}', true); return event.key != 'Enter';|"/>
+                </div>
+                <div class="selectedTags">
+                    <th:block th:each="tag,rowStat : *{tags}">
+                        <input type="hidden" th:field="*{tags[__${rowStat.index}__].id}"></input>
+                        <input type="hidden" th:field="*{tags[__${rowStat.index}__].name}"></input>
+                        <span class="w3-tag w3-green tag">
+                            <span class="w3-tag w3-round w3-green w3-border w3-border-white">
+                                <span th:text="${tag.name}"></span>
+                                <a href="javascript:void(0);" th:onclick="|submitForm('searchForm', 'content', '@{'/view/find/removeTag/__${rowStat.index}__'}', true);|"><i class="fas fa-minus-circle"></i></a>
+                            </span>
+                        </span>
+                    </th:block>
+                </div>
+            </form>
+            <h2 class="w3-center" th:text="${title}">Title</h2>
+            <div class="w3-row-padding">
+                <div th:onclick="|load('content', '@{'/view/recipe'}', { recipeId: __${recipe.id}__ }, true);|" class="w3-col l3 m6 s12 w3-container padding-bottom-16 pointer" th:each="recipe, rowStat : ${recipes}">
+                    <div class="w3-display-container">
+                        <button th:if="${recipe.creator == #authentication.getPrincipal().getUsername() || #strings.contains(#authentication.principal.authorities,'ADMIN')}" th:onclick="|event.stopPropagation(); load('content', '@{'/recipe/edit/__${recipe.id}__'}', null, true);|" class="w3-button w3-text-green w3-display-topright w3-hover-black" sec:authorize="hasAnyRole('EDITOR', 'ADMIN')"><i class="fas fa-edit"></i></button>
+                        <div class="w3-center">
+                            <img th:src="@{/view/picture/thumbnail/byrecipe/__${recipe.id}__}" class="uploaded-picture">
+                        </div>
+                        <div class="w3-block w3-text-white w3-display-bottomleft picture-title">
+                            <label>
+                                <b th:text="${recipe.title}">
+                                    Recipe title
+                                </b>
+                            </label>
+                            <p class="w3-small" th:text="${recipe.description}">Recipe description</p>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+            <div class="w3-container w3-center">
+                <div th:if="${recipes.totalPages > 0}" 
+                     class="w3-bar w3-tiny w3-border w3-border-light-grey"
+                     th:each="pageNumber, rowStat : ${pageNumbers}">
+                    <a href="javascript:void(0);" th:onclick="|$('#page').val(${pageNumber - 1}) && submitForm('searchForm', 'content', '@{'/view/find'}', true);|" class="w3-button" th:classappend="${pageNumber==recipes.number + 1} ? w3-green : (${rowStat.first} or ${rowStat.last} ? 'w3-light-grey')" th:text=${pageNumber}>PageNumber</a>
+                </div>
+            </div>
+        </article>
+    </body>
+</html>

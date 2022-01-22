@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="sk">
+    <head th:replace="fragments/common :: htmlHeader">
+    </head>
+    <body>
+        <form method="post" th:if="${userSO!=null}" action="javascript:void(0);" id="userForm" th:object="${userSO}" th:fragment="userForm">
+            <h2 class="w3-center" th:text="#{user.title}">User</h2>
+            <input type="hidden" th:field="*{id}"/>
+            <div class="padding-8">
+                <label><span th:text="#{user.username}">Username</span> <span class="w3-text-red">*</span></label>
+                <input class="w3-input w3-border" type="text" th:field="*{username}" minlength="4" maxlength="25">
+                <label class="w3-text-red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Incorrect username</label>
+            </div>
+            <div class="padding-8">
+                <label th:text="#{user.firstname}">First name</span></label>
+                <input class="w3-input w3-border" type="text" th:field="*{firstName}" maxlength="50">
+                <label class="w3-text-red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Incorrect first name</label>
+            </div>
+            <div class="padding-8">
+                <label th:text="#{user.lastname}">Last name</label>
+                <input class="w3-input w3-border" type="text" th:field="*{lastName}" maxlength="50">
+                <label class="w3-text-red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Incorrect last name</label>
+            </div>
+            <div class="padding-8">
+                <label><span th:text="#{user.password}">Password</span> <span th:if="*{id}==null" class="w3-text-red">*</span></label>
+                <input class="w3-input w3-border" type="password" th:field="*{password}" maxlength="255">
+                <label class="w3-text-red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Incorrect password</label>
+            </div>
+            <div class="padding-8">
+                <label><span th:text="#{user.password.confirm}">Password Confirm</span> <span th:if="*{id}==null" class="w3-text-red">*</span></label>
+                <input class="w3-input w3-border" type="password" th:field="*{passwordConfirm}" maxlength="255">
+                <label class="w3-text-red" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}">Incorrect password</label>
+            </div>
+            <div class="padding-8">
+                <label th:text="#{user.roles}">Roles</label>
+                <select class="w3-select w3-border no-padding" multiple th:field="*{roles}" th:size="${#lists.size(T(sk.filo.recipes.domain.RoleName).values())}">
+                    <option th:each="roleName : ${T(sk.filo.recipes.domain.RoleName).values()}"
+                            th:value="${roleName}" 
+                            th:text="${roleName}"
+                            class="w3-block w3-button w3-left-align">
+                    </option>
+                </select>
+                <label class="w3-text-red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Incorrect roles</label>
+            </div>
+            <div class="padding-8">
+                <input class="w3-check" type="checkbox" th:field="*{enabled}">
+                <label th:text="#{user.enabled}">Enable user</label>
+            </div>
+            <div class="padding-8 button-wrapper">
+                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('userForm', 'content', '@{'/admin/user/save'}', true);|"><i class="fas fa-save"></i>&nbsp;<span th:text="#{common.save}">Save</span></button>
+                <span class="flex-row-spacer"></span>
+                <button type="button" class="w3-button w3-red" th:if="*{id}" th:onclick="|$('#modalDeleteBtn').off('click').click(function(){ load('content', '@{'/admin/user/delete/__*{id}__'}', null, true); $('#modalDelete').hide(); }); $('#modalDelete').show();|"><i class="fas fa-trash-alt"></i>&nbsp;<span th:text="#{common.delete}">Delete</span></button>
+                <span class="flex-row-spacer"></span>
+                <button type="button" class="w3-button w3-amber" th:onclick="|$('#modalCancelBtn').off('click').click(function(){ load('content', '@{'/admin/user/all'}', null, true); $('#modalCancel').hide(); }); $('#modalCancel').show();|"><i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span></button>
+            </div>
+        </form>
+        <form method="post" th:if="${userBasicSO!=null}" action="javascript:void(0);" id="profilForm" th:object="${userBasicSO}" th:fragment="profilForm">
+            <h2 class="w3-center" th:text="#{user.profile}">Profile</h2>
+            <div class="padding-8">
+                <label class="w3-center" th:text="#{user.firstname}">First name</label>
+                <input class="w3-input w3-border" type="text" th:field="*{firstName}" maxlength="50">
+                <label class="w3-text-red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Incorrect first name</label>
+            </div>
+            <div class="padding-8">
+                <label class="w3-center" th:text="#{user.lastname}">Last name</label>
+                <input class="w3-input w3-border" type="text" th:field="*{lastName}" maxlength="50">
+                <label class="w3-text-red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Incorrect last name</label>
+            </div>
+            <div class="padding-8">
+                <label class="w3-center" th:text="#{user.password}">Password</label>
+                <input class="w3-input w3-border" type="password" th:field="*{password}" maxlength="255">
+                <label class="w3-text-red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Incorrect password</label>
+            </div>
+            <div class="padding-8">
+                <label class="w3-center" th:text="#{user.password.confirm}">Password Confirm</label>
+                <input class="w3-input w3-border" type="password" th:field="*{passwordConfirm}" maxlength="255">
+                <label class="w3-text-red" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}">Incorrect password</label>
+            </div>
+            <div class="padding-8">
+                <button type="submit" class="w3-button w3-light-green" th:onclick="|submitForm('profilForm', 'content', '@{'/user/save'}', true);|"><i class="fas fa-save"></i>&nbsp;<span th:text="#{common.save}">Save</span></button>
+                <button type="button" class="w3-button w3-red" th:onclick="|load('content', '@{'/view/back'}', null, true);|"><i class="fas fa-ban"></i>&nbsp;<span th:text="#{common.cancel}">Cancel</span></button>
+            </div>
+        </form>
+        <div th:fragment="usersList">
+            <div>
+                <div class="w3-right"><a href="javascript:void(0);" th:onclick="|load('content', '@{'/admin/user/add'}', null, true);|" class="w3-button w3-xlarge w3-text-green"><i class="fas fa-plus-circle"></i></a></div>
+                <div><h2 class="w3-center" th:text="#{users.title}">Users</h2></div>
+            </div>
+            <ul class="w3-ul w3-border" th:if="${users}">
+                <li class="w3-row w3-light-grey w3-strong">
+                    <label class="w3-col l2 m2 s12"><b th:text="#{user.username}">Username</b></label>
+                    <label class="w3-col l5 m5 s12"><b th:text="#{user.fullname}">Full name</b></label>
+                    <label class="w3-col l5 m5 s12"><b th:text="#{user.roles}">Roles</b></label>
+                </li>
+                <li class="w3-row" th:each="user,rowStat : ${users}" th:classappend="${!user.enabled} ? 'w3-text-gray'">
+                    <a class="w3-col l2 m2 s12" href="javascript:void(0);" th:onclick="|load('content', '@{'/admin/user/get/__${user.id}__'}', null, true);|" th:text="${user.username}"></a>
+                    <span class="w3-col l5 m5 s12" th:text="|${user.firstName ?: ''} ${user.lastName ?: ''}&nbsp;|"></span>
+                    <span class="w3-col l5 m5 s12">
+                        <span th:each="role : ${user.roles}" th:text="${role}" class="w3-tag w3-margin-right" th:classappend="${user.enabled} ? 'w3-green' : 'w3-gray'"></span>
+                        &nbsp;
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </body>
+</html>

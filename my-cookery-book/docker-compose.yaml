@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  db:
+    image: "postgres:13.5-alpine"
+    environment:
+      POSTGRES_DB: recipes
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: User123
+    volumes:
+      - postgre_recipes_data:/var/lib/postgresql/data
+  app:
+    image: "tfilo/recipes:latest"
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      CB_BASE_URL: http://localhost:8080
+      CB_DATASOURCE: jdbc:postgresql://db:5432/recipes
+      CB_DATASOURCE_USER: user
+      CB_DATASOURCE_PASS: User123
+      CB_THYMELEAF_CACHE: "true"
+    depends_on:
+      - db
+volumes:
+  postgre_recipes_data:
