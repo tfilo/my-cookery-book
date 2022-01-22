@@ -30,7 +30,7 @@ You will need to modify this category and unit names to English after login in t
 * [Docker](https://www.docker.com/)
 * [Postgres 13.5-alpine](https://hub.docker.com/_/postgres)
   
-### Libraries, Frameworks, etc. used in this project:
+### Libraries, Frameworks and dependencies used in this project:
 * [cookieconsent](https://github.com/osano/cookieconsent)
 * [css-loader](https://projects.lukehaas.me/css-loaders/)
 * [dockerfile-maven-plugin](https://github.com/spotify/dockerfile-maven)
